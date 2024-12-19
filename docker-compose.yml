@@ -21,6 +21,8 @@ services:
     depends_on:
       - mysql
       #- redis
+    networks:
+      - OpenParcel
 
   mysql:
     image: mysql:8.0
@@ -32,6 +34,8 @@ services:
       - mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    networks:
+      - OpenParcel
 
   #redis:
   #  container_name: redis_db
@@ -42,3 +46,6 @@ services:
 volumes:
   mysql_data:
     external: true
+
+networks:
+  OpenParcel:
