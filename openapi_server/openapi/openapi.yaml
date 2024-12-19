@@ -1,0 +1,876 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: mario@binary-kitchen.de
+  description: Manages outgoing packages for small online shops
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: OpenParcel
+  version: 0.1.0
+servers:
+- url: http://127.0.0.1/api
+tags:
+- name: dashboard
+- name: settings
+- name: orders
+- name: products
+- name: lights
+- description: Operations about user
+  name: user
+paths:
+  /dashboard:
+    get:
+      description: lists dashboard information
+      operationId: dashboard_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Dashboard'
+                type: array
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: list dashboard information
+      tags:
+      - dashboard
+      x-openapi-router-controller: openapi_server.controllers.dashboard_controller
+  /lights/devices:
+    delete:
+      description: deletes a light
+      operationId: lights_devices_delete
+      parameters:
+      - description: The light that needs to be deleted
+        explode: true
+        in: query
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          description: succesfull operation
+        "400":
+          description: Invalid id supplied
+        "404":
+          description: light not found
+      summary: delete a light
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+    get:
+      description: list all light devices
+      operationId: lights_devices_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Lights'
+                type: array
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: list lights
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+    post:
+      description: adds a new Light device
+      operationId: light_add
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lights'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "401":
+          description: Unathorized
+      summary: add light device
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+    put:
+      description: change a Light device
+      operationId: light_change
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lights'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "401":
+          description: Unathorized
+      summary: change light device
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+  /lights/group:
+    delete:
+      description: deletes a light grouo
+      operationId: lights_group_delete
+      parameters:
+      - description: The group that needs to be deleted
+        explode: true
+        in: query
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          description: succesfull operation
+        "400":
+          description: Invalid id supplied
+        "404":
+          description: group not found
+      summary: delete a light group
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+    get:
+      description: returns all light groups
+      operationId: lights_group_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Groups'
+                type: array
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: list all light groups
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+    post:
+      description: adds a new Light group
+      operationId: lights_group_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Groups'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "401":
+          description: Unathorized
+      summary: add light group
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+  /lights/map:
+    delete:
+      description: deletes a mapper
+      operationId: lights_map_delete
+      parameters:
+      - description: The mapper that needs to be deleted
+        explode: true
+        in: query
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          description: succesfull operation
+        "400":
+          description: Invalid id supplied
+        "404":
+          description: mapper not found
+      summary: delete a mapper
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+    get:
+      description: lists all mappings
+      operationId: lights_map_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Map'
+                type: array
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: list all mappings
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+    post:
+      description: map a light to a product
+      operationId: lights_map_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Map'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "401":
+          description: Unathorized
+      summary: add a light - product mapping
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+    put:
+      description: change a mapping
+      operationId: lights_map_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Map'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "401":
+          description: Unathorized
+      summary: change a light - product mapping
+      tags:
+      - lights
+      x-openapi-router-controller: openapi_server.controllers.lights_controller
+  /orders:
+    delete:
+      description: deletes a order
+      operationId: orders_delete
+      parameters:
+      - description: The order that needs to be deleted
+        explode: true
+        in: query
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          description: succesfull operation
+        "400":
+          description: Invalid id supplied
+        "404":
+          description: order not found
+      summary: delete a order
+      tags:
+      - orders
+      x-openapi-router-controller: openapi_server.controllers.orders_controller
+    get:
+      description: lists all orders
+      operationId: orders_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Orders'
+                type: array
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: list all orders
+      tags:
+      - orders
+      x-openapi-router-controller: openapi_server.controllers.orders_controller
+    post:
+      description: adds an order
+      operationId: orders_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Orders'
+      responses:
+        "200":
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: add an order
+      tags:
+      - orders
+      x-openapi-router-controller: openapi_server.controllers.orders_controller
+    put:
+      description: updates an order
+      operationId: orders_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Orders'
+      responses:
+        "200":
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: update an order
+      tags:
+      - orders
+      x-openapi-router-controller: openapi_server.controllers.orders_controller
+  /products:
+    delete:
+      description: deletes a product
+      operationId: products_delete
+      parameters:
+      - description: The product that needs to be deleted
+        explode: true
+        in: query
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          description: succesfull operation
+        "400":
+          description: Invalid id supplied
+        "404":
+          description: product not found
+      summary: delete a product
+      tags:
+      - products
+      x-openapi-router-controller: openapi_server.controllers.products_controller
+    get:
+      description: lists all avaiable products
+      operationId: products_list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Products'
+                type: array
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: list of products
+      tags:
+      - products
+      x-openapi-router-controller: openapi_server.controllers.products_controller
+    post:
+      description: adds a product
+      operationId: product_add
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Products'
+      responses:
+        "200":
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: add a product
+      tags:
+      - products
+      x-openapi-router-controller: openapi_server.controllers.products_controller
+    put:
+      description: updates product properties
+      operationId: update_product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Products'
+      responses:
+        "200":
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: update product
+      tags:
+      - products
+      x-openapi-router-controller: openapi_server.controllers.products_controller
+  /settings:
+    get:
+      description: list all current settings states
+      operationId: settings_list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+          description: successful operation
+        "401":
+          description: Unathorized
+      summary: display settings
+      tags:
+      - settings
+      x-openapi-router-controller: openapi_server.controllers.settings_controller
+    put:
+      description: updates settings
+      operationId: settings_update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "401":
+          description: Unathorized
+      summary: update settings
+      tags:
+      - settings
+      x-openapi-router-controller: openapi_server.controllers.settings_controller
+  /user:
+    delete:
+      description: This can only be done by the logged in user.
+      operationId: delete_user
+      parameters:
+      - description: The name that needs to be deleted
+        explode: true
+        in: query
+        name: username
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: User not found
+      summary: Delete user
+      tags:
+      - user
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+    get:
+      description: ""
+      operationId: get_user_by_name
+      parameters:
+      - description: 'The name that needs to be fetched. Use user1 for testing. '
+        explode: true
+        in: query
+        name: username
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: successful operation
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: User not found
+      summary: Get user by user name
+      tags:
+      - user
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+    post:
+      description: This can only be done by the logged in user.
+      operationId: create_user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: Created user object
+      responses:
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: successful operation
+      summary: Create user
+      tags:
+      - user
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+    put:
+      description: This can only be done by the logged in user.
+      operationId: update_user
+      parameters:
+      - description: name of user that needs to be changed
+        explode: true
+        in: query
+        name: username
+        required: true
+        schema:
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: Update an existent user in the store
+      responses:
+        default:
+          description: successful operation
+      summary: Update user
+      tags:
+      - user
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+  /user/list:
+    get:
+      description: list all users
+      operationId: user_list_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/User'
+                type: array
+          description: succesfull operation
+      summary: list users
+      tags:
+      - user
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+  /user/login:
+    get:
+      description: ""
+      operationId: login_user
+      parameters:
+      - description: The user name for login
+        explode: true
+        in: query
+        name: username
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The password for login in clear text
+        explode: true
+        in: query
+        name: password
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: successful operation
+        "400":
+          description: Invalid username/password supplied
+      summary: Logs user into the system
+      tags:
+      - user
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+  /user/logout:
+    get:
+      description: ""
+      operationId: logout_user
+      parameters: []
+      responses:
+        default:
+          description: successful operation
+      summary: Logs out current logged in user session
+      tags:
+      - user
+      x-openapi-router-controller: openapi_server.controllers.user_controller
+components:
+  schemas:
+    Settings:
+      example:
+        minPasswordLength: 5
+      properties:
+        minPasswordLength:
+          example: 5
+          format: int64
+          title: minPasswordLength
+          type: integer
+      title: Settings
+      type: object
+    Dashboard:
+      example:
+        done: 420
+        open: 23
+        lights: 10
+        mappers: 10
+        products: 15
+      properties:
+        open:
+          description: count of open orders
+          example: 23
+          title: open
+          type: integer
+        done:
+          description: count of completed orders
+          example: 420
+          title: done
+          type: integer
+        products:
+          description: count of avaiable products
+          example: 15
+          title: products
+          type: integer
+        lights:
+          example: 10
+          title: lights
+          type: integer
+        mappers:
+          example: 10
+          title: mappers
+          type: integer
+      title: Dashboard
+      type: object
+    Orders:
+      example:
+        dateAdd: 2024-12-19T20:35:19.772Z
+        id: 5610
+        state: open
+        dateClosed: 2024-12-19T20:35:19.772Z
+        customer: Max Mustermann
+        products:
+        - difficulty: 3
+          customerGroups:
+          - "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+          - "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+          buildTime: 20-30 min
+          name: openDTU
+          comment: example comment
+          id: 1
+        - difficulty: 3
+          customerGroups:
+          - "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+          - "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+          buildTime: 20-30 min
+          name: openDTU
+          comment: example comment
+          id: 1
+      properties:
+        id:
+          example: 5610
+          title: id
+          type: integer
+        customer:
+          example: Max Mustermann
+          title: customer
+          type: string
+        products:
+          items:
+            $ref: '#/components/schemas/Products'
+          title: products
+          type: array
+        state:
+          enum:
+          - open
+          - in work
+          - hold
+          - closed
+          example: open
+          title: state
+          type: string
+        dateAdd:
+          example: 2024-12-19T20:35:19.772Z
+          title: dateAdd
+          type: string
+        dateClosed:
+          example: 2024-12-19T20:35:19.772Z
+          title: dateClosed
+          type: string
+      title: Orders
+      type: object
+    User:
+      example:
+        firstName: John
+        lastName: James
+        userGroups:
+        - "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
+        - "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
+        password: "12345"
+        userStatus: 1
+        email: john@email.com
+        username: theUser
+      properties:
+        username:
+          example: theUser
+          title: username
+          type: string
+        firstName:
+          example: John
+          title: firstName
+          type: string
+        lastName:
+          example: James
+          title: lastName
+          type: string
+        email:
+          example: john@email.com
+          title: email
+          type: string
+        password:
+          example: "12345"
+          title: password
+          type: string
+        userStatus:
+          description: User Status
+          example: 1
+          format: int32
+          title: userStatus
+          type: integer
+        userGroups:
+          items:
+            example: "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
+            type: string
+          title: userGroups
+          type: array
+      title: User
+      type: object
+    Products:
+      example:
+        difficulty: 3
+        customerGroups:
+        - "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+        - "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+        buildTime: 20-30 min
+        name: openDTU
+        comment: example comment
+        id: 1
+      properties:
+        id:
+          example: 1
+          title: id
+          type: integer
+        name:
+          example: openDTU
+          title: name
+          type: string
+        comment:
+          example: example comment
+          title: comment
+          type: string
+        difficulty:
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          example: 3
+          title: difficulty
+          type: integer
+        buildTime:
+          example: 20-30 min
+          title: buildTime
+          type: string
+        customerGroups:
+          items:
+            example: "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+            type: string
+          title: customerGroups
+          type: array
+      title: Products
+      type: object
+    Groups:
+      example:
+        name: regal rechts
+        id: 1
+      properties:
+        id:
+          example: 1
+          title: id
+          type: integer
+        name:
+          example: regal rechts
+          title: name
+          type: string
+      title: Groups
+      type: object
+    Lights:
+      example:
+        note: example note
+        groups:
+          name: regal rechts
+          id: 1
+        online: 1
+        adress: wled1.local
+        id: 1
+      properties:
+        id:
+          example: 1
+          title: id
+          type: integer
+        groups:
+          $ref: '#/components/schemas/Groups'
+        adress:
+          example: wled1.local
+          title: adress
+          type: string
+        note:
+          example: example note
+          title: note
+          type: string
+        online:
+          enum:
+          - 1
+          - 0
+          example: 1
+          title: online
+          type: integer
+      title: Lights
+      type: object
+    Map:
+      example:
+        productId:
+        - 10
+        - 10
+        name: blinky
+        id: 1
+        lightId:
+        - 5
+        - 5
+      properties:
+        id:
+          example: 1
+          title: id
+          type: integer
+        name:
+          example: blinky
+          title: name
+          type: string
+        productId:
+          items:
+            example: 10
+            type: integer
+          title: productId
+          type: array
+        lightId:
+          items:
+            example: 5
+            type: integer
+          title: lightId
+          type: array
+      title: Map
+      type: object

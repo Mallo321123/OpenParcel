@@ -1,0 +1,44 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask_app
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=0UbuFbKhdSYOpZjx
+      - MYSQL_DATABASE=OpenParcel
+      - FLASK_PORT=8080
+      #- JWT_SECRET_KEY=jHDxKyZXSH7Fwacc4qpQmrS1
+      #- REDIS_HOST=redis
+      #- REDIS_PORT=6379
+    depends_on:
+      - mysql
+      #- redis
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 0UbuFbKhdSYOpZjx
+      MYSQL_DATABASE: OpenParcel
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  #redis:
+  #  container_name: redis_db
+  #  image: redis:alpine
+  #  ports:
+  #    - "6379:6379"
+
+volumes:
+  mysql_data:
+    external: true
