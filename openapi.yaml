@@ -705,3 +705,11 @@ components:
           items:
             type: integer
             example: 5
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: []
