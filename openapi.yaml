@@ -36,6 +36,8 @@ paths:
                 $ref: '#/components/schemas/Settings'
         '401':
           description: Unathorized
+      security:
+        - BearerAuth: []
     put:
       tags:
         - settings
@@ -53,6 +55,8 @@ paths:
           description: Successful operation
         '401':
           description: Unathorized
+      security:
+        - BearerAuth: []
   /dashboard:
     get:
       tags:
@@ -485,8 +489,6 @@ paths:
         - user
       summary: list users
       description: list all users
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: succesfull operation
@@ -529,6 +531,7 @@ paths:
                     type: string
         '401':
           description: Invalid credentials
+      security: []
   /user/logout:
     get:
       tags:
@@ -716,6 +719,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
-security:
-  - BearerAuth: []
