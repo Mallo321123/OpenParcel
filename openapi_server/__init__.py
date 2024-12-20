@@ -1,6 +1,7 @@
 import mysql.connector
 import os
 import time
+import redis
 
 from mysql.connector import Error
 
@@ -30,6 +31,9 @@ def close_db(db):
     if db is not None:
         db.close()
     return True
+
+def get_redis():
+    return redis.StrictRedis(host=os.getenv('REDIS_HOST', 'redis'), port=os.getenv('REDIS_PORT', '6379'), decode_responses=True)
 
 def prepare_database():
     db = get_db()
