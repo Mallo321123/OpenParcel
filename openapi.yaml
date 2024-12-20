@@ -36,8 +36,6 @@ paths:
                 $ref: '#/components/schemas/Settings'
         '401':
           description: Unathorized
-      security:
-        - BearerAuth: []
     put:
       tags:
         - settings
@@ -55,8 +53,6 @@ paths:
           description: Successful operation
         '401':
           description: Unathorized
-      security:
-        - BearerAuth: []
   /dashboard:
     get:
       tags:
@@ -419,6 +415,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+      security: []
+      
     get:
       tags:
         - user
@@ -719,3 +717,5 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+security:
+  - BearerAuth: []

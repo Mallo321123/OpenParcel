@@ -8,8 +8,13 @@ from openapi_server.models.security_controller_login_request import SecurityCont
 from openapi_server.models.user import User  # noqa: E501
 from openapi_server import util
 
+from openapi_server.__init__ import get_db, close_db
+
+import hashlib
 
 def create_user(user=None):  # noqa: E501
+    db = get_db()
+    cursor = db.cursor()
     """Create user
 
     This can only be done by the logged in user. # noqa: E501
@@ -21,7 +26,20 @@ def create_user(user=None):  # noqa: E501
     """
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        
+        password_hash = hashlib.md5(user.password.encode())
+        cross_hash = hashlib.md5(user.username.encode() + user.password.encode())
+        
+        cursor.execute("""INSERT INTO users (
+            email, firstname, lastname, username, password_hash, cross_hash, `groups`, status, username)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+            (user.email, user.first_name, user.last_name, user.username, password_hash, cross_hash, user.user_groups, user.user_status, user.username))
+        db.commit()
+        close_db(db)
+        
+        return "User created", 200
+        
+    return "User not created", 400
 
 
 def delete_user(username):  # noqa: E501

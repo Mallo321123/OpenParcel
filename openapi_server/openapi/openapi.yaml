@@ -509,6 +509,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: successful operation
+      security:
+      - BearerAuth: []
       summary: Create user
       tags:
       - user
@@ -551,8 +553,6 @@ paths:
                   $ref: '#/components/schemas/User'
                 type: array
           description: succesfull operation
-      security:
-      - BearerAuth: []
       summary: list users
       tags:
       - user
@@ -576,6 +576,7 @@ paths:
           description: Successfully authenticated
         "401":
           description: Invalid credentials
+      security: []
       summary: User Login
       tags:
       - user
