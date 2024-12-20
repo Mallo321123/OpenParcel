@@ -11,6 +11,8 @@ info:
   version: 0.1.0
 servers:
 - url: http://127.0.0.1/api
+security:
+- BearerAuth: []
 tags:
 - name: dashboard
 - name: settings
@@ -549,41 +551,32 @@ paths:
                   $ref: '#/components/schemas/User'
                 type: array
           description: succesfull operation
+      security:
+      - BearerAuth: []
       summary: list users
       tags:
       - user
       x-openapi-router-controller: openapi_server.controllers.user_controller
   /user/login:
-    get:
-      description: ""
-      operationId: login_user
-      parameters:
-      - description: The user name for login
-        explode: true
-        in: query
-        name: username
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: The password for login in clear text
-        explode: true
-        in: query
-        name: password
-        required: false
-        schema:
-          type: string
-        style: form
+    post:
+      description: Authenticates a user and returns a JWT token.
+      operationId: security_controller_login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/security_controller_login_request'
+        required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                type: string
-          description: successful operation
-        "400":
-          description: Invalid username/password supplied
-      summary: Logs user into the system
+                $ref: '#/components/schemas/security_controller_login_200_response'
+          description: Successfully authenticated
+        "401":
+          description: Invalid credentials
+      summary: User Login
       tags:
       - user
       x-openapi-router-controller: openapi_server.controllers.user_controller
@@ -874,3 +867,31 @@ components:
           type: array
       title: Map
       type: object
+    security_controller_login_request:
+      properties:
+        username:
+          title: username
+          type: string
+        password:
+          title: password
+          type: string
+      required:
+      - password
+      - username
+      title: security_controller_login_request
+      type: object
+    security_controller_login_200_response:
+      example:
+        token: token
+      properties:
+        token:
+          title: token
+          type: string
+      title: security_controller_login_200_response
+      type: object
+  securitySchemes:
+    BearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+      x-bearerInfoFunc: openapi_server.controllers.security_controller.info_from_BearerAuth

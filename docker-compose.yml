@@ -15,7 +15,7 @@ services:
       - MYSQL_PASSWORD=0UbuFbKhdSYOpZjx
       - MYSQL_DATABASE=OpenParcel
       - FLASK_PORT=8080
-      #- JWT_SECRET_KEY=jHDxKyZXSH7Fwacc4qpQmrS1
+      - SECRET_KEY=cPpkbCFceAnqhJkt
       #- REDIS_HOST=redis
       #- REDIS_PORT=6379
     depends_on:

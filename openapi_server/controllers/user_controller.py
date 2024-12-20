@@ -3,6 +3,8 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
+from openapi_server.models.security_controller_login200_response import SecurityControllerLogin200Response  # noqa: E501
+from openapi_server.models.security_controller_login_request import SecurityControllerLoginRequest  # noqa: E501
 from openapi_server.models.user import User  # noqa: E501
 from openapi_server import util
 
@@ -48,21 +50,6 @@ def get_user_by_name(username):  # noqa: E501
     return 'do some magic!'
 
 
-def login_user(username=None, password=None):  # noqa: E501
-    """Logs user into the system
-
-     # noqa: E501
-
-    :param username: The user name for login
-    :type username: str
-    :param password: The password for login in clear text
-    :type password: str
-
-    :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
-    """
-    return 'do some magic!'
-
-
 def logout_user():  # noqa: E501
     """Logs out current logged in user session
 
@@ -71,6 +58,21 @@ def logout_user():  # noqa: E501
 
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
+    return 'do some magic!'
+
+
+def security_controller_login(security_controller_login_request):  # noqa: E501
+    """User Login
+
+    Authenticates a user and returns a JWT token. # noqa: E501
+
+    :param security_controller_login_request: 
+    :type security_controller_login_request: dict | bytes
+
+    :rtype: Union[SecurityControllerLogin200Response, Tuple[SecurityControllerLogin200Response, int], Tuple[SecurityControllerLogin200Response, int, Dict[str, str]]
+    """
+    if connexion.request.is_json:
+        security_controller_login_request = SecurityControllerLoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
