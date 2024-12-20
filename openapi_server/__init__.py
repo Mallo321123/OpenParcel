@@ -42,14 +42,14 @@ def prepare_database():
     cursor.execute("USE OpenParcel")
     cursor.execute("""CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        email VARCHAR(255),
-        firstname VARCHAR(255),
-        lastname VARCHAR(255),
+        email VARCHAR(255) DEFAULT NULL,
+        firstname VARCHAR(255) DEFAULT NULL,
+        lastname VARCHAR(255) DEFAULT NULL,
         username VARCHAR(255),
         password_hash VARCHAR(255),
         cross_hash VARCHAR(255),
-        `groups` VARCHAR(255),
-        status INT
+        `groups` VARCHAR(255) DEFAULT NULL,
+        status INT DEFAULT 0
         )""")
     
     cursor.execute("""CREATE TABLE IF NOT EXISTS orders (

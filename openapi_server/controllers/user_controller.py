@@ -27,13 +27,13 @@ def create_user(user=None):  # noqa: E501
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
         
-        password_hash = hashlib.md5(user.password.encode())
-        cross_hash = hashlib.md5(user.username.encode() + user.password.encode())
+        password_hash = hashlib.md5(user.password.encode()).hexdigest()
+        cross_hash = hashlib.md5(user.username.encode() + user.password.encode()).hexdigest()
         
         cursor.execute("""INSERT INTO users (
-            email, firstname, lastname, username, password_hash, cross_hash, `groups`, status, username)
+            email, firstname, lastname, username, password_hash, cross_hash, `groups`, status)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-            (user.email, user.first_name, user.last_name, user.username, password_hash, cross_hash, user.user_groups, user.user_status, user.username))
+            (user.email, user.first_name, user.last_name, user.username, password_hash, cross_hash, user.user_groups, user.user_status))
         db.commit()
         close_db(db)
         
