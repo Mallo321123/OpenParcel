@@ -56,25 +56,26 @@ def prepare_database():
         id INT AUTO_INCREMENT PRIMARY KEY,
         customer VARCHAR(255),
         addDate DATE,
-        closeDate DATE,
+        closeDate DATE DEFAULT NULL,
         products VARCHAR(255),
+        notes TEXT DEFAULT NULL,
         state VARCHAR(255)
         )""")
     
     cursor.execute("""CREATE TABLE IF NOT EXISTS products (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255),
-        comment TEXT,
-        customerGroups VARCHAR(255),
-        difficulty INT,
-        buildTime VARCHAR(255)
+        comment TEXT DEFAULT NULL,
+        customerGroups VARCHAR(255) DEFAULT NULL,
+        difficulty INT DEFAULT NULL,
+        buildTime VARCHAR(255) DEFAULT NULL
         )""")
     
     cursor.execute("""CREATE TABLE IF NOT EXISTS lights (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        adress VARCHAR(255),
-        `groups` VARCHAR(255),
-        comment TEXT
+        adress VARCHAR(255) DEFAULT NULL,
+        `groups` VARCHAR(255) DEFAULT NULL,
+        comment TEXT DEFAULT NULL
         )""")
     
     cursor.execute("""CREATE TABLE IF NOT EXISTS `group` (
@@ -85,8 +86,8 @@ def prepare_database():
     cursor.execute("""CREATE TABLE IF NOT EXISTS mapper (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name TEXT,
-        lights VARCHAR(255),
-        products VARCHAR(255)
+        lights VARCHAR(255) DEFAULT NULL,
+        products VARCHAR(255) DEFAULT NULL
         )""")
     db.commit()
     close_db(db)

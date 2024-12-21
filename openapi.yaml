@@ -415,8 +415,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-      security: []
-      
     get:
       tags:
         - user
@@ -529,7 +527,6 @@ paths:
                     type: string
         '401':
           description: Invalid credentials
-      security: []
   /user/logout:
     get:
       tags:
@@ -712,10 +709,3 @@ components:
           items:
             type: integer
             example: 5
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-security:
-  - BearerAuth: []

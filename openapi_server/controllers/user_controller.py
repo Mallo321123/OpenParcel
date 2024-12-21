@@ -8,9 +8,13 @@ from openapi_server.models.security_controller_login_request import SecurityCont
 from openapi_server.models.user import User  # noqa: E501
 from openapi_server import util
 
-from openapi_server.__init__ import get_db, close_db
+from openapi_server.__init__ import get_db, close_db, get_redis
 
+import jwt
 import hashlib
+import os
+from datetime import datetime, timedelta
+import redis
 
 def create_user(user=None):  # noqa: E501
     db = get_db()
@@ -36,7 +40,7 @@ def create_user(user=None):  # noqa: E501
         
         cursor.execute("""INSERT INTO users (
             email, firstname, lastname, username, password_hash, cross_hash, `groups`, status)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
             (user.email, user.first_name, user.last_name, user.username, password_hash, cross_hash, user.user_groups, user.user_status))
         db.commit()
         close_db(db)
@@ -93,6 +97,9 @@ def logout_user():  # noqa: E501
 
 
 def security_controller_login(security_controller_login_request):  # noqa: E501
+    db = get_db()
+    cursor = db.cursor()
+    redis_connection = get_redis()
     """User Login
 
     Authenticates a user and returns a JWT token. # noqa: E501
@@ -103,7 +110,38 @@ def security_controller_login(security_controller_login_request):  # noqa: E501
     :rtype: Union[SecurityControllerLogin200Response, Tuple[SecurityControllerLogin200Response, int], Tuple[SecurityControllerLogin200Response, int, Dict[str, str]]
     """
     if connexion.request.is_json:
-        security_controller_login_request = SecurityControllerLoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
+        login = SecurityControllerLoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
+        
+        cursor.execute("SELECT * FROM users WHERE username = %s", (login.username,))
+        user = cursor.fetchone()
+        if user is None:
+            return "Login or password Invalid", 401
+        
+        password_hash = hashlib.md5(login.password.encode()).hexdigest()
+        cross_hash = hashlib.md5(login.username.encode() + login.password.encode()).hexdigest()
+        
+        if user[5] != password_hash or user[6] != cross_hash:
+            return "Login or password Invalid", 401
+        
+        # Generate JWT token
+        secret_key = os.getenv("SECRET_KEY", "default_secret")
+        expiration_time = datetime.utcnow() + timedelta(hours=1)
+        token_payload = {
+            "user": user['username'],
+            "uid": user['id'],
+            "exp": expiration_time
+        }
+        token = jwt.encode(token_payload, secret_key, algorithm="HS256")
+
+        # Store token in Redis
+        redis_connection.setex(f"jwt:{user['id']}", timedelta(hours=1), token)
+
+        return {
+            "success": True,
+            "message": "Login successful.",
+            "token": token
+        }
+
     return 'do some magic!'
 
 
