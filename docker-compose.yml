@@ -1,13 +1,13 @@
 services:
-  web:
+  backend:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: flask_app
     ports:
       - "8080:8080"
     volumes:
-      - .:/usr/src/app
+      - ./backend:/usr/src/app
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_PORT=3306
@@ -22,6 +22,18 @@ services:
     depends_on:
       - mysql
       - redis
+    networks:
+      - OpenParcel
+
+  frontend:
+    build:
+      context: ./frontend/OpenParcel
+      dockerfile: Dockerfile
+    container_name: vue_frontend
+    ports:
+      - "3000:80" # Das Frontend wird auf Port 3000 erreichbar sein
+    environment:
+      - VUE_APP_API_URL=http://localhost:8080/api # API-URL für das Backend
     networks:
       - OpenParcel
 
