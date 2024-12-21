@@ -14,7 +14,7 @@ import re
 from openapi_server.tokenManager import valid_token, delete_token
 
 from flask_jwt_extended import jwt_required, get_jwt
-from flask import request
+from flask import request, jsonify
 
 
 def create_user(user=None):  # noqa: E501
@@ -182,8 +182,18 @@ def update_user(username, user=None):  # noqa: E501
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
-
+@jwt_required()
 def user_list_get():  # noqa: E501
+    
+    jwt_data = get_jwt()  # Alle Claims aus dem Token abrufen
+    user = jwt_data.get("user")  # Benutzername abrufen
+    token = request.headers.get("Authorization").split(" ")[1]  # Token abrufen
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
+    db = get_db()
+    cursor = db.cursor()
     """list users
 
     list all users # noqa: E501
@@ -191,4 +201,17 @@ def user_list_get():  # noqa: E501
 
     :rtype: Union[List[User], Tuple[List[User], int], Tuple[List[User], int, Dict[str, str]]
     """
-    return 'do some magic!'
+    cursor.execute("SELECT * FROM users")
+    users = cursor.fetchall()
+    close_db(db)
+    
+    for i in range(len(users)):
+        users[i] = User(
+            email=users[i][1],
+            first_name=users[i][2],
+            last_name=users[i][3],
+            username=users[i][4],
+            user_groups=users[i][7],
+            user_status=users[i][8]
+        )
+    return jsonify(users), 200

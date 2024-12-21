@@ -1,0 +1,1561 @@
+{
+  "version": "2.0.0",
+  "runtimeConfiguration": {
+    "environment": "default",
+    "laxTestingModeEnabled": false,
+    "apiConnectivityCheck": true,
+    "logLevel": "error",
+    "logDestination": "stdout+platform",
+    "logMaxFileSize": 2147483648,
+    "requestHeaderNameRequestId": "x-scan-request-id",
+    "requestHeaderNameScenarioId": "x-scan-scenario-id",
+    "requestHeaderNameRequestType": "x-scan-request-type",
+    "requestFlowrate": 100,
+    "requestTimeout": 30,
+    "requestTlsInsecureSkipVerify": true,
+    "responseFollowRedirection": false,
+    "responseMaxBodySizeScan": 10485760,
+    "happyPathOnly": false,
+    "maxRequestRetryAttempts": 5,
+    "maxScanDuration": 1800,
+    "memoryLimit": 2147483648,
+    "memoryTimeSpan": 10,
+    "reportMaxRequestSizeHappyPath": 8092,
+    "reportMaxRequestSizeTest": 8092,
+    "reportIncludeRequestBody": true,
+    "reportIncludeResponseBody": true,
+    "reportMaxHttpResponseSizeHappyPath": 8092,
+    "reportMaxBodySizeHappyPath": 8092,
+    "reportMaxHttpResponseSizeTest": 8092,
+    "reportMaxBodySizeTest": 8092,
+    "reportIssuesOnly": false,
+    "reportMaxIssues": 1000,
+    "reportMaxSize": 20971520,
+    "reportGenerateCurlCommand": true
+  },
+  "customizations": {
+    "happyPaths": {
+      "retry": 1,
+      "responsePolicy": {
+        "httpStatusExpected": true,
+        "mustBeConformant": true
+      },
+      "httpStatusExpected": []
+    },
+    "tests": {
+      "responsePolicy": {
+        "httpStatusExpected": true,
+        "mustBeConformant": true
+      }
+    }
+  },
+  "environments": {
+    "default": {
+      "variables": {
+        "bearerAuth": {
+          "name": "SCAN42C_SECURITY_BEARERAUTH",
+          "from": "environment",
+          "required": false
+        },
+        "host": {
+          "name": "SCAN42C_HOST",
+          "from": "environment",
+          "required": false,
+          "default": "http://127.0.0.1/api"
+        }
+      }
+    }
+  },
+  "operations": {
+    "create_user": {
+      "operationId": "create_user",
+      "request": {
+        "operationId": "create_user",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "create_user",
+            "method": "POST",
+            "url": "{{host}}/user",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "email": "john@email.com",
+                "firstName": "John",
+                "lastName": "James",
+                "password": "12345",
+                "userGroups": [
+                  "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
+                ],
+                "userStatus": 1,
+                "username": "theUser"
+              }
+            }
+          }
+        },
+        "defaultResponse": "default",
+        "responses": {
+          "default": {
+            "expectations": {
+              "httpStatus": "default"
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/create_user/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "dashboard_get": {
+      "operationId": "dashboard_get",
+      "request": {
+        "operationId": "dashboard_get",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "dashboard_get",
+            "method": "GET",
+            "url": "{{host}}/dashboard"
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/dashboard_get/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "delete_user": {
+      "operationId": "delete_user",
+      "request": {
+        "operationId": "delete_user",
+        "auth": [
+          "bearerAuth"
+        ],
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "delete_user",
+            "method": "DELETE",
+            "url": "{{host}}/user",
+            "queries": [
+              {
+                "key": "username",
+                "value": "dcgdpxldrckakqkexlhzfkywuhhoovyv"
+              }
+            ]
+          }
+        },
+        "defaultResponse": "404",
+        "responses": {
+          "400": {
+            "expectations": {
+              "httpStatus": 400
+            }
+          },
+          "404": {
+            "expectations": {
+              "httpStatus": 404
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/delete_user/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "get_user_by_name": {
+      "operationId": "get_user_by_name",
+      "request": {
+        "operationId": "get_user_by_name",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "get_user_by_name",
+            "method": "GET",
+            "url": "{{host}}/user",
+            "queries": [
+              {
+                "key": "username",
+                "value": "pxivnugyangrtsrfmlqysswumfuyuqiu"
+              }
+            ]
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "400": {
+            "expectations": {
+              "httpStatus": 400
+            }
+          },
+          "404": {
+            "expectations": {
+              "httpStatus": 404
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/get_user_by_name/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "light_add": {
+      "operationId": "light_add",
+      "request": {
+        "operationId": "light_add",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "light_add",
+            "method": "POST",
+            "url": "{{host}}/lights/devices",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "adress": "wled1.local",
+                "groups": {
+                  "id": 1,
+                  "name": "regal rechts"
+                },
+                "id": 1,
+                "note": "example note",
+                "online": 1
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/light_add/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "light_change": {
+      "operationId": "light_change",
+      "request": {
+        "operationId": "light_change",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "light_change",
+            "method": "PUT",
+            "url": "{{host}}/lights/devices",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "adress": "wled1.local",
+                "groups": {
+                  "id": 1,
+                  "name": "regal rechts"
+                },
+                "id": 1,
+                "note": "example note",
+                "online": 1
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/light_change/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "lights_devices_delete": {
+      "operationId": "lights_devices_delete",
+      "request": {
+        "operationId": "lights_devices_delete",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "lights_devices_delete",
+            "method": "DELETE",
+            "url": "{{host}}/lights/devices",
+            "queries": [
+              {
+                "key": "id",
+                "value": 557731771021088640
+              }
+            ]
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "400": {
+            "expectations": {
+              "httpStatus": 400
+            }
+          },
+          "404": {
+            "expectations": {
+              "httpStatus": 404
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/lights_devices_delete/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "lights_devices_get": {
+      "operationId": "lights_devices_get",
+      "request": {
+        "operationId": "lights_devices_get",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "lights_devices_get",
+            "method": "GET",
+            "url": "{{host}}/lights/devices"
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/lights_devices_get/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "lights_group_delete": {
+      "operationId": "lights_group_delete",
+      "request": {
+        "operationId": "lights_group_delete",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "lights_group_delete",
+            "method": "DELETE",
+            "url": "{{host}}/lights/group",
+            "queries": [
+              {
+                "key": "id",
+                "value": 5786281930673748000
+              }
+            ]
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "400": {
+            "expectations": {
+              "httpStatus": 400
+            }
+          },
+          "404": {
+            "expectations": {
+              "httpStatus": 404
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/lights_group_delete/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "lights_group_get": {
+      "operationId": "lights_group_get",
+      "request": {
+        "operationId": "lights_group_get",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "lights_group_get",
+            "method": "GET",
+            "url": "{{host}}/lights/group"
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/lights_group_get/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "lights_group_post": {
+      "operationId": "lights_group_post",
+      "request": {
+        "operationId": "lights_group_post",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "lights_group_post",
+            "method": "POST",
+            "url": "{{host}}/lights/group",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "id": 1,
+                "name": "regal rechts"
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/lights_group_post/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "lights_map_delete": {
+      "operationId": "lights_map_delete",
+      "request": {
+        "operationId": "lights_map_delete",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "lights_map_delete",
+            "method": "DELETE",
+            "url": "{{host}}/lights/map",
+            "queries": [
+              {
+                "key": "id",
+                "value": 9210573162069755000
+              }
+            ]
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "400": {
+            "expectations": {
+              "httpStatus": 400
+            }
+          },
+          "404": {
+            "expectations": {
+              "httpStatus": 404
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/lights_map_delete/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "lights_map_get": {
+      "operationId": "lights_map_get",
+      "request": {
+        "operationId": "lights_map_get",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "lights_map_get",
+            "method": "GET",
+            "url": "{{host}}/lights/map"
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/lights_map_get/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "lights_map_post": {
+      "operationId": "lights_map_post",
+      "request": {
+        "operationId": "lights_map_post",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "lights_map_post",
+            "method": "POST",
+            "url": "{{host}}/lights/map",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "id": 1,
+                "lightId": [
+                  5,
+                  5
+                ],
+                "name": "blinky",
+                "productId": [
+                  10,
+                  10
+                ]
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/lights_map_post/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "lights_map_put": {
+      "operationId": "lights_map_put",
+      "request": {
+        "operationId": "lights_map_put",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "lights_map_put",
+            "method": "PUT",
+            "url": "{{host}}/lights/map",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "id": 1,
+                "lightId": [
+                  5,
+                  5
+                ],
+                "name": "blinky",
+                "productId": [
+                  10,
+                  10
+                ]
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/lights_map_put/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "logout_user": {
+      "operationId": "logout_user",
+      "request": {
+        "operationId": "logout_user",
+        "auth": [
+          "bearerAuth"
+        ],
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "logout_user",
+            "method": "GET",
+            "url": "{{host}}/user/logout"
+          }
+        },
+        "defaultResponse": "default",
+        "responses": {
+          "default": {
+            "expectations": {
+              "httpStatus": "default"
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/logout_user/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "orders_delete": {
+      "operationId": "orders_delete",
+      "request": {
+        "operationId": "orders_delete",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "orders_delete",
+            "method": "DELETE",
+            "url": "{{host}}/orders",
+            "queries": [
+              {
+                "key": "id",
+                "value": 7595690731277087000
+              }
+            ]
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "400": {
+            "expectations": {
+              "httpStatus": 400
+            }
+          },
+          "404": {
+            "expectations": {
+              "httpStatus": 404
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/orders_delete/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "orders_get": {
+      "operationId": "orders_get",
+      "request": {
+        "operationId": "orders_get",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "orders_get",
+            "method": "GET",
+            "url": "{{host}}/orders"
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/orders_get/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "orders_post": {
+      "operationId": "orders_post",
+      "request": {
+        "operationId": "orders_post",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "orders_post",
+            "method": "POST",
+            "url": "{{host}}/orders",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "customer": "Max Mustermann",
+                "dateAdd": "2024-12-19T20:35:19.772Z",
+                "dateClosed": "2024-12-19T20:35:19.772Z",
+                "id": 5610,
+                "products": [
+                  {
+                    "buildTime": "20-30 min",
+                    "comment": "example comment",
+                    "customerGroups": [
+                      "[\"adults\",\"teens\",\"kids\",\"nerds\"]",
+                      "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+                    ],
+                    "difficulty": 3,
+                    "id": 1,
+                    "name": "openDTU"
+                  },
+                  {
+                    "buildTime": "20-30 min",
+                    "comment": "example comment",
+                    "customerGroups": [
+                      "[\"adults\",\"teens\",\"kids\",\"nerds\"]",
+                      "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+                    ],
+                    "difficulty": 3,
+                    "id": 1,
+                    "name": "openDTU"
+                  }
+                ],
+                "state": "open"
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/orders_post/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "orders_put": {
+      "operationId": "orders_put",
+      "request": {
+        "operationId": "orders_put",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "orders_put",
+            "method": "PUT",
+            "url": "{{host}}/orders",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "customer": "Max Mustermann",
+                "dateAdd": "2024-12-19T20:35:19.772Z",
+                "dateClosed": "2024-12-19T20:35:19.772Z",
+                "id": 5610,
+                "products": [
+                  {
+                    "buildTime": "20-30 min",
+                    "comment": "example comment",
+                    "customerGroups": [
+                      "[\"adults\",\"teens\",\"kids\",\"nerds\"]",
+                      "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+                    ],
+                    "difficulty": 3,
+                    "id": 1,
+                    "name": "openDTU"
+                  },
+                  {
+                    "buildTime": "20-30 min",
+                    "comment": "example comment",
+                    "customerGroups": [
+                      "[\"adults\",\"teens\",\"kids\",\"nerds\"]",
+                      "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+                    ],
+                    "difficulty": 3,
+                    "id": 1,
+                    "name": "openDTU"
+                  }
+                ],
+                "state": "open"
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/orders_put/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "product_add": {
+      "operationId": "product_add",
+      "request": {
+        "operationId": "product_add",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "product_add",
+            "method": "POST",
+            "url": "{{host}}/products",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "buildTime": "20-30 min",
+                "comment": "example comment",
+                "customerGroups": [
+                  "[\"adults\",\"teens\",\"kids\",\"nerds\"]",
+                  "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+                ],
+                "difficulty": 3,
+                "id": 1,
+                "name": "openDTU"
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/product_add/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "products_delete": {
+      "operationId": "products_delete",
+      "request": {
+        "operationId": "products_delete",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "products_delete",
+            "method": "DELETE",
+            "url": "{{host}}/products",
+            "queries": [
+              {
+                "key": "id",
+                "value": 6614335950721720000
+              }
+            ]
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "400": {
+            "expectations": {
+              "httpStatus": 400
+            }
+          },
+          "404": {
+            "expectations": {
+              "httpStatus": 404
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/products_delete/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "products_list": {
+      "operationId": "products_list",
+      "request": {
+        "operationId": "products_list",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "products_list",
+            "method": "GET",
+            "url": "{{host}}/products"
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/products_list/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "security_controller_login": {
+      "operationId": "security_controller_login",
+      "request": {
+        "operationId": "security_controller_login",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "security_controller_login",
+            "method": "POST",
+            "url": "{{host}}/user/login",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "password": "12345",
+                "username": "theUser"
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/security_controller_login/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "settings_list": {
+      "operationId": "settings_list",
+      "request": {
+        "operationId": "settings_list",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "settings_list",
+            "method": "GET",
+            "url": "{{host}}/settings"
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/settings_list/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "settings_update": {
+      "operationId": "settings_update",
+      "request": {
+        "operationId": "settings_update",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "settings_update",
+            "method": "PUT",
+            "url": "{{host}}/settings",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "minPasswordLength": 5
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/settings_update/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "update_product": {
+      "operationId": "update_product",
+      "request": {
+        "operationId": "update_product",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "update_product",
+            "method": "PUT",
+            "url": "{{host}}/products",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "buildTime": "20-30 min",
+                "comment": "example comment",
+                "customerGroups": [
+                  "[\"adults\",\"teens\",\"kids\",\"nerds\"]",
+                  "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+                ],
+                "difficulty": 3,
+                "id": 1,
+                "name": "openDTU"
+              }
+            }
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          },
+          "401": {
+            "expectations": {
+              "httpStatus": 401
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/update_product/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "update_user": {
+      "operationId": "update_user",
+      "request": {
+        "operationId": "update_user",
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "update_user",
+            "method": "PUT",
+            "url": "{{host}}/user",
+            "headers": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "queries": [
+              {
+                "key": "username",
+                "value": "knonvbwuyxoxhovwmflfburpabescihw"
+              }
+            ],
+            "requestBody": {
+              "mode": "json",
+              "json": {
+                "email": "john@email.com",
+                "firstName": "John",
+                "lastName": "James",
+                "password": "12345",
+                "userGroups": [
+                  "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
+                ],
+                "userStatus": 1,
+                "username": "theUser"
+              }
+            }
+          }
+        },
+        "defaultResponse": "default",
+        "responses": {
+          "default": {
+            "expectations": {
+              "httpStatus": "default"
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/update_user/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    },
+    "user_list_get": {
+      "operationId": "user_list_get",
+      "request": {
+        "operationId": "user_list_get",
+        "auth": [
+          "bearerAuth"
+        ],
+        "request": {
+          "type": "42c",
+          "details": {
+            "operationId": "user_list_get",
+            "method": "GET",
+            "url": "{{host}}/user/list"
+          }
+        },
+        "defaultResponse": "200",
+        "responses": {
+          "200": {
+            "expectations": {
+              "httpStatus": 200
+            }
+          }
+        }
+      },
+      "scenarios": [
+        {
+          "key": "happy.path",
+          "requests": [
+            {
+              "fuzzing": true,
+              "$ref": "#/operations/user_list_get/request"
+            }
+          ],
+          "fuzzing": true
+        }
+      ]
+    }
+  },
+  "authenticationDetails": [
+    {
+      "bearerAuth": {
+        "type": "bearer",
+        "default": "bearerAuth",
+        "credentials": {
+          "bearerAuth": {
+            "credential": "{{bearerAuth}}",
+            "description": "bearerAuth security"
+          }
+        }
+      }
+    }
+  ]
+}
