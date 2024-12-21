@@ -587,7 +587,7 @@ paths:
         required: true
         schema:
           maxLength: 32
-          pattern: "^example-[0-9a-z]+$"
+          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       responses:
@@ -889,7 +889,8 @@ components:
         firstName: John
         lastName: James
         userGroups:
-        - "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
+        - admin
+        - lights
         password: "12345"
         userStatus: 1
         email: john@email.com
@@ -898,25 +899,25 @@ components:
         username:
           example: theUser
           maxLength: 15
-          pattern: "^[0-9a-z]"
+          pattern: "^[0-9a-zA-Z]+$"
           title: username
           type: string
         firstName:
           example: John
           maxLength: 20
-          pattern: "^[a-z]"
+          pattern: "^[a-zA-Z]+$"
           title: firstName
           type: string
         lastName:
           example: James
           maxLength: 20
-          pattern: "^[a-z]"
+          pattern: "^[a-zA-Z]+$"
           title: lastName
           type: string
         email:
           example: john@email.com
           maxLength: 100
-          pattern: "^[A-Z0-9+_.-]+@[A-Z0-9.-]+$"
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
           title: email
           type: string
         password:
@@ -935,7 +936,13 @@ components:
           type: integer
         userGroups:
           items:
-            example: "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
+            enum:
+            - admin
+            - products
+            - lights
+            - settings
+            - orders
+            example: admin
             maxLength: 200
             type: string
           maxItems: 100
@@ -949,7 +956,8 @@ components:
         firstName: John
         lastName: James
         userGroups:
-        - "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
+        - admin
+        - lights
         userStatus: 1
         email: john@email.com
         username: theUser
@@ -961,25 +969,25 @@ components:
         username:
           example: theUser
           maxLength: 15
-          pattern: "^[0-9a-z]"
+          pattern: "^[0-9a-zA-Z]+$"
           title: username
           type: string
         firstName:
           example: John
           maxLength: 20
-          pattern: "^[a-z]"
+          pattern: "^[a-zA-Z]+$"
           title: firstName
           type: string
         lastName:
           example: James
           maxLength: 20
-          pattern: "^[a-z]"
+          pattern: "^[a-zA-Z]+$"
           title: lastName
           type: string
         email:
           example: john@email.com
           maxLength: 100
-          pattern: "^[A-Z0-9+_.-]+@[A-Z0-9.-]+$"
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
           title: email
           type: string
         userStatus:
@@ -990,7 +998,13 @@ components:
           type: integer
         userGroups:
           items:
-            example: "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
+            enum:
+            - admin
+            - products
+            - lights
+            - settings
+            - orders
+            example: admin
             maxLength: 200
             type: string
           maxItems: 100

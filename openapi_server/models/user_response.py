@@ -112,8 +112,8 @@ class UserResponse(Model):
         """
         if username is not None and len(username) > 15:
             raise ValueError("Invalid value for `username`, length must be less than or equal to `15`")  # noqa: E501
-        if username is not None and not re.search(r'^[0-9a-z]', username):  # noqa: E501
-            raise ValueError(r"Invalid value for `username`, must be a follow pattern or equal to `/^[0-9a-z]/`")  # noqa: E501
+        if username is not None and not re.search(r'^[0-9a-zA-Z]+$', username):  # noqa: E501
+            raise ValueError(r"Invalid value for `username`, must be a follow pattern or equal to `/^[0-9a-zA-Z]+$/`")  # noqa: E501
 
         self._username = username
 
@@ -137,8 +137,8 @@ class UserResponse(Model):
         """
         if first_name is not None and len(first_name) > 20:
             raise ValueError("Invalid value for `first_name`, length must be less than or equal to `20`")  # noqa: E501
-        if first_name is not None and not re.search(r'^[a-z]', first_name):  # noqa: E501
-            raise ValueError(r"Invalid value for `first_name`, must be a follow pattern or equal to `/^[a-z]/`")  # noqa: E501
+        if first_name is not None and not re.search(r'^[a-zA-Z]+$', first_name):  # noqa: E501
+            raise ValueError(r"Invalid value for `first_name`, must be a follow pattern or equal to `/^[a-zA-Z]+$/`")  # noqa: E501
 
         self._first_name = first_name
 
@@ -162,8 +162,8 @@ class UserResponse(Model):
         """
         if last_name is not None and len(last_name) > 20:
             raise ValueError("Invalid value for `last_name`, length must be less than or equal to `20`")  # noqa: E501
-        if last_name is not None and not re.search(r'^[a-z]', last_name):  # noqa: E501
-            raise ValueError(r"Invalid value for `last_name`, must be a follow pattern or equal to `/^[a-z]/`")  # noqa: E501
+        if last_name is not None and not re.search(r'^[a-zA-Z]+$', last_name):  # noqa: E501
+            raise ValueError(r"Invalid value for `last_name`, must be a follow pattern or equal to `/^[a-zA-Z]+$/`")  # noqa: E501
 
         self._last_name = last_name
 
@@ -187,8 +187,8 @@ class UserResponse(Model):
         """
         if email is not None and len(email) > 100:
             raise ValueError("Invalid value for `email`, length must be less than or equal to `100`")  # noqa: E501
-        if email is not None and not re.search(r'^[A-Z0-9+_.-]+@[A-Z0-9.-]+$', email):  # noqa: E501
-            raise ValueError(r"Invalid value for `email`, must be a follow pattern or equal to `/^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/`")  # noqa: E501
+        if email is not None and not re.search(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):  # noqa: E501
+            raise ValueError(r"Invalid value for `email`, must be a follow pattern or equal to `/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/`")  # noqa: E501
 
         self._email = email
 
@@ -233,7 +233,12 @@ class UserResponse(Model):
         :param user_groups: The user_groups of this UserResponse.
         :type user_groups: List[str]
         """
-        if user_groups is not None and len(user_groups) > 100:
-            raise ValueError("Invalid value for `user_groups`, number of items must be less than or equal to `100`")  # noqa: E501
+        allowed_values = ["admin", "products", "lights", "settings", "orders"]  # noqa: E501
+        if not set(user_groups).issubset(set(allowed_values)):
+            raise ValueError(
+                "Invalid values for `user_groups` [{0}], must be a subset of [{1}]"  # noqa: E501
+                .format(", ".join(map(str, set(user_groups) - set(allowed_values))),  # noqa: E501
+                        ", ".join(map(str, allowed_values)))
+            )
 
         self._user_groups = user_groups

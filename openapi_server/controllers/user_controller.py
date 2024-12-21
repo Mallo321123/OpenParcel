@@ -10,6 +10,7 @@ import hashlib
 import os
 from datetime import datetime, timedelta
 import re
+import json
 
 from openapi_server.tokenManager import valid_token, delete_token
 
@@ -42,10 +43,12 @@ def create_user(user=None):  # noqa: E501
         password_hash = hashlib.md5(user.password.encode()).hexdigest()
         cross_hash = hashlib.md5(user.username.encode() + user.password.encode()).hexdigest()
         
+        user_groups_json = json.dumps(user.user_groups)
+        
         cursor.execute("""INSERT INTO users (
             email, firstname, lastname, username, password_hash, cross_hash, `groups`, status)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
-            (user.email, user.first_name, user.last_name, user.username, password_hash, cross_hash, user.user_groups, user.user_status))
+            (user.email, user.first_name, user.last_name, user.username, password_hash, cross_hash, user_groups_json, user.user_status))
         db.commit()
         close_db(db)
         
@@ -206,12 +209,17 @@ def user_list_get():  # noqa: E501
     close_db(db)
     
     for i in range(len(users)):
+        try:
+            groups = json.loads(users[i][7])
+        except TypeError:
+            groups = []
+            
         users[i] = User(
             email=users[i][1],
             first_name=users[i][2],
             last_name=users[i][3],
             username=users[i][4],
-            user_groups=users[i][7],
+            user_groups=groups,
             user_status=users[i][8]
         )
     return jsonify(users), 200
