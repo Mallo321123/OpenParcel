@@ -13,6 +13,7 @@ import re
 import json
 
 from openapi_server.tokenManager import valid_token, delete_token
+from openapi_server.permission_check import check_permission
 
 from flask_jwt_extended import jwt_required, get_jwt
 from flask import request, jsonify
@@ -96,7 +97,7 @@ def security_controller_login():  # noqa: E501
         token = jwt.encode(token_payload, secret_key, algorithm="HS256")
 
         # Store token in Redis
-        redis_connection.setex(user[4], timedelta(hours=24), token)
+        redis_connection.setex(f"jwt:{user[4]}", timedelta(hours=24), token)
 
         return {
             "success": True,
@@ -112,6 +113,10 @@ def delete_user(username):  # noqa: E501
     
     jwt_data = get_jwt()  # Alle Claims aus dem Token abrufen
     user = jwt_data.get("user")  # Benutzername abrufen
+    
+    if check_permission("admin", user) is False:
+        return "unauthorized", 401
+    
     token = request.headers.get("Authorization").split(" ")[1]  # Token abrufen
     
     if not valid_token(user, token):
@@ -139,8 +144,18 @@ def delete_user(username):  # noqa: E501
     
     return "User deleted", 200
 
-
+@jwt_required()
 def get_user_by_name(username):  # noqa: E501
+    jwt_data = get_jwt()  # Alle Claims aus dem Token abrufen
+    user = jwt_data.get("user")  # Benutzername abrufen
+    token = request.headers.get("Authorization").split(" ")[1]  # Token abrufen
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
+    
+    db = get_db()
+    cursor = db.cursor()
     """Get user by user name
 
      # noqa: E501
@@ -150,7 +165,28 @@ def get_user_by_name(username):  # noqa: E501
 
     :rtype: Union[User, Tuple[User, int], Tuple[User, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    user = cursor.fetchone()
+    close_db(db)
+    
+    if user is None:
+        return "User not found", 404
+    
+    try:
+        groups = json.loads(user[7])
+    except TypeError:
+        groups = []
+            
+    user = User(
+        email=user[1],
+        first_name=user[2],
+        last_name=user[3],
+        username=user[4],
+        user_groups=groups,
+        user_status=user[8]
+    )
+    
+    return jsonify(user), 200
 
 @jwt_required()
 def logout_user():  # noqa: E501
@@ -166,7 +202,6 @@ def logout_user():  # noqa: E501
     delete_token(user)
     
     return "User logged out", 200
-
 
 
 def update_user(username, user=None):  # noqa: E501
@@ -190,6 +225,10 @@ def user_list_get():  # noqa: E501
     
     jwt_data = get_jwt()  # Alle Claims aus dem Token abrufen
     user = jwt_data.get("user")  # Benutzername abrufen
+    
+    if check_permission("admin", user) is False:
+        return "unauthorized", 401
+    
     token = request.headers.get("Authorization").split(" ")[1]  # Token abrufen
     
     if not valid_token(user, token):
