@@ -27,6 +27,10 @@ def create_user(user=None):  # noqa: E501
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
         
+        cursor.execute("SELECT * FROM users WHERE username = %s", (user.username,))
+        if cursor.fetchone() is not None:
+            return "User already exists", 400
+        
         password_hash = hashlib.md5(user.password.encode()).hexdigest()
         cross_hash = hashlib.md5(user.username.encode() + user.password.encode()).hexdigest()
         
@@ -43,6 +47,8 @@ def create_user(user=None):  # noqa: E501
 
 
 def delete_user(username):  # noqa: E501
+    db = get_db()
+    cursor = db.cursor()
     """Delete user
 
     This can only be done by the logged in user. # noqa: E501
@@ -52,7 +58,14 @@ def delete_user(username):  # noqa: E501
 
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    if cursor.fetchone() is None:
+        return "User not found", 404
+    
+    cursor.execute("DELETE FROM users WHERE username = %s", (username,))
+    db.commit()
+    
+    return "User deleted", 200
 
 
 def get_user_by_name(username):  # noqa: E501
