@@ -11,8 +11,6 @@ info:
   version: 0.1.0
 servers:
 - url: http://127.0.0.1/api
-security:
-- BearerAuth: []
 tags:
 - name: dashboard
 - name: settings
@@ -466,6 +464,8 @@ paths:
       tags:
       - user
       x-openapi-router-controller: openapi_server.controllers.user_controller
+      security:
+        - bearerAuth: []
     get:
       description: ""
       operationId: get_user_by_name
@@ -509,7 +509,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: successful operation
-      security: []
       summary: Create user
       tags:
       - user
@@ -575,7 +574,6 @@ paths:
           description: Successfully authenticated
         "401":
           description: Invalid credentials
-      security: []
       summary: User Login
       tags:
       - user
@@ -890,8 +888,7 @@ components:
       title: security_controller_login_200_response
       type: object
   securitySchemes:
-    BearerAuth:
+    bearerAuth:
       bearerFormat: JWT
       scheme: bearer
       type: http
-      x-bearerInfoFunc: openapi_server.controllers.security_controller.info_from_BearerAuth

@@ -33,7 +33,13 @@ def close_db(db):
     return True
 
 def get_redis():
-    return redis.StrictRedis(host=os.getenv('REDIS_HOST', 'redis'), port=os.getenv('REDIS_PORT', '6379'), decode_responses=True)
+    try:
+        redis_connection = redis.StrictRedis(host=os.getenv('REDIS_HOST', 'redis'), port=os.getenv('REDIS_PORT', '6379'), decode_responses=True)
+
+    except redis.ConnectionError:
+        print("Redis connection error.")
+        return None
+    return redis_connection
 
 def prepare_database():
     db = get_db()

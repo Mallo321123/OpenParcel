@@ -1,12 +1,7 @@
 import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
 
-from openapi_server.models.security_controller_login200_response import SecurityControllerLogin200Response  # noqa: E501
 from openapi_server.models.security_controller_login_request import SecurityControllerLoginRequest  # noqa: E501
 from openapi_server.models.user import User  # noqa: E501
-from openapi_server import util
 
 from openapi_server.__init__ import get_db, close_db, get_redis
 
@@ -14,7 +9,13 @@ import jwt
 import hashlib
 import os
 from datetime import datetime, timedelta
-import redis
+import re
+
+from openapi_server.tokenManager import valid_token
+
+from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
+from flask import request, jsonify
+
 
 def create_user(user=None):  # noqa: E501
     db = get_db()
@@ -30,6 +31,9 @@ def create_user(user=None):  # noqa: E501
     """
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
+        
+        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', user.email):
+            return "Invalid email", 400
         
         cursor.execute("SELECT * FROM users WHERE username = %s", (user.username,))
         if cursor.fetchone() is not None:
@@ -49,8 +53,68 @@ def create_user(user=None):  # noqa: E501
         
     return "User not created", 400
 
+def security_controller_login():  # noqa: E501
+    db = get_db()
+    cursor = db.cursor()
+    redis_connection = get_redis()
+    """User Login
+
+    Authenticates a user and returns a JWT token. # noqa: E501
+
+    :param security_controller_login_request: 
+    :type security_controller_login_request: dict | bytes
+
+    :rtype: Union[SecurityControllerLogin200Response, Tuple[SecurityControllerLogin200Response, int], Tuple[SecurityControllerLogin200Response, int, Dict[str, str]]
+    """
+    if connexion.request.is_json:
+        login = SecurityControllerLoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
+        
+        
+        cursor.execute("SELECT * FROM users WHERE username = %s", (login.username,))
+        user = cursor.fetchone()
+        if user is None:
+            return "Login or password Invalid", 401
+        
+        password_hash = hashlib.md5(login.password.encode()).hexdigest()
+        cross_hash = hashlib.md5(login.username.encode() + login.password.encode()).hexdigest()
+    
+        
+        if user[5] != password_hash or user[6] != cross_hash:
+            return "Login or password Invalid", 401
+        
+        # Generate JWT token
+        secret_key = os.getenv("SECRET_KEY", "default_secret")
+        expiration_time = datetime.utcnow() + timedelta(hours=24)
+        token_payload = {
+            "user": user[4],
+            "id": user[0],
+            "exp": expiration_time
+        }
+        token = jwt.encode(token_payload, secret_key, algorithm="HS256")
+
+        # Store token in Redis
+        redis_connection.setex(user[4], timedelta(hours=24), token)
+
+        return {
+            "success": True,
+            "message": "Login successful.",
+            "token": token
+        }
+
+    close_db(db)
+    return "Login or password Invalid", 401
 
 def delete_user(username):  # noqa: E501
+    auth_header = request.headers.get('Authorization')
+    
+    return 200, auth_header
+    
+    
+    verify_jwt_in_request()
+    user = get_jwt_identity()
+    if not valid_token(user):
+        return 401
+    
     db = get_db()
     cursor = db.cursor()
     """Delete user
@@ -95,54 +159,6 @@ def logout_user():  # noqa: E501
     """
     return 'do some magic!'
 
-
-def security_controller_login(security_controller_login_request):  # noqa: E501
-    db = get_db()
-    cursor = db.cursor()
-    redis_connection = get_redis()
-    """User Login
-
-    Authenticates a user and returns a JWT token. # noqa: E501
-
-    :param security_controller_login_request: 
-    :type security_controller_login_request: dict | bytes
-
-    :rtype: Union[SecurityControllerLogin200Response, Tuple[SecurityControllerLogin200Response, int], Tuple[SecurityControllerLogin200Response, int, Dict[str, str]]
-    """
-    if connexion.request.is_json:
-        login = SecurityControllerLoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
-        
-        cursor.execute("SELECT * FROM users WHERE username = %s", (login.username,))
-        user = cursor.fetchone()
-        if user is None:
-            return "Login or password Invalid", 401
-        
-        password_hash = hashlib.md5(login.password.encode()).hexdigest()
-        cross_hash = hashlib.md5(login.username.encode() + login.password.encode()).hexdigest()
-        
-        if user[5] != password_hash or user[6] != cross_hash:
-            return "Login or password Invalid", 401
-        
-        # Generate JWT token
-        secret_key = os.getenv("SECRET_KEY", "default_secret")
-        expiration_time = datetime.utcnow() + timedelta(hours=1)
-        token_payload = {
-            "user": user['username'],
-            "uid": user['id'],
-            "exp": expiration_time
-        }
-        token = jwt.encode(token_payload, secret_key, algorithm="HS256")
-
-        # Store token in Redis
-        redis_connection.setex(f"jwt:{user['id']}", timedelta(hours=1), token)
-
-        return {
-            "success": True,
-            "message": "Login successful.",
-            "token": token
-        }
-
-    return 'do some magic!'
 
 
 def update_user(username, user=None):  # noqa: E501
