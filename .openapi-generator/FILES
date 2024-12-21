@@ -27,6 +27,7 @@ openapi_server/models/security_controller_login200_response.py
 openapi_server/models/security_controller_login_request.py
 openapi_server/models/settings.py
 openapi_server/models/user.py
+openapi_server/models/user_response.py
 openapi_server/openapi/openapi.yaml
 openapi_server/test/__init__.py
 openapi_server/typing_utils.py

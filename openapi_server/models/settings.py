@@ -57,5 +57,9 @@ class Settings(Model):
         :param min_password_length: The min_password_length of this Settings.
         :type min_password_length: int
         """
+        if min_password_length is not None and min_password_length > 1024:  # noqa: E501
+            raise ValueError("Invalid value for `min_password_length`, must be a value less than or equal to `1024`")  # noqa: E501
+        if min_password_length is not None and min_password_length < 0:  # noqa: E501
+            raise ValueError("Invalid value for `min_password_length`, must be a value greater than or equal to `0`")  # noqa: E501
 
         self._min_password_length = min_password_length

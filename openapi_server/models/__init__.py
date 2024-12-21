@@ -10,3 +10,4 @@ from openapi_server.models.security_controller_login200_response import Security
 from openapi_server.models.security_controller_login_request import SecurityControllerLoginRequest
 from openapi_server.models.settings import Settings
 from openapi_server.models.user import User
+from openapi_server.models.user_response import UserResponse

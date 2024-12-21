@@ -31,14 +31,14 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/Dashboard'
-                type: array
                 maxItems: 100
+                type: array
           description: successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: Not Found
@@ -57,10 +57,10 @@ paths:
         name: id
         required: true
         schema:
-          type: integer
+          format: int32
           maximum: 2147483647
           minimum: 0
-          format: int32
+          type: integer
         style: form
       responses:
         "200":
@@ -69,7 +69,7 @@ paths:
           description: Invalid id supplied
         "404":
           description: light not found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: Too Many Requests
@@ -87,14 +87,14 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/Lights'
-                type: array
                 maxItems: 100
+                type: array
           description: successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -116,7 +116,7 @@ paths:
           description: Successful operation
         "401":
           description: Unathorized
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -138,9 +138,9 @@ paths:
           description: Successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -159,10 +159,10 @@ paths:
         name: id
         required: true
         schema:
-          type: integer
+          format: int32
           maximum: 2147483647
           minimum: 0
-          format: int32
+          type: integer
         style: form
       responses:
         "200":
@@ -171,7 +171,7 @@ paths:
           description: Invalid id supplied
         "404":
           description: group not found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -189,14 +189,14 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/Groups'
-                type: array
                 maxItems: 100
+                type: array
           description: successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Not Found
         default:
           description: default
@@ -218,7 +218,7 @@ paths:
           description: Successful operation
         "401":
           description: Unathorized
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -237,10 +237,10 @@ paths:
         name: id
         required: true
         schema:
-          type: integer
+          format: int32
           maximum: 2147483647
           minimum: 0
-          format: int32
+          type: integer
         style: form
       responses:
         "200":
@@ -249,7 +249,7 @@ paths:
           description: Invalid id supplied
         "404":
           description: mapper not found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -267,18 +267,17 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/Map'
-                type: array
                 maxItems: 100
+                type: array
           description: successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
-
       summary: list all mappings
       tags:
       - lights
@@ -297,7 +296,7 @@ paths:
           description: Successful operation
         "401":
           description: Unathorized
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -319,9 +318,9 @@ paths:
           description: Successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -340,10 +339,10 @@ paths:
         name: id
         required: true
         schema:
-          type: integer
+          format: int32
           maximum: 2147483647
           minimum: 0
-          format: int32
+          type: integer
         style: form
       responses:
         "200":
@@ -352,7 +351,7 @@ paths:
           description: Invalid id supplied
         "404":
           description: order not found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -370,14 +369,14 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/Orders'
-                type: array
                 maxItems: 100
+                type: array
           description: successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -398,7 +397,7 @@ paths:
           description: successful operation
         "401":
           description: Unathorized
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -419,9 +418,9 @@ paths:
           description: successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -440,10 +439,10 @@ paths:
         name: id
         required: true
         schema:
-          type: integer
+          format: int32
           maximum: 2147483647
           minimum: 0
-          format: int32
+          type: integer
         style: form
       responses:
         "200":
@@ -452,7 +451,7 @@ paths:
           description: Invalid id supplied
         "404":
           description: product not found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -470,14 +469,14 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/Products'
-                type: array
                 maxItems: 100
+                type: array
           description: successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -498,7 +497,7 @@ paths:
           description: successful operation
         "401":
           description: Unathorized
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -519,9 +518,9 @@ paths:
           description: successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -542,9 +541,9 @@ paths:
           description: successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -566,9 +565,9 @@ paths:
           description: Successful operation
         "401":
           description: Unathorized
-        '404':
+        "404":
           description: Not Found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -587,22 +586,22 @@ paths:
         name: username
         required: true
         schema:
-          type: string
-          pattern: ^example-[0-9a-z]+$
           maxLength: 32
+          pattern: "^example-[0-9a-z]+$"
+          type: string
         style: form
       responses:
         "400":
           description: Invalid username supplied
         "404":
           description: User not found
-        '204':
+        "204":
           description: Created
-        '401':
+        "401":
           description: Unathorized
-        '403':
+        "403":
           description: Forbidden
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -622,9 +621,9 @@ paths:
         name: username
         required: true
         schema:
-          type: string
-          pattern: ^example-[0-9a-z]+$
           maxLength: 20
+          pattern: "^example-[0-9a-z]+$"
+          type: string
         style: form
       responses:
         "200":
@@ -637,7 +636,7 @@ paths:
           description: Invalid username supplied
         "404":
           description: User not found
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
@@ -661,7 +660,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: successful operation
-        '204':
+        "204":
           description: Created
       summary: Create user
       tags:
@@ -677,9 +676,9 @@ paths:
         name: username
         required: true
         schema:
-          type: string
-          pattern: ^example-[0-9a-z]+$
           maxLength: 20
+          pattern: "^example-[0-9a-z]+$"
+          type: string
         style: form
       requestBody:
         content:
@@ -690,7 +689,7 @@ paths:
       responses:
         default:
           description: successful operation
-        '204':
+        "204":
           description: Created
       summary: Update user
       tags:
@@ -707,16 +706,16 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/User_response'
-                type: array
                 maxItems: 100
+                type: array
           description: succesfull operation
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Unauthorized
-        '404':
+        "404":
           description: Unauthorized
-        '429':
+        "429":
           description: Unauthorized
         default:
           description: Unauthorized
@@ -745,14 +744,14 @@ paths:
           description: Successfully authenticated
         "401":
           description: Invalid credentials
-        '429':
+        "429":
           description: Too Many Requests
         default:
           description: default
+      security: []
       summary: User Login
       tags:
       - user
-      security: []
       x-openapi-router-controller: openapi_server.controllers.user_controller
   /user/logout:
     get:
@@ -762,7 +761,7 @@ paths:
       responses:
         default:
           description: successful operation
-        '200':
+        "200":
           description: OK
       security:
       - bearerAuth: []
@@ -773,20 +772,21 @@ paths:
 components:
   schemas:
     Settings:
+      additionalProperties: false
       example:
         minPasswordLength: 5
       properties:
         minPasswordLength:
           example: 5
           format: int64
-          title: minPasswordLength
-          type: integer
           maximum: 1024
           minimum: 0
+          title: minPasswordLength
+          type: integer
       title: Settings
       type: object
-      additionalProperties: false
     Dashboard:
+      additionalProperties: false
       example:
         done: 420
         open: 23
@@ -819,8 +819,8 @@ components:
           type: integer
       title: Dashboard
       type: object
-      additionalProperties: false
     Orders:
+      additionalProperties: false
       example:
         dateAdd: 2024-12-19T20:35:19.772Z
         id: 5610
@@ -845,23 +845,23 @@ components:
       properties:
         id:
           example: 5610
-          title: id
-          type: integer
+          format: int32
           maximum: 2147483647
           minimum: 0
-          format: int32
+          title: id
+          type: integer
         customer:
           example: Max Mustermann
+          maxLength: 255
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
           title: customer
           type: string
-          pattern: ^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$
-          maxLength: 255
         products:
           items:
             $ref: '#/components/schemas/Products'
+          maxItems: 100
           title: products
           type: array
-          maxItems: 100
         state:
           enum:
           - open
@@ -873,20 +873,20 @@ components:
           type: string
         dateAdd:
           example: 2024-12-19T20:35:19.772
+          maxLength: 30
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
           title: dateAdd
           type: string
-          pattern: ^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$
-          maxLength: 30
         dateClosed:
           example: 2024-12-19T20:35:19.772
+          maxLength: 30
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
           title: dateClosed
           type: string
-          pattern: ^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$
-          maxLength: 30
       title: Orders
       type: object
-      additionalProperties: false
     User:
+      additionalProperties: false
       example:
         firstName: John
         lastName: James
@@ -899,54 +899,54 @@ components:
       properties:
         username:
           example: theUser
+          maxLength: 15
+          pattern: "^[0-9a-z]"
           title: username
           type: string
-          pattern: ^[0-9a-z]
-          maxLength: 15
         firstName:
           example: John
+          maxLength: 20
+          pattern: "^[a-z]"
           title: firstName
           type: string
-          pattern: ^[a-z]
-          maxLength: 20
         lastName:
           example: James
+          maxLength: 20
+          pattern: "^[a-z]"
           title: lastName
           type: string
-          pattern: ^[a-z]
-          maxLength: 20
         email:
           example: john@email.com
+          maxLength: 100
+          pattern: "^[A-Z0-9+_.-]+@[A-Z0-9.-]+$"
           title: email
           type: string
-          pattern: ^[A-Z0-9+_.-]+@[A-Z0-9.-]+$
-          maxLength: 100
         password:
           example: "12345"
+          maxLength: 255
+          pattern: "^.*$"
           title: password
           type: string
-          pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$
-          maxLength: 255
         userStatus:
           description: User Status
           example: 1
           format: int32
-          title: userStatus
-          type: integer
           maximum: 1
           minimum: 0
+          title: userStatus
+          type: integer
         userGroups:
           items:
             example: "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
-            type: string
             maxLength: 200
+            type: string
+          maxItems: 100
           title: userGroups
           type: array
-          maxItems: 100
       title: User
       type: object
-      additionalProperties: false
     User_response:
+      additionalProperties: false
       example:
         firstName: John
         lastName: James
@@ -963,28 +963,28 @@ components:
           type: integer
         username:
           example: theUser
+          maxLength: 15
+          pattern: "^[0-9a-z]"
           title: username
           type: string
-          pattern: ^[0-9a-z]
-          maxLength: 15
         firstName:
           example: John
+          maxLength: 20
+          pattern: "^[a-z]"
           title: firstName
           type: string
-          pattern: ^[a-z]
-          maxLength: 20
         lastName:
           example: James
+          maxLength: 20
+          pattern: "^[a-z]"
           title: lastName
           type: string
-          pattern: ^[a-z]
-          maxLength: 20
         email:
           example: john@email.com
+          maxLength: 100
+          pattern: "^[A-Z0-9+_.-]+@[A-Z0-9.-]+$"
           title: email
           type: string
-          pattern: ^[A-Z0-9+_.-]+@[A-Z0-9.-]+$
-          maxLength: 100
         userStatus:
           description: User Status
           example: 1
@@ -994,15 +994,15 @@ components:
         userGroups:
           items:
             example: "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
-            type: string
             maxLength: 200
+            type: string
+          maxItems: 100
           title: userGroups
           type: array
-          maxItems: 100
       title: User
       type: object
-      additionalProperties: false
     Products:
+      additionalProperties: false
       example:
         difficulty: 3
         customerGroups:
@@ -1015,23 +1015,23 @@ components:
       properties:
         id:
           example: 1
-          title: id
-          type: integer
+          format: int32
           maximum: 2147483647
           minimum: 0
-          format: int32
+          title: id
+          type: integer
         name:
           example: openDTU
+          maxLength: 255
+          pattern: "^example-[0-9a-z]"
           title: name
           type: string
-          pattern: ^example-[0-9a-z]
-          maxLength: 255
         comment:
           example: example comment
+          maxLength: 65535
+          pattern: "^example-[0-9a-z]"
           title: comment
           type: string
-          pattern: ^example-[0-9a-z]
-          maxLength: 65535
         difficulty:
           enum:
           - 1
@@ -1044,44 +1044,44 @@ components:
           type: integer
         buildTime:
           example: 20-30 min
+          maxLength: 255
+          pattern: "^example-[0-9a-z]"
           title: buildTime
           type: string
-          pattern: ^example-[0-9a-z]
-          maxLength: 255
         customerGroups:
           items:
             example: "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
-            type: string
-            pattern: ^example-[0-9a-z]
             maxLength: 255
+            pattern: "^example-[0-9a-z]"
+            type: string
+          maxItems: 100
           title: customerGroups
           type: array
-          maxItems: 100
       title: Products
       type: object
-      additionalProperties: false
     Groups:
+      additionalProperties: false
       example:
         name: regal rechts
         id: 1
       properties:
         id:
           example: 1
-          title: id
-          type: integer
+          format: int32
           maximum: 2147483647
           minimum: 0
-          format: int32
+          title: id
+          type: integer
         name:
           example: regal rechts
+          maxLength: 255
+          pattern: "^example-[0-9a-z]"
           title: name
           type: string
-          pattern: ^example-[0-9a-z]
-          maxLength: 255
       title: Groups
       type: object
-      additionalProperties: false
     Lights:
+      additionalProperties: false
       example:
         note: example note
         groups:
@@ -1093,25 +1093,26 @@ components:
       properties:
         id:
           example: 1
-          title: id
-          type: integer
+          format: int32
           maximum: 2147483647
           minimum: 0
-          format: int32
+          title: id
+          type: integer
         groups:
           $ref: '#/components/schemas/Groups'
         adress:
           example: wled1.local
+          maxLength: 255
+          pattern: "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^([a-zA-Z0-9-]+\\\
+            .)+[a-zA-Z]{2,}$"
           title: adress
           type: string
-          pattern: ^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$
-          maxLength: 255
         note:
           example: example note
+          maxLength: 65535
+          pattern: "^example-[0-9a-z]"
           title: note
           type: string
-          pattern: ^example-[0-9a-z]
-          maxLength: 65535
         online:
           enum:
           - 1
@@ -1121,8 +1122,8 @@ components:
           type: integer
       title: Lights
       type: object
-      additionalProperties: false
     Map:
+      additionalProperties: false
       example:
         productId:
         - 10
@@ -1135,72 +1136,71 @@ components:
       properties:
         id:
           example: 1
-          title: id
-          type: integer
+          format: int32
           maximum: 2147483647
           minimum: 0
-          format: int32
+          title: id
+          type: integer
         name:
           example: blinky
+          maxLength: 255
+          pattern: "^example-[0-9a-z]"
           title: name
           type: string
-          pattern: ^example-[0-9a-z]
-          maxLength: 255
         productId:
           items:
             example: 10
-            type: integer
+            format: int32
             maximum: 2147483647
             minimum: 0
-            format: int32
+            type: integer
+          maxItems: 100
           title: productId
           type: array
-          maxItems: 100
         lightId:
           items:
             example: 5
-            type: integer
+            format: int32
             maximum: 2147483647
             minimum: 0
-            format: int32
+            type: integer
+          maxItems: 100
           title: lightId
           type: array
-          maxItems: 100
       title: Map
       type: object
-      additionalProperties: false
     security_controller_login_request:
+      additionalProperties: false
       properties:
         username:
+          example: theUser
+          maxLength: 15
+          pattern: "^[0-9a-z]"
           title: username
           type: string
-          example: theUser
-          pattern: ^[0-9a-z]
-          maxLength: 15
         password:
+          example: "12345"
+          maxLength: 255
+          pattern: ^.*$
           title: password
           type: string
-          example: "12345"
-          pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$
-          maxLength: 255
       required:
       - password
       - username
       title: security_controller_login_request
       type: object
-      additionalProperties: false
     security_controller_login_200_response:
+      additionalProperties: false
       example:
         token: token
       properties:
         token:
+          maxLength: 255
+          pattern: "^[\\w-]*\\.[\\w-]*\\.[\\w-]*$"
           title: token
           type: string
-          pattern: ^[\w-]*\.[\w-]*\.[\w-]*$
-          maxLength: 255
       title: security_controller_login_200_response
       type: object
-      additionalProperties: false
   securitySchemes:
     bearerAuth:
       bearerFormat: JWT
