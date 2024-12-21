@@ -25,17 +25,17 @@ services:
     networks:
       - OpenParcel
 
-  frontend:
-    build:
-      context: ./frontend/OpenParcel
-      dockerfile: Dockerfile
-    container_name: vue_frontend
-    ports:
-      - "3000:80" # Das Frontend wird auf Port 3000 erreichbar sein
-    environment:
-      - VUE_APP_API_URL=http://localhost:8080/api # API-URL für das Backend
-    networks:
-      - OpenParcel
+  #frontend:
+  #  build:
+  #    context: ./frontend/OpenParcel
+  #    dockerfile: Dockerfile
+  #  container_name: vue_frontend
+  #  ports:
+  #   - "3000:80" # Das Frontend wird auf Port 3000 erreichbar sein
+  #  environment:
+  #    - VUE_APP_API_URL=http://localhost:8080/api # API-URL für das Backend
+  #  networks:
+  #    - OpenParcel
 
   mysql:
     image: mysql:8.0

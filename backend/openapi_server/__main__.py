@@ -7,11 +7,15 @@ from openapi_server import encoder
 from openapi_server.__init__ import prepare_database
 from flask_jwt_extended import JWTManager
 
+from flask_cors import CORS  # Importiere CORS
 
 
 app = connexion.App(__name__, specification_dir='./openapi/')
     
 flask_app = app.app
+
+CORS(flask_app, resources={r"/api/*": {"origins": "*"}})
+
 flask_app.config['JWT_SECRET_KEY'] = os.getenv('SECRET_KEY', 'secret')
 flask_app.config["JWT_IDENTITY_CLAIM"] = "user"
 jwt = JWTManager(flask_app)
