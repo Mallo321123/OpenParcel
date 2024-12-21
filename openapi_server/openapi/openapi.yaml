@@ -460,12 +460,12 @@ paths:
           description: Invalid username supplied
         "404":
           description: User not found
+      security:
+      - bearerAuth: []
       summary: Delete user
       tags:
       - user
       x-openapi-router-controller: openapi_server.controllers.user_controller
-      security:
-        - bearerAuth: []
     get:
       description: ""
       operationId: get_user_by_name
@@ -892,3 +892,4 @@ components:
       bearerFormat: JWT
       scheme: bearer
       type: http
+      x-bearerInfoFunc: openapi_server.controllers.security_controller.info_from_bearerAuth

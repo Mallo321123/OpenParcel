@@ -11,10 +11,10 @@ import os
 from datetime import datetime, timedelta
 import re
 
-from openapi_server.tokenManager import valid_token
+from openapi_server.tokenManager import valid_token, delete_token
 
-from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
-from flask import request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt
+from flask import request
 
 
 def create_user(user=None):  # noqa: E501
@@ -104,16 +104,15 @@ def security_controller_login():  # noqa: E501
     close_db(db)
     return "Login or password Invalid", 401
 
+@jwt_required()
 def delete_user(username):  # noqa: E501
-    auth_header = request.headers.get('Authorization')
     
-    return 200, auth_header
+    jwt_data = get_jwt()  # Alle Claims aus dem Token abrufen
+    user = jwt_data.get("user")  # Benutzername abrufen
+    token = request.headers.get("Authorization").split(" ")[1]  # Token abrufen
     
-    
-    verify_jwt_in_request()
-    user = get_jwt_identity()
-    if not valid_token(user):
-        return 401
+    if not valid_token(user, token):
+        return "unauthorized", 401
     
     db = get_db()
     cursor = db.cursor()
@@ -133,6 +132,8 @@ def delete_user(username):  # noqa: E501
     cursor.execute("DELETE FROM users WHERE username = %s", (username,))
     db.commit()
     
+    delete_token(username)
+    
     return "User deleted", 200
 
 
@@ -148,7 +149,7 @@ def get_user_by_name(username):  # noqa: E501
     """
     return 'do some magic!'
 
-
+@jwt_required()
 def logout_user():  # noqa: E501
     """Logs out current logged in user session
 
@@ -157,7 +158,11 @@ def logout_user():  # noqa: E501
 
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    jwt_data = get_jwt()  # Alle Claims aus dem Token abrufen
+    user = jwt_data.get("user")  # Benutzername abrufen
+    delete_token(user)
+    
+    return "User logged out", 200
 
 
 

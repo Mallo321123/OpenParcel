@@ -9,30 +9,27 @@ def valid_token(username, token):
     
     try:
         # Retrieve the token from Redis
-        redis_token = redis_connection.get(username)
+        redis_token = redis_connection.get(f"jwt:{username}")
 
         if redis_token is None:
             print("Token not found in Redis.")
-            return None
+            return False
 
         # Compare tokens
         if redis_token != token:
             print("Token mismatch.")
-            return None
+            return False
 
-        # Decode the token
-        decoded_token = jwt.decode(
-            token,
-            os.getenv("SECRET_KEY", "default_secret"),
-            algorithms=["HS256"]
-        )
-
-        return decoded_token
+        return True
 
     except ExpiredSignatureError:
         print("Token has expired.")
-        return None
+        return False
 
     except InvalidTokenError:
         print("Invalid token.")
-        return None
+        return False
+    
+def delete_token(username):
+    redis_connection = get_redis()
+    redis_connection.delete(f"jwt:{username}")

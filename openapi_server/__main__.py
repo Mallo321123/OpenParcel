@@ -12,6 +12,8 @@ from flask_jwt_extended import JWTManager
 app = connexion.App(__name__, specification_dir='./openapi/')
     
 flask_app = app.app
+flask_app.config['JWT_SECRET_KEY'] = os.getenv('SECRET_KEY', 'secret')
+flask_app.config["JWT_IDENTITY_CLAIM"] = "user"
 jwt = JWTManager(flask_app)
     
 app.app.json_encoder = encoder.JSONEncoder
