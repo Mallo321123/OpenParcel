@@ -95,7 +95,7 @@ class SecurityControllerLoginRequest(Model):
             raise ValueError("Invalid value for `password`, must not be `None`")  # noqa: E501
         if password is not None and len(password) > 255:
             raise ValueError("Invalid value for `password`, length must be less than or equal to `255`")  # noqa: E501
-        if password is not None and not re.search(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$', password):  # noqa: E501
-            raise ValueError(r"Invalid value for `password`, must be a follow pattern or equal to `/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$/`")  # noqa: E501
+        if password is not None and not re.search(r'^.*$', password):  # noqa: E501
+            raise ValueError(r"Invalid value for `password`, must be a follow pattern or equal to `/^.*$/`")  # noqa: E501
 
         self._password = password

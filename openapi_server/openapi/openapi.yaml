@@ -595,8 +595,8 @@ paths:
           description: Invalid username supplied
         "404":
           description: User not found
-        "204":
-          description: Created
+        "200":
+          description: Ok
         "401":
           description: Unathorized
         "403":
@@ -711,14 +711,10 @@ paths:
           description: succesfull operation
         "401":
           description: Unauthorized
-        "403":
-          description: Unauthorized
         "404":
-          description: Unauthorized
+          description: Not Found
         "429":
-          description: Unauthorized
-        default:
-          description: Unauthorized
+          description: Too Many Requests
       security:
       - bearerAuth: []
       summary: list users
@@ -763,6 +759,8 @@ paths:
           description: successful operation
         "200":
           description: OK
+        "404":
+          description: Not Found
       security:
       - bearerAuth: []
       summary: Logs out current logged in user session
@@ -924,7 +922,7 @@ components:
         password:
           example: "12345"
           maxLength: 255
-          pattern: "^.*$"
+          pattern: ^.*$
           title: password
           type: string
         userStatus:
@@ -952,7 +950,6 @@ components:
         lastName: James
         userGroups:
         - "[\"admin\",\"products\",\"users\",\"lights\",\"statistics\"]"
-        password: "12345"
         userStatus: 1
         email: john@email.com
         username: theUser
@@ -1193,7 +1190,15 @@ components:
       additionalProperties: false
       example:
         token: token
+        message: ogin successful.
+        success: true
       properties:
+        message:
+          title: message
+          type: string
+        success:
+          title: success
+          type: boolean
         token:
           maxLength: 255
           pattern: "^[\\w-]*\\.[\\w-]*\\.[\\w-]*$"
