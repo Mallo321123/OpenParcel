@@ -1,6 +1,4 @@
 import datetime
-
-import typing
 from openapi_server import typing_utils
 
 

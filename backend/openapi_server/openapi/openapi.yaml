@@ -547,6 +547,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+        - bearerAuth: []
       summary: display settings
       tags:
       - settings
@@ -571,6 +573,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+        - bearerAuth: []
       summary: update settings
       tags:
       - settings

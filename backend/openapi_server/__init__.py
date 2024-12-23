@@ -41,11 +41,37 @@ def get_redis():
         return None
     return redis_connection
 
+def close_redis(redis_connection):
+    if redis_connection is not None:
+        redis_connection.close()
+    return True
+
+def settings_default():
+    db = get_db()
+    cursor = db.cursor()
+    
+    cursor.execute("SELECT * FROM settings")
+    result = cursor.fetchone()
+    
+    if result is None:
+        cursor.execute("INSERT INTO settings (name, value) VALUES ('min_password_length', '5')")
+        db.commit()
+
+
 def prepare_database():
     db = get_db()
     cursor = db.cursor()
     cursor.execute("CREATE DATABASE IF NOT EXISTS OpenParcel")
     cursor.execute("USE OpenParcel")
+    
+    cursor.execute("""CREATE TABLE IF NOT EXISTS settings (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        value TEXT
+        )""")
+    
+    settings_default()  # Only sets settings, if database is empty
+    
     cursor.execute("""CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
         email VARCHAR(255) DEFAULT NULL,

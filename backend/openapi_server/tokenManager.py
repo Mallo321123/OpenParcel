@@ -1,7 +1,5 @@
-from openapi_server.__init__ import get_redis
+from openapi_server.__init__ import get_redis, close_redis
 from jwt import ExpiredSignatureError, InvalidTokenError
-import jwt
-import os
 
 
 def valid_token(username, token):
@@ -30,6 +28,10 @@ def valid_token(username, token):
         print("Invalid token.")
         return False
     
+    finally:
+        close_redis(redis_connection)
+    
 def delete_token(username):
     redis_connection = get_redis()
     redis_connection.delete(f"jwt:{username}")
+    close_redis(redis_connection)
