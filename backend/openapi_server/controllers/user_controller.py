@@ -4,6 +4,11 @@ from openapi_server.models.security_controller_login_request import SecurityCont
 from openapi_server.models.user import User  # noqa: E501
 
 from openapi_server.__init__ import get_db, close_db, get_redis
+from openapi_server.tokenManager import valid_token, delete_token
+from openapi_server.permission_check import check_permission
+
+from flask_jwt_extended import jwt_required, get_jwt
+from flask import request, jsonify
 
 import jwt
 import hashlib
@@ -11,12 +16,6 @@ import os
 from datetime import datetime, timedelta
 import re
 import json
-
-from openapi_server.tokenManager import valid_token, delete_token
-from openapi_server.permission_check import check_permission
-
-from flask_jwt_extended import jwt_required, get_jwt
-from flask import request, jsonify
 
 
 def create_user(user=None):  # noqa: E501
@@ -258,8 +257,7 @@ def update_user(username, user=None):  # noqa: E501
         return "User updated", 204
         
         
-    return "Invalid request", 400
-    
+    return "Invalid request", 400 
 
 @jwt_required()
 def user_list_get():  # noqa: E501
