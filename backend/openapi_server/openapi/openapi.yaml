@@ -10,7 +10,7 @@ info:
   title: OpenParcel
   version: 0.1.0
 servers:
-- url: http://127.0.0.1/api
+- url: http://127.0.0.1:8080/api
 tags:
 - name: dashboard
 - name: settings
@@ -586,7 +586,7 @@ paths:
         name: username
         required: true
         schema:
-          maxLength: 32
+          maxLength: 20
           pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
@@ -640,6 +640,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+      - bearerAuth: []
       summary: Get user by user name
       tags:
       - user
@@ -677,7 +679,7 @@ paths:
         required: true
         schema:
           maxLength: 20
-          pattern: "^example-[0-9a-z]+$"
+          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       requestBody:
@@ -691,6 +693,8 @@ paths:
           description: successful operation
         "204":
           description: Created
+      security:
+      - bearerAuth: []
       summary: Update user
       tags:
       - user

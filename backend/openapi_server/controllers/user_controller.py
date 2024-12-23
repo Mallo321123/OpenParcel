@@ -22,15 +22,7 @@ from flask import request, jsonify
 def create_user(user=None):  # noqa: E501
     db = get_db()
     cursor = db.cursor()
-    """Create user
 
-    This can only be done by the logged in user. # noqa: E501
-
-    :param user: Created user object
-    :type user: dict | bytes
-
-    :rtype: Union[User, Tuple[User, int], Tuple[User, int, Dict[str, str]]
-    """
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
         
@@ -179,22 +171,95 @@ def logout_user():  # noqa: E501
     
     return "User logged out", 200
 
-
+@jwt_required()
 def update_user(username, user=None):  # noqa: E501
-    """Update user
-
-    This can only be done by the logged in user. # noqa: E501
-
-    :param username: name of user that needs to be changed
-    :type username: str
-    :param user: Update an existent user in the store
-    :type user: dict | bytes
-
-    :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
-    """
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")  # Extract username from token
+    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
+    if user != username and check_permission("admin", user) is False:
+        return "unauthorized", 401  # Only admins and the user himself can update the user
+    
+    db = get_db()
+    cursor = db.cursor()
+    
+    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    if cursor.fetchone() is None:
+        return "User not found", 404
+    
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        
+        if isinstance(user, User):
+            user = user.to_dict()
+        
+        # Prepare a dictionary of fields to update
+        update_fields = {}
+
+        if user.get("email") is not None:
+            if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', user['email']):
+                return "Invalid email", 400
+            update_fields['email'] = user['email']
+
+        if user.get('first_name') is not None:
+            update_fields['firstname'] = user['first_name']
+
+        if user.get('last_name') is not None:
+            update_fields['lastname'] = user['last_name']
+
+        if user.get('password') is not None:
+            password_hash = hashlib.md5(user['password'].encode()).hexdigest()
+            cross_hash = hashlib.md5(username.encode() + user['password'].encode()).hexdigest()
+            update_fields['password_hash'] = password_hash
+            update_fields['cross_hash'] = cross_hash
+
+        if user.get('user_groups') is not None:
+            if check_permission("admin", user) is False:
+                return "unauthorized", 401     # Only admins can change user groups
+            
+            user_groups_json = json.dumps(user['user_groups'])
+            update_fields['`groups`'] = user_groups_json
+
+        if user.get('user_status') is not None:
+            if check_permission("admin", user) is False:
+                return "unauthorized", 401      # Only admins can change user status
+            
+            update_fields['status'] = user['user_status']
+        
+        if user.get("username") is not None:
+            cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+            if cursor.fetchone() is not None:
+                return "Username already taken", 400    # Username already taken
+            
+            update_fields['username'] = user['username']
+
+        if not update_fields is not None:
+            return "No fields to update", 400
+
+        # Construct the SQL update statement dynamically
+        set_clause = ", ".join([f"{key} = %s" for key in update_fields.keys()])
+        values = list(update_fields.values())
+        values.append(username)
+
+        update_query = f"UPDATE users SET {set_clause} WHERE username = %s"
+
+        try:
+            cursor.execute(update_query, tuple(values))
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            return f"Failed to update user: {e}", 500
+        finally:
+            close_db(db)
+
+        return "User updated", 204
+        
+        
+    return "Invalid request", 400
+    
 
 @jwt_required()
 def user_list_get():  # noqa: E501
