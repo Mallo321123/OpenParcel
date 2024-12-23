@@ -622,7 +622,7 @@ paths:
         required: true
         schema:
           maxLength: 20
-          pattern: "^example-[0-9a-z]+$"
+          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       responses:

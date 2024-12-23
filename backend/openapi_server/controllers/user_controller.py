@@ -61,15 +61,7 @@ def security_controller_login():  # noqa: E501
     db = get_db()
     cursor = db.cursor()
     redis_connection = get_redis()
-    """User Login
 
-    Authenticates a user and returns a JWT token. # noqa: E501
-
-    :param security_controller_login_request: 
-    :type security_controller_login_request: dict | bytes
-
-    :rtype: Union[SecurityControllerLogin200Response, Tuple[SecurityControllerLogin200Response, int], Tuple[SecurityControllerLogin200Response, int, Dict[str, str]]
-    """
     if connexion.request.is_json:
         login = SecurityControllerLoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
         
@@ -124,15 +116,7 @@ def delete_user(username):  # noqa: E501
     
     db = get_db()
     cursor = db.cursor()
-    """Delete user
 
-    This can only be done by the logged in user. # noqa: E501
-
-    :param username: The name that needs to be deleted
-    :type username: str
-
-    :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
-    """
     cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
     if cursor.fetchone() is None:
         return "User not found", 404
@@ -156,15 +140,7 @@ def get_user_by_name(username):  # noqa: E501
     
     db = get_db()
     cursor = db.cursor()
-    """Get user by user name
 
-     # noqa: E501
-
-    :param username: The name that needs to be fetched. Use user1 for testing. 
-    :type username: str
-
-    :rtype: Union[User, Tuple[User, int], Tuple[User, int, Dict[str, str]]
-    """
     cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
     user = cursor.fetchone()
     close_db(db)
