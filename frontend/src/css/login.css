@@ -1,0 +1,100 @@
+body {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-container {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.login-container h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.login-container .form-control {
+  border-radius: 30px;
+  padding: 0.75rem 1rem;
+}
+
+.login-container .btn-primary {
+  border-radius: 30px;
+  padding: 0.5rem 1rem;
+  background: #2575fc;
+  border: none;
+  transition: background 0.3s;
+}
+
+.login-container .btn-primary:hover {
+  background: #1b5bb5;
+}
+
+.login-container .forgot-password {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+  text-decoration: none;
+}
+
+.login-container .forgot-password:hover {
+  text-decoration: underline;
+}
+
+.login-container .sign-up {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.login-container .sign-up a {
+  color: #2575fc;
+  text-decoration: none;
+}
+
+.login-container .sign-up a:hover {
+  text-decoration: underline;
+}
+
+/* Stil für den Button zum Zeigen/Verstecken des Passworts */
+.show-password-btn {
+  background: transparent;
+  border: none;
+  color: #6c757d;
+  font-size: 1.2rem;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.show-password-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.show-password-btn:hover {
+  color: #2575fc;
+}
+
+/* Platz für das Passwortfeld */
+.mb-3 {
+  position: relative;
+}
+
+/* Optional: Stil für das Passwortfeld */
+input[type="password"], input[type="text"] {
+  padding-right: 40px; /* Platz für den Button */
+}

@@ -11,6 +11,9 @@ COPY . /usr/src/app
 
 EXPOSE 8080
 
-ENTRYPOINT ["python3"]
-
-CMD ["-m", "openapi_server"]
+# Falls USE_GUNICORN true ist, Gunicorn starten, sonst Python3
+CMD if [ "$DEV_SERVER" = "false" ]; then \
+        exec gunicorn --certfile=ssl/backend.crt --keyfile=ssl/backend.key --bind 0.0.0.0:8080 openapi_server.__main__:app; \
+    else \
+        exec python3 -m openapi_server; \
+    fi
