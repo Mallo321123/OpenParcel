@@ -11,12 +11,6 @@ info:
   version: 0.1.0
 servers:
 - url: https://127.0.0.1:8080/api
-  description: Development server
-  variables:
-    port:
-      default: "8080"
-    protocol:
-      default: http
 tags:
 - name: dashboard
 - name: settings
