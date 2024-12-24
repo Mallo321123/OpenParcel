@@ -260,7 +260,7 @@ def update_user(username, user=None):  # noqa: E501
     return "Invalid request", 400 
 
 @jwt_required()
-def user_list_get():  # noqa: E501
+def user_list_get(limit=None, page=None):  # noqa: E501
     
     jwt_data = get_jwt()  # Alle Claims aus dem Token abrufen
     user = jwt_data.get("user")  # Benutzername abrufen
@@ -275,14 +275,10 @@ def user_list_get():  # noqa: E501
     
     db = get_db()
     cursor = db.cursor()
-    """list users
 
-    list all users # noqa: E501
+    offset = limit * page
 
-
-    :rtype: Union[List[User], Tuple[List[User], int], Tuple[List[User], int, Dict[str, str]]
-    """
-    cursor.execute("SELECT * FROM users")
+    cursor.execute("SELECT * FROM users ORDER BY id ASC LIMIT %s OFFSET %s", (limit, offset))
     users = cursor.fetchall()
     close_db(db)
     
