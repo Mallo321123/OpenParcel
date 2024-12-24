@@ -80,6 +80,29 @@ paths:
     get:
       description: list all light devices
       operationId: lights_devices_get
+      parameters:
+      - description: items per page
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 200
+          minimum: 0
+          type: integer
+        style: form
+      - description: page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
       responses:
         "200":
           content:
@@ -182,6 +205,29 @@ paths:
     get:
       description: returns all light groups
       operationId: lights_group_get
+      parameters:
+      - description: items per page
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 200
+          minimum: 0
+          type: integer
+        style: form
+      - description: page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
       responses:
         "200":
           content:
@@ -260,6 +306,29 @@ paths:
     get:
       description: lists all mappings
       operationId: lights_map_get
+      parameters:
+      - description: items per page
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 200
+          minimum: 0
+          type: integer
+        style: form
+      - description: page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
       responses:
         "200":
           content:
@@ -362,6 +431,29 @@ paths:
     get:
       description: lists all orders
       operationId: orders_get
+      parameters:
+      - description: items per page
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 200
+          minimum: 0
+          type: integer
+        style: form
+      - description: page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
       responses:
         "200":
           content:
@@ -369,7 +461,7 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/Orders'
-                maxItems: 100
+                maxItems: 200
                 type: array
           description: successful operation
         "401":
@@ -462,6 +554,29 @@ paths:
     get:
       description: lists all avaiable products
       operationId: products_list
+      parameters:
+      - description: items per page
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 200
+          minimum: 0
+          type: integer
+        style: form
+      - description: page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
       responses:
         "200":
           content:
@@ -548,7 +663,7 @@ paths:
         default:
           description: default
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: display settings
       tags:
       - settings
@@ -574,7 +689,7 @@ paths:
         default:
           description: default
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: update settings
       tags:
       - settings
@@ -707,6 +822,29 @@ paths:
     get:
       description: list all users
       operationId: user_list_get
+      parameters:
+      - description: items per page
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          maximum: 200
+          minimum: 0
+          type: integer
+        style: form
+      - description: page number
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
       responses:
         "200":
           content:

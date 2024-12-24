@@ -35,11 +35,15 @@ def products_delete(id):  # noqa: E501
     return 'do some magic!'
 
 
-def products_list():  # noqa: E501
+def products_list(limit=None, page=None):  # noqa: E501
     """list of products
 
     lists all avaiable products # noqa: E501
 
+    :param limit: items per page
+    :type limit: int
+    :param page: page number
+    :type page: int
 
     :rtype: Union[List[Products], Tuple[List[Products], int], Tuple[List[Products], int, Dict[str, str]]
     """

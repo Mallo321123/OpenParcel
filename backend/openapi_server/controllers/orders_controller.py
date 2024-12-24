@@ -20,11 +20,15 @@ def orders_delete(id):  # noqa: E501
     return 'do some magic!'
 
 
-def orders_get():  # noqa: E501
+def orders_get(limit=None, page=None):  # noqa: E501
     """list all orders
 
     lists all orders # noqa: E501
 
+    :param limit: items per page
+    :type limit: int
+    :param page: page number
+    :type page: int
 
     :rtype: Union[List[Orders], Tuple[List[Orders], int], Tuple[List[Orders], int, Dict[str, str]]
     """
