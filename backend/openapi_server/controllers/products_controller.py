@@ -1,10 +1,6 @@
 import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
-
 from openapi_server.models.products import Products  # noqa: E501
-from openapi_server import util
+from openapi_server.models.products_response import ProductsResponse  # noqa: E501
 
 from openapi_server.__init__ import get_db, close_db
 
@@ -71,7 +67,7 @@ def products_list(limit=None, page=None):  # noqa: E501
         except TypeError:
             customerGroups = []
             
-        products[i] = Products(
+        products[i] = ProductsResponse(
             id=products[i][0],
             name=products[i][1],
             comment=products[i][2],

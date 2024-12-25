@@ -2,6 +2,7 @@ import connexion
 
 from openapi_server.models.security_controller_login_request import SecurityControllerLoginRequest  # noqa: E501
 from openapi_server.models.user import User  # noqa: E501
+from openapi_server.models.user_response import UserResponse
 
 from openapi_server.__init__ import get_db, close_db, get_redis
 from openapi_server.tokenManager import valid_token, delete_token
@@ -286,7 +287,8 @@ def user_list_get(limit=None, page=None):  # noqa: E501
         except TypeError:
             groups = []
             
-        users[i] = User(
+        users[i] = UserResponse(
+            id=users[i][0],
             email=users[i][1],
             first_name=users[i][2],
             last_name=users[i][3],

@@ -1118,9 +1118,13 @@ components:
         userStatus: 1
         email: john@email.com
         username: theUser
+        id: 1
       properties:
         id:
           example: 1
+          format: int32
+          maximum: 2147483647
+          minimum: 0
           title: id
           type: integer
         username:
