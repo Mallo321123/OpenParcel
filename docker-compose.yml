@@ -19,28 +19,28 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - LOGIN_REQUIRED=true
-      - DEV_SERVER=false
+      - DEV_SERVER=true
     depends_on:
       - mysql
       - redis
     networks:
       - OpenParcel
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: OpenParcel_frontend
-    volumes:
-      - ./frontend/src:/usr/share/nginx/html:ro
-      - ./frontend/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - backend
-    ports:
-     - "80:80"
-     - "443:443"
-    networks:
-      - OpenParcel
+  #frontend:
+  #  build:
+  #    context: ./frontend
+  #    dockerfile: Dockerfile
+  #  container_name: OpenParcel_frontend
+  #  volumes:
+  #    - ./frontend/src:/usr/share/nginx/html:ro
+  #    - ./frontend/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #  depends_on:
+  #    - backend
+  #  ports:
+  #   - "80:80"
+  #   - "443:443"
+  #  networks:
+  #    - OpenParcel
 
   mysql:
     image: mysql:8.0

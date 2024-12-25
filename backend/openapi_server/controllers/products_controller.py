@@ -6,20 +6,37 @@ from typing import Union
 from openapi_server.models.products import Products  # noqa: E501
 from openapi_server import util
 
+from openapi_server.__init__ import get_db, close_db
+
+import json
+
 
 def product_add(products=None):  # noqa: E501
-    """add a product
-
-    adds a product # noqa: E501
-
-    :param products: 
-    :type products: dict | bytes
-
-    :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
-    """
+    
+    db = get_db()
+    cursor = db.cursor()
+    
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        
+        cursor.execute("SELECT * FROM products WHERE name = %s", (products.name,))
+        if cursor.fetchone() is not None:
+            return "Product already exists", 400
+        
+        customer_groups_json = json.dumps(products.customer_groups)
+        
+        try:
+            cursor.execute("""INSERT INTO products 
+                       (name, comment, customerGroups, difficulty, buildTime) VALUES (%s, %s, %s, %s, %s)""",
+                       (products.name, products.comment, customer_groups_json, products.difficulty, products.build_time))
+        
+        except Exception as e:
+            return str(e), 400
+        
+        db.commit()
+        close_db(db)
+        
+        return "Product created", 200
 
 
 def products_delete(id):  # noqa: E501

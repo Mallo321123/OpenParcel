@@ -1163,8 +1163,8 @@ components:
       example:
         difficulty: 3
         customerGroups:
-        - "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
-        - "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
+        - adults
+        - nerds
         buildTime: 20-30 min
         name: openDTU
         comment: example comment
@@ -1180,13 +1180,13 @@ components:
         name:
           example: openDTU
           maxLength: 255
-          pattern: "^example-[0-9a-z]"
+          pattern: "^[0-9a-zA-Z]+$"
           title: name
           type: string
         comment:
           example: example comment
           maxLength: 65535
-          pattern: "^example-[0-9a-z]"
+          pattern: ^(?!.*<.*?>)[\w\s.,!?'"-]+$
           title: comment
           type: string
         difficulty:
@@ -1202,14 +1202,13 @@ components:
         buildTime:
           example: 20-30 min
           maxLength: 255
-          pattern: "^example-[0-9a-z]"
+          pattern: "^[0-9a-zA-Z- ]+$"
           title: buildTime
           type: string
         customerGroups:
           items:
-            example: "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
             maxLength: 255
-            pattern: "^example-[0-9a-z]"
+            pattern: "^[0-9a-zA-Z]+$"
             type: string
           maxItems: 100
           title: customerGroups
