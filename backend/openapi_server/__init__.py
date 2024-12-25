@@ -90,8 +90,9 @@ def prepare_database():
         addDate DATE,
         closeDate DATE DEFAULT NULL,
         products VARCHAR(255),
-        notes TEXT DEFAULT NULL,
-        state VARCHAR(255)
+        comment TEXT DEFAULT NULL,
+        state VARCHAR(255),
+        shipmentType VARCHAR(255)
         )""")
     
     cursor.execute("""CREATE TABLE IF NOT EXISTS products (

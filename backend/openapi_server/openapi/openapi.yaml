@@ -460,7 +460,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Orders'
+                  $ref: '#/components/schemas/Orders_add'
                 maxItems: 200
                 type: array
           description: successful operation
@@ -483,7 +483,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Orders'
+              $ref: '#/components/schemas/Orders_add'
       responses:
         "200":
           description: successful operation
@@ -504,7 +504,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Orders'
+              $ref: '#/components/schemas/Orders_add'
       responses:
         "200":
           description: successful operation
@@ -1186,7 +1186,55 @@ components:
           type: integer
       title: Dashboard
       type: object
-    Orders:
+    Orders_add:
+      additionalProperties: false
+      example:
+        state: open
+        customer: Max Mustermann
+        products:
+        - 101
+        - 42
+        comment: Example comment
+      properties:
+        customer:
+          example: Max Mustermann
+          maxLength: 255
+          pattern: "[0-9a-zA-Z ]+$"
+          title: customer
+          type: string
+        products:
+          items:
+            example: 5610
+            format: int32
+            maximum: 2147483647
+            minimum: 0
+            title: id
+            type: integer
+          maxItems: 255
+          title: products
+          type: array
+        state:
+          enum:
+          - open
+          - working
+          - hold
+          - closed
+          example: open
+          title: state
+          type: string
+        comment:
+          maxLength: 255
+          pattern: ^.*$
+          title: comment
+          type: string
+        shipmentType:
+          format: string
+          maxLength: 255
+          pattern: "[0-9a-zA-Z ]+$"
+          title: shipmentType
+      title: Orders
+      type: object
+    Orders_response:
       additionalProperties: false
       example:
         dateAdd: 2024-12-19T20:35:19.772Z
@@ -1195,20 +1243,9 @@ components:
         dateClosed: 2024-12-19T20:35:19.772Z
         customer: Max Mustermann
         products:
-        - difficulty: 3
-          customerGroups:
-          - "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
-          buildTime: 20-30 min
-          name: openDTU
-          comment: example comment
-          id: 1
-        - difficulty: 3
-          customerGroups:
-          - "[\"adults\",\"teens\",\"kids\",\"nerds\"]"
-          buildTime: 20-30 min
-          name: openDTU
-          comment: example comment
-          id: 1
+        - 101
+        - 42
+        comment: Example comment
       properties:
         id:
           example: 5610
@@ -1220,19 +1257,24 @@ components:
         customer:
           example: Max Mustermann
           maxLength: 255
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          pattern: "[0-9a-zA-Z ]+$"
           title: customer
           type: string
         products:
           items:
-            $ref: '#/components/schemas/Products'
-          maxItems: 100
+            example: 5610
+            format: int32
+            maximum: 2147483647
+            minimum: 0
+            title: id
+            type: integer
+          maxItems: 255
           title: products
           type: array
         state:
           enum:
           - open
-          - in work
+          - working
           - hold
           - closed
           example: open
@@ -1250,6 +1292,78 @@ components:
           pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
           title: dateClosed
           type: string
+        comment:
+          maxLength: 255
+          pattern: ^.*$
+          title: comment
+          type: string
+        shipmentType:
+          format: string
+          maxLength: 255
+          pattern: "[0-9a-zA-Z ]+$"
+          title: shipmentType
+      title: Orders
+      type: object
+    Orders_change:
+      additionalProperties: false
+      example:
+        dateAdd: 2024-12-19T20:35:19.772Z
+        state: open
+        dateClosed: 2024-12-19T20:35:19.772Z
+        customer: Max Mustermann
+        products:
+        - 101
+        - 42
+        comment: Example comment
+      properties:
+        customer:
+          example: Max Mustermann
+          maxLength: 255
+          pattern: "[0-9a-zA-Z ]+$"
+          title: customer
+          type: string
+        products:
+          items:
+            example: 5610
+            format: int32
+            maximum: 2147483647
+            minimum: 0
+            title: id
+            type: integer
+          maxItems: 255
+          title: products
+          type: array
+        state:
+          enum:
+          - open
+          - working
+          - hold
+          - closed
+          example: open
+          title: state
+          type: string
+        dateAdd:
+          example: 2024-12-19T20:35:19.772
+          maxLength: 30
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          title: dateAdd
+          type: string
+        dateClosed:
+          example: 2024-12-19T20:35:19.772
+          maxLength: 30
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          title: dateClosed
+          type: string
+        comment:
+          maxLength: 255
+          pattern: ^.*$
+          title: comment
+          type: string
+        shipmentType:
+          format: string
+          maxLength: 255
+          pattern: "[0-9a-zA-Z ]+$"
+          title: shipmentType
       title: Orders
       type: object
     User:
