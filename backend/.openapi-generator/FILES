@@ -19,7 +19,9 @@ openapi_server/models/__init__.py
 openapi_server/models/base_model.py
 openapi_server/models/dashboard.py
 openapi_server/models/groups.py
+openapi_server/models/groups_response.py
 openapi_server/models/lights.py
+openapi_server/models/lights_response.py
 openapi_server/models/map.py
 openapi_server/models/orders.py
 openapi_server/models/products.py

@@ -4,7 +4,9 @@ from typing import Tuple
 from typing import Union
 
 from openapi_server.models.groups import Groups  # noqa: E501
+from openapi_server.models.groups_response import GroupsResponse  # noqa: E501
 from openapi_server.models.lights import Lights  # noqa: E501
+from openapi_server.models.lights_response import LightsResponse  # noqa: E501
 from openapi_server.models.map import Map  # noqa: E501
 from openapi_server import util
 
@@ -62,7 +64,7 @@ def lights_devices_get(limit=None, page=None):  # noqa: E501
     :param page: page number
     :type page: int
 
-    :rtype: Union[List[Lights], Tuple[List[Lights], int], Tuple[List[Lights], int, Dict[str, str]]
+    :rtype: Union[List[LightsResponse], Tuple[List[LightsResponse], int], Tuple[List[LightsResponse], int, Dict[str, str]]
     """
     return 'do some magic!'
 
@@ -90,7 +92,7 @@ def lights_group_get(limit=None, page=None):  # noqa: E501
     :param page: page number
     :type page: int
 
-    :rtype: Union[List[Groups], Tuple[List[Groups], int], Tuple[List[Groups], int, Dict[str, str]]
+    :rtype: Union[List[GroupsResponse], Tuple[List[GroupsResponse], int], Tuple[List[GroupsResponse], int, Dict[str, str]]
     """
     return 'do some magic!'
 

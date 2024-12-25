@@ -89,6 +89,10 @@ class UserResponse(Model):
         :param id: The id of this UserResponse.
         :type id: int
         """
+        if id is not None and id > 2147483647:  # noqa: E501
+            raise ValueError("Invalid value for `id`, must be a value less than or equal to `2147483647`")  # noqa: E501
+        if id is not None and id < 0:  # noqa: E501
+            raise ValueError("Invalid value for `id`, must be a value greater than or equal to `0`")  # noqa: E501
 
         self._id = id
 

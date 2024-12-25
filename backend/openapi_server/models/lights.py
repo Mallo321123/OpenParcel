@@ -3,11 +3,9 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from openapi_server.models.base_model import Model
-from openapi_server.models.groups import Groups
 import re
 from openapi_server import util
 
-from openapi_server.models.groups import Groups  # noqa: E501
 import re  # noqa: E501
 
 class Lights(Model):
@@ -16,41 +14,31 @@ class Lights(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id=None, groups=None, adress=None, note=None, online=None):  # noqa: E501
+    def __init__(self, groups=None, adress=None, comment=None):  # noqa: E501
         """Lights - a model defined in OpenAPI
 
-        :param id: The id of this Lights.  # noqa: E501
-        :type id: int
         :param groups: The groups of this Lights.  # noqa: E501
-        :type groups: Groups
+        :type groups: List[str]
         :param adress: The adress of this Lights.  # noqa: E501
         :type adress: str
-        :param note: The note of this Lights.  # noqa: E501
-        :type note: str
-        :param online: The online of this Lights.  # noqa: E501
-        :type online: int
+        :param comment: The comment of this Lights.  # noqa: E501
+        :type comment: str
         """
         self.openapi_types = {
-            'id': int,
-            'groups': Groups,
+            'groups': List[str],
             'adress': str,
-            'note': str,
-            'online': int
+            'comment': str
         }
 
         self.attribute_map = {
-            'id': 'id',
             'groups': 'groups',
             'adress': 'adress',
-            'note': 'note',
-            'online': 'online'
+            'comment': 'comment'
         }
 
-        self._id = id
         self._groups = groups
         self._adress = adress
-        self._note = note
-        self._online = online
+        self._comment = comment
 
     @classmethod
     def from_dict(cls, dikt) -> 'Lights':
@@ -64,48 +52,25 @@ class Lights(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
-        """Gets the id of this Lights.
-
-
-        :return: The id of this Lights.
-        :rtype: int
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id: int):
-        """Sets the id of this Lights.
-
-
-        :param id: The id of this Lights.
-        :type id: int
-        """
-        if id is not None and id > 2147483647:  # noqa: E501
-            raise ValueError("Invalid value for `id`, must be a value less than or equal to `2147483647`")  # noqa: E501
-        if id is not None and id < 0:  # noqa: E501
-            raise ValueError("Invalid value for `id`, must be a value greater than or equal to `0`")  # noqa: E501
-
-        self._id = id
-
-    @property
-    def groups(self) -> Groups:
+    def groups(self) -> List[str]:
         """Gets the groups of this Lights.
 
 
         :return: The groups of this Lights.
-        :rtype: Groups
+        :rtype: List[str]
         """
         return self._groups
 
     @groups.setter
-    def groups(self, groups: Groups):
+    def groups(self, groups: List[str]):
         """Sets the groups of this Lights.
 
 
         :param groups: The groups of this Lights.
-        :type groups: Groups
+        :type groups: List[str]
         """
+        if groups is not None and len(groups) > 100:
+            raise ValueError("Invalid value for `groups`, number of items must be less than or equal to `100`")  # noqa: E501
 
         self._groups = groups
 
@@ -135,53 +100,26 @@ class Lights(Model):
         self._adress = adress
 
     @property
-    def note(self) -> str:
-        """Gets the note of this Lights.
+    def comment(self) -> str:
+        """Gets the comment of this Lights.
 
 
-        :return: The note of this Lights.
+        :return: The comment of this Lights.
         :rtype: str
         """
-        return self._note
+        return self._comment
 
-    @note.setter
-    def note(self, note: str):
-        """Sets the note of this Lights.
+    @comment.setter
+    def comment(self, comment: str):
+        """Sets the comment of this Lights.
 
 
-        :param note: The note of this Lights.
-        :type note: str
+        :param comment: The comment of this Lights.
+        :type comment: str
         """
-        if note is not None and len(note) > 65535:
-            raise ValueError("Invalid value for `note`, length must be less than or equal to `65535`")  # noqa: E501
-        if note is not None and not re.search(r'^example-[0-9a-z]', note):  # noqa: E501
-            raise ValueError(r"Invalid value for `note`, must be a follow pattern or equal to `/^example-[0-9a-z]/`")  # noqa: E501
+        if comment is not None and len(comment) > 65535:
+            raise ValueError("Invalid value for `comment`, length must be less than or equal to `65535`")  # noqa: E501
+        if comment is not None and not re.search(r'^[0-9a-z]+$', comment):  # noqa: E501
+            raise ValueError(r"Invalid value for `comment`, must be a follow pattern or equal to `/^[0-9a-z]+$/`")  # noqa: E501
 
-        self._note = note
-
-    @property
-    def online(self) -> int:
-        """Gets the online of this Lights.
-
-
-        :return: The online of this Lights.
-        :rtype: int
-        """
-        return self._online
-
-    @online.setter
-    def online(self, online: int):
-        """Sets the online of this Lights.
-
-
-        :param online: The online of this Lights.
-        :type online: int
-        """
-        allowed_values = [1, 0]  # noqa: E501
-        if online not in allowed_values:
-            raise ValueError(
-                "Invalid value for `online` ({0}), must be one of {1}"
-                .format(online, allowed_values)
-            )
-
-        self._online = online
+        self._comment = comment

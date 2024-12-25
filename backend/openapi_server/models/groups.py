@@ -14,25 +14,20 @@ class Groups(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id=None, name=None):  # noqa: E501
+    def __init__(self, name=None):  # noqa: E501
         """Groups - a model defined in OpenAPI
 
-        :param id: The id of this Groups.  # noqa: E501
-        :type id: int
         :param name: The name of this Groups.  # noqa: E501
         :type name: str
         """
         self.openapi_types = {
-            'id': int,
             'name': str
         }
 
         self.attribute_map = {
-            'id': 'id',
             'name': 'name'
         }
 
-        self._id = id
         self._name = name
 
     @classmethod
@@ -45,31 +40,6 @@ class Groups(Model):
         :rtype: Groups
         """
         return util.deserialize_model(dikt, cls)
-
-    @property
-    def id(self) -> int:
-        """Gets the id of this Groups.
-
-
-        :return: The id of this Groups.
-        :rtype: int
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id: int):
-        """Sets the id of this Groups.
-
-
-        :param id: The id of this Groups.
-        :type id: int
-        """
-        if id is not None and id > 2147483647:  # noqa: E501
-            raise ValueError("Invalid value for `id`, must be a value less than or equal to `2147483647`")  # noqa: E501
-        if id is not None and id < 0:  # noqa: E501
-            raise ValueError("Invalid value for `id`, must be a value greater than or equal to `0`")  # noqa: E501
-
-        self._id = id
 
     @property
     def name(self) -> str:

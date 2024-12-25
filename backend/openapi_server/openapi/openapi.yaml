@@ -109,7 +109,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Lights'
+                  $ref: '#/components/schemas/Lights_response'
                 maxItems: 100
                 type: array
           description: successful operation
@@ -234,7 +234,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Groups'
+                  $ref: '#/components/schemas/Groups_response'
                 maxItems: 100
                 type: array
           description: successful operation
@@ -1283,6 +1283,19 @@ components:
       additionalProperties: false
       example:
         name: regal rechts
+      properties:
+        name:
+          example: regal rechts
+          maxLength: 255
+          pattern: "^example-[0-9a-z]"
+          title: name
+          type: string
+      title: Groups
+      type: object
+    Groups_response:
+      additionalProperties: false
+      example:
+        name: regal rechts
         id: 1
       properties:
         id:
@@ -1303,7 +1316,39 @@ components:
     Lights:
       additionalProperties: false
       example:
-        note: example note
+        comment: example comment
+        groups:
+          name: regal rechts
+          id: 1
+        adress: wled1.local
+      properties:
+        groups:
+          items:
+            example: drawer left
+            maxLength: 200
+            type: string
+          maxItems: 100
+          title: userGroups
+          type: array
+        adress:
+          example: wled1.local
+          maxLength: 255
+          pattern: "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^([a-zA-Z0-9-]+\\\
+            .)+[a-zA-Z]{2,}$"
+          title: adress
+          type: string
+        comment:
+          example: example comment
+          maxLength: 65535
+          pattern: "^[0-9a-z]+$"
+          title: comment
+          type: string
+      title: Lights
+      type: object
+    Lights_response:
+      additionalProperties: false
+      example:
+        comment: example comment
         groups:
           name: regal rechts
           id: 1
@@ -1319,7 +1364,13 @@ components:
           title: id
           type: integer
         groups:
-          $ref: '#/components/schemas/Groups'
+          items:
+            example: drawer left
+            maxLength: 200
+            type: string
+          maxItems: 100
+          title: userGroups
+          type: array
         adress:
           example: wled1.local
           maxLength: 255
@@ -1327,11 +1378,11 @@ components:
             .)+[a-zA-Z]{2,}$"
           title: adress
           type: string
-        note:
-          example: example note
+        comment:
+          example: example comment
           maxLength: 65535
-          pattern: "^example-[0-9a-z]"
-          title: note
+          pattern: "^[0-9a-z]+$"
+          title: comment
           type: string
         online:
           enum:
