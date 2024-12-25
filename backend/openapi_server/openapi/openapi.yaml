@@ -547,6 +547,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+        - bearerAuth: []
       summary: delete a product
       tags:
       - products
@@ -595,6 +597,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+        - bearerAuth: []
       summary: list of products
       tags:
       - products
@@ -616,6 +620,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+        - bearerAuth: []
       summary: add a product
       tags:
       - products
@@ -650,6 +656,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+        - bearerAuth: []
       summary: update product
       tags:
       - products

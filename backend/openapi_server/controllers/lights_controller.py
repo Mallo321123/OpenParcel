@@ -10,6 +10,10 @@ from openapi_server.models.lights_response import LightsResponse  # noqa: E501
 from openapi_server.models.map import Map  # noqa: E501
 from openapi_server import util
 
+from openapi_server.__init__ import get_db, close_db
+
+import json
+
 
 def light_add(lights):  # noqa: E501
     """add light device
@@ -70,46 +74,58 @@ def lights_devices_get(limit=None, page=None):  # noqa: E501
 
 
 def lights_group_delete(id):  # noqa: E501
-    """delete a light group
-
-    deletes a light grouo # noqa: E501
-
-    :param id: The group that needs to be deleted
-    :type id: int
-
-    :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
-    """
-    return 'do some magic!'
+    db = get_db()
+    cursor = db.cursor()
+    
+    cursor.execute("SELECT * FROM groups WHERE id = %s", (id,))
+    if cursor.fetchone() is None:
+        return "Group does not exist", 404
+    
+    cursor.execute("DELETE FROM groups WHERE id = %s", (id,))
+    db.commit()
+    close_db(db)
+    return "Group deleted", 200
 
 
 def lights_group_get(limit=None, page=None):  # noqa: E501
-    """list all light groups
+    db = get_db()
+    cursor = db.cursor()
+    
+    offset = limit * page
 
-    returns all light groups # noqa: E501
-
-    :param limit: items per page
-    :type limit: int
-    :param page: page number
-    :type page: int
-
-    :rtype: Union[List[GroupsResponse], Tuple[List[GroupsResponse], int], Tuple[List[GroupsResponse], int, Dict[str, str]]
-    """
-    return 'do some magic!'
+    cursor.execute("SELECT * FROM groups ORDER BY id ASC LIMIT %s OFFSET %s", (limit, offset))
+    groups = cursor.fetchall()
+    
+    for i in range(len(groups)):
+        try:
+            groups = json.loads(groups[i][7])
+        except TypeError:
+            groups = []
+            
+        groups[i] = GroupsResponse(
+            id=groups[i][0],
+            name=groups[i][1]
+        )
+    
+    return groups, 200
 
 
 def lights_group_post(groups):  # noqa: E501
-    """add light group
-
-    adds a new Light group # noqa: E501
-
-    :param groups: 
-    :type groups: dict | bytes
-
-    :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
-    """
+    db = get_db()
+    cursor = db.cursor()
+    
     if connexion.request.is_json:
         groups = Groups.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        
+        cursor.execute("SELECT * FROM groups WHERE name = %s", (groups.name,))
+        if cursor.fetchone() is not None:
+            return "Group already exists", 400
+        
+        cursor.execute("INSERT INTO groups (name) VALUES (%s)", (groups.name,))
+        db.commit()
+        close_db(db)
+        return "Group added", 201
+    return "invalid request", 400
 
 
 def lights_map_delete(id):  # noqa: E501

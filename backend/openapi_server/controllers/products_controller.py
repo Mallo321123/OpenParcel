@@ -3,11 +3,27 @@ from openapi_server.models.products import Products  # noqa: E501
 from openapi_server.models.products_response import ProductsResponse  # noqa: E501
 
 from openapi_server.__init__ import get_db, close_db
+from openapi_server.tokenManager import valid_token
+from openapi_server.permission_check import check_permission
+
+from flask_jwt_extended import jwt_required, get_jwt
+from flask import request
 
 import json
 
-
+@jwt_required()
 def product_add(products=None):  # noqa: E501
+    
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")
+    
+    if check_permission("products", user) is False:
+        return "unauthorized", 401
+    
+    token = request.headers.get("Authorization").split(" ")[1]
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
     
     db = get_db()
     cursor = db.cursor()
@@ -34,8 +50,19 @@ def product_add(products=None):  # noqa: E501
         
         return "Product created", 200
 
-
+@jwt_required()
 def products_delete(id):  # noqa: E501
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")
+    
+    if check_permission("products", user) is False:
+        return "unauthorized", 401
+    
+    token = request.headers.get("Authorization").split(" ")[1]
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
     db = get_db()
     cursor = db.cursor()
     
@@ -49,8 +76,19 @@ def products_delete(id):  # noqa: E501
     close_db(db)
     return "Product deleted", 200
 
-
+@jwt_required()
 def products_list(limit=None, page=None):  # noqa: E501
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")
+    
+    if check_permission("products", user) is False:
+        return "unauthorized", 401
+    
+    token = request.headers.get("Authorization").split(" ")[1]
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
     db = get_db()
     cursor = db.cursor()
     
@@ -78,8 +116,18 @@ def products_list(limit=None, page=None):  # noqa: E501
     
     return products, 200
 
-
+@jwt_required()
 def update_product(name, products=None):  # noqa: E501
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")
+    
+    if check_permission("products", user) is False:
+        return "unauthorized", 401
+    
+    token = request.headers.get("Authorization").split(" ")[1]
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
     
     db = get_db()
     cursor = db.cursor()
