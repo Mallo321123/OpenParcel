@@ -583,7 +583,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Products'
+                  $ref: '#/components/schemas/Products_response'
                 maxItems: 100
                 type: array
           description: successful operation
@@ -623,6 +623,17 @@ paths:
     put:
       description: updates product properties
       operationId: update_product
+      parameters:
+      - description: name of user that needs to be changed
+        explode: true
+        in: query
+        name: name
+        required: true
+        schema:
+          maxLength: 20
+          pattern: "^[0-9a-zA-Z]+$"
+          type: string
+        style: form
       requestBody:
         content:
           application/json:
@@ -1168,6 +1179,55 @@ components:
         buildTime: 20-30 min
         name: openDTU
         comment: example comment
+      properties:
+        name:
+          example: openDTU
+          maxLength: 255
+          pattern: "^[0-9a-zA-Z]+$"
+          title: name
+          type: string
+        comment:
+          example: example comment
+          maxLength: 65535
+          pattern: "^(?!.*<.*?>)[\\w\\s.,!?-]+$"
+          title: comment
+          type: string
+        difficulty:
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          example: 3
+          title: difficulty
+          type: integer
+        buildTime:
+          example: 20-30 min
+          maxLength: 255
+          pattern: "^[0-9a-zA-Z- ]+$"
+          title: buildTime
+          type: string
+        customerGroups:
+          items:
+            maxLength: 255
+            pattern: "^[0-9a-zA-Z]+$"
+            type: string
+          maxItems: 100
+          title: customerGroups
+          type: array
+      title: Products
+      type: object
+    Products_response:
+      additionalProperties: false
+      example:
+        difficulty: 3
+        customerGroups:
+        - adults
+        - nerds
+        buildTime: 20-30 min
+        name: openDTU
+        comment: example comment
         id: 1
       properties:
         id:
@@ -1186,7 +1246,7 @@ components:
         comment:
           example: example comment
           maxLength: 65535
-          pattern: ^(?!.*<.*?>)[\w\s.,!?'"-]+$
+          pattern: "^(?!.*<.*?>)[\\w\\s.,!?-]+$"
           title: comment
           type: string
         difficulty:

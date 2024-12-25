@@ -199,8 +199,6 @@ def update_user(username, user=None):  # noqa: E501
         update_fields = {}
 
         if user.get("email") is not None:
-            if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', user['email']):
-                return "Invalid email", 400
             update_fields['email'] = user['email']
 
         if user.get('first_name') is not None:
@@ -235,7 +233,7 @@ def update_user(username, user=None):  # noqa: E501
             
             update_fields['username'] = user['username']
 
-        if not update_fields is not None:
+        if update_fields is None:
             return "No fields to update", 400
 
         # Construct the SQL update statement dynamically

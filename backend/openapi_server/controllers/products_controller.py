@@ -40,43 +40,97 @@ def product_add(products=None):  # noqa: E501
 
 
 def products_delete(id):  # noqa: E501
-    """delete a product
-
-    deletes a product # noqa: E501
-
-    :param id: The product that needs to be deleted
-    :type id: int
-
-    :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
-    """
-    return 'do some magic!'
+    db = get_db()
+    cursor = db.cursor()
+    
+    cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
+    if cursor.fetchone() is None:
+        return "Product not found", 400
+    
+    cursor.execute("DELETE FROM products WHERE id = %s", (id,))
+    db.commit()
+    
+    close_db(db)
+    return "Product deleted", 200
 
 
 def products_list(limit=None, page=None):  # noqa: E501
-    """list of products
+    db = get_db()
+    cursor = db.cursor()
+    
+    offset = limit * page
 
-    lists all avaiable products # noqa: E501
+    cursor.execute("SELECT * FROM products ORDER BY id ASC LIMIT %s OFFSET %s", (limit, offset))
+    products = cursor.fetchall()
+    
+    close_db(db)
+    
+    for i in range(len(products)):
+        try:
+            customerGroups = json.loads(products[i][3])
+        except TypeError:
+            customerGroups = []
+            
+        products[i] = Products(
+            id=products[i][0],
+            name=products[i][1],
+            comment=products[i][2],
+            customer_groups=customerGroups,
+            difficulty=products[i][4],
+            build_time=products[i][5]
+        )
+    
+    return products, 200
 
-    :param limit: items per page
-    :type limit: int
-    :param page: page number
-    :type page: int
 
-    :rtype: Union[List[Products], Tuple[List[Products], int], Tuple[List[Products], int, Dict[str, str]]
-    """
-    return 'do some magic!'
-
-
-def update_product(products=None):  # noqa: E501
-    """update product
-
-    updates product properties # noqa: E501
-
-    :param products: 
-    :type products: dict | bytes
-
-    :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
-    """
+def update_product(name, products=None):  # noqa: E501
+    
+    db = get_db()
+    cursor = db.cursor()
+    
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        
+        if isinstance(products, products):
+            products = products.to_dict()
+        
+        # Prepare a dictionary of fields to update
+        update_fields = {}
+
+        if products.get("buildTime") is not None:
+            update_fields['buildTime'] = products['BuildTime']
+
+        if products.get('comment') is not None:
+            update_fields['comment'] = products['comment']
+
+        if products.get('customerGroups') is not None:
+            customer_groups_json = json.dumps(products['customerGroups'])
+            update_fields['customerGroups'] = customer_groups_json
+            
+        if products.get('difficulty') is not None:
+            update_fields['difficulty'] = products['difficulty']
+        
+        if products.get('name') is not None:
+            update_fields['name'] = products['name']
+            
+        if update_fields is None:
+            return "No fields to update", 400
+        
+        # Construct the SQL update statement dynamically
+        set_clause = ", ".join([f"{key} = %s" for key in update_fields.keys()])
+        values = list(update_fields.values())
+        values.append(name)
+
+        update_query = f"UPDATE products SET {set_clause} WHERE name = %s"
+
+        try:
+            cursor.execute(update_query, tuple(values))
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            return f"Failed to update product: {e}", 500
+        finally:
+            close_db(db)
+        
+        return "Product updated", 200
+    return "Invalid input", 400
