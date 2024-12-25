@@ -55,6 +55,18 @@ def security_controller_login():  # noqa: E501
     db = get_db()
     cursor = db.cursor()
     redis_connection = get_redis()
+    
+    client_ip = connexion.request.remote_addr
+    redis_key = f"login_attempts:{client_ip}"
+    max_attempts = 5
+    block_time = 600  # 10 Minuten (in Sekunden)
+    
+    attempts = redis_connection.get(redis_key)
+    if attempts and int(attempts) >= max_attempts:
+        return {
+            "success": False,
+            "message": f"Too many failed attempts. Try again in {block_time // 60} minutes."
+        }, 429  # HTTP-Status: Too Many Requests
 
     if connexion.request.is_json:
         login = SecurityControllerLoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
@@ -63,6 +75,8 @@ def security_controller_login():  # noqa: E501
         cursor.execute("SELECT * FROM users WHERE username = %s", (login.username,))
         user = cursor.fetchone()
         if user is None:
+            redis_connection.incr(redis_key)  # count Fails
+            redis_connection.expire(redis_key, block_time)  # Set timeout
             return "Login or password Invalid", 401
         
         password_hash = hashlib.md5(login.password.encode()).hexdigest()
@@ -70,7 +84,12 @@ def security_controller_login():  # noqa: E501
     
         
         if user[5] != password_hash or user[6] != cross_hash:
+            redis_connection.incr(redis_key)  # count Fails
+            redis_connection.expire(redis_key, block_time)  # Set timeout
             return "Login or password Invalid", 401
+        
+        # Delete login attempts counter due to successful login
+        redis_connection.delete(redis_key)
         
         # Generate JWT token
         secret_key = os.getenv("SECRET_KEY", "default_secret")
