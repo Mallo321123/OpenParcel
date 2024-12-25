@@ -548,7 +548,7 @@ paths:
         default:
           description: default
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: delete a product
       tags:
       - products
@@ -598,7 +598,7 @@ paths:
         default:
           description: default
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: list of products
       tags:
       - products
@@ -621,7 +621,7 @@ paths:
         default:
           description: default
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: add a product
       tags:
       - products
@@ -657,7 +657,7 @@ paths:
         default:
           description: default
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: update product
       tags:
       - products
@@ -674,17 +674,17 @@ paths:
                 $ref: '#/components/schemas/Settings'
           description: successful operation
         "401":
-          description: Unathorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unathorized'
+          description: Unathorized
         "500":
-          description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
         default:
           description: default
       security:
@@ -704,29 +704,29 @@ paths:
         required: true
       responses:
         "200":
-          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessfulResponse'
+          description: Successful operation
         "400":
-          description: Invalid Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidRequest'
+          description: Invalid Request
         "401":
-          description: Unathorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unathorized'
+          description: Unathorized
         "500":
-          description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
         default:
           description: default
       security:
@@ -752,23 +752,23 @@ paths:
         style: form
       responses:
         "200":
-          description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessfulResponse'
+          description: successful operation
         "401":
-          description: Unathorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unathorized'
+          description: Unathorized
         "404":
-          description: User not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
+          description: User not found
         default:
           description: default
       security:
@@ -799,17 +799,17 @@ paths:
                 $ref: '#/components/schemas/User'
           description: successful operation
         "401":
-          description: Unathorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unathorized'
+          description: Unathorized
         "404":
-          description: User not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
+          description: User not found
         default:
           description: default
       security:
@@ -835,23 +835,23 @@ paths:
                 $ref: '#/components/schemas/User'
           description: successful operation
         "204":
-          description: Created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Created'
+          description: Created
         "400":
-          description: Invalid Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidRequest'
+          description: Invalid Request
         "401":
-          description: Unathorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unathorized'
+          description: Unathorized
       summary: Create user
       tags:
       - user
@@ -880,35 +880,35 @@ paths:
         default:
           description: successful operation
         "204":
-          description: updated
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Updated'
+          description: updated
         "400":
-          description: Invalid Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidRequest'
+          description: Invalid Request
         "401":
-          description: Unathorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unathorized'
+          description: Unathorized
         "404":
-          description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
+          description: Not Found
         "500":
-          description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
       security:
       - bearerAuth: []
       summary: Update user
@@ -953,11 +953,11 @@ paths:
                 type: array
           description: succesfull operation
         "401":
-          description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unathorized'
+          description: Unauthorized
       security:
       - bearerAuth: []
       summary: list users
@@ -982,23 +982,23 @@ paths:
                 $ref: '#/components/schemas/security_controller_login_200_response'
           description: Successfully authenticated
         "400":
-          description: Invalid Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidRequest'
+          description: Invalid Request
         "401":
-          description: Invalid credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unathorized'
+          description: Invalid credentials
         "429":
-          description: Too Many Requests
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TooManyRequests'
+          description: Too Many Requests
         default:
           description: default
       security: []
@@ -1015,17 +1015,17 @@ paths:
         default:
           description: successful operation
         "200":
-          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessfulResponse'
+          description: OK
         "500":
-          description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
+          description: Internal Server Error
       security:
       - bearerAuth: []
       summary: Logs out current logged in user session
@@ -1199,7 +1199,7 @@ components:
         customer:
           example: Max Mustermann
           maxLength: 255
-          pattern: "[0-9a-zA-Z ]+$"
+          pattern: "^[A-ZÄÖÜa-zäöüß]+(?:[-' ][A-ZÄÖÜa-zäöüß]+)+$"
           title: customer
           type: string
         products:
@@ -1228,10 +1228,10 @@ components:
           title: comment
           type: string
         shipmentType:
-          format: string
           maxLength: 255
-          pattern: "[0-9a-zA-Z ]+$"
+          pattern: "^[0-9a-zA-Z]+$"
           title: shipmentType
+          type: string
       title: Orders
       type: object
     Orders_response:
@@ -1257,7 +1257,7 @@ components:
         customer:
           example: Max Mustermann
           maxLength: 255
-          pattern: "[0-9a-zA-Z ]+$"
+          pattern: "^[A-ZÄÖÜa-zäöüß]+(?:[-' ][A-ZÄÖÜa-zäöüß]+)+$"
           title: customer
           type: string
         products:
@@ -1298,10 +1298,10 @@ components:
           title: comment
           type: string
         shipmentType:
-          format: string
           maxLength: 255
-          pattern: "[0-9a-zA-Z ]+$"
+          pattern: "^[0-9a-zA-Z]+$"
           title: shipmentType
+          type: string
       title: Orders
       type: object
     Orders_change:
@@ -1319,7 +1319,7 @@ components:
         customer:
           example: Max Mustermann
           maxLength: 255
-          pattern: "[0-9a-zA-Z ]+$"
+          pattern: "^[A-ZÄÖÜa-zäöüß]+(?:[-' ][A-ZÄÖÜa-zäöüß]+)+$"
           title: customer
           type: string
         products:
@@ -1360,10 +1360,10 @@ components:
           title: comment
           type: string
         shipmentType:
-          format: string
           maxLength: 255
-          pattern: "[0-9a-zA-Z ]+$"
+          pattern: "^[0-9a-zA-Z]+$"
           title: shipmentType
+          type: string
       title: Orders
       type: object
     User:
