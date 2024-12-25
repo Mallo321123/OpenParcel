@@ -6,6 +6,7 @@ from openapi_server.models.lights import Lights
 from openapi_server.models.map import Map
 from openapi_server.models.orders import Orders
 from openapi_server.models.products import Products
+from openapi_server.models.products_response import ProductsResponse
 from openapi_server.models.security_controller_login200_response import SecurityControllerLogin200Response
 from openapi_server.models.security_controller_login_request import SecurityControllerLoginRequest
 from openapi_server.models.settings import Settings

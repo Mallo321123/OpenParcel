@@ -23,6 +23,7 @@ openapi_server/models/lights.py
 openapi_server/models/map.py
 openapi_server/models/orders.py
 openapi_server/models/products.py
+openapi_server/models/products_response.py
 openapi_server/models/security_controller_login200_response.py
 openapi_server/models/security_controller_login_request.py
 openapi_server/models/settings.py

@@ -91,7 +91,7 @@ def update_product(name, products=None):  # noqa: E501
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
         
-        if isinstance(products, products):
+        if isinstance(products, Products):
             products = products.to_dict()
         
         # Prepare a dictionary of fields to update
@@ -111,6 +111,9 @@ def update_product(name, products=None):  # noqa: E501
             update_fields['difficulty'] = products['difficulty']
         
         if products.get('name') is not None:
+            cursor.execute("SELECT * FROM products WHERE name = %s", (products['name'],))
+            if cursor.fetchone() is not None:
+                return "Name already taken", 400
             update_fields['name'] = products['name']
             
         if update_fields is None:
