@@ -47,9 +47,9 @@ def create_user(user=None):  # noqa: E501
         db.commit()
         close_db(db)
         
-        return "User created", 200
+        return "User created", 204
         
-    return "User not created", 400
+    return "Invalid Request", 400
 
 def security_controller_login():  # noqa: E501
     db = get_db()
@@ -111,7 +111,7 @@ def security_controller_login():  # noqa: E501
         }
 
     close_db(db)
-    return "Login or password Invalid", 401
+    return "Invalid Request", 400
 
 @jwt_required()
 def delete_user(username):  # noqa: E501
@@ -179,16 +179,12 @@ def get_user_by_name(username):  # noqa: E501
 
 @jwt_required()
 def logout_user():  # noqa: E501
-    """Logs out current logged in user session
-
-     # noqa: E501
-
-
-    :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
-    """
     jwt_data = get_jwt()  # Alle Claims aus dem Token abrufen
     user = jwt_data.get("user")  # Benutzername abrufen
-    delete_token(user)
+    try:
+        delete_token(user)
+    except Exception as e:
+        return f"Failed to log out: {e}", 500
     
     return "User logged out", 200
 
@@ -276,12 +272,11 @@ def update_user(username, user=None):  # noqa: E501
             db.commit()
         except Exception as e:
             db.rollback()
-            return f"Failed to update user: {e}", 500
+            return "Failed to update user", 500
         finally:
             close_db(db)
 
         return "User updated", 204
-        
         
     return "Invalid request", 400 
 

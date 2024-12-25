@@ -675,10 +675,16 @@ paths:
           description: successful operation
         "401":
           description: Unathorized
-        "404":
-          description: Not Found
-        "429":
-          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unathorized'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
         default:
           description: default
       security:
@@ -699,12 +705,28 @@ paths:
       responses:
         "200":
           description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulResponse'
+        "400":
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
         "401":
           description: Unathorized
-        "404":
-          description: Not Found
-        "429":
-          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unathorized'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
         default:
           description: default
       security:
@@ -729,18 +751,24 @@ paths:
           type: string
         style: form
       responses:
-        "400":
-          description: Invalid username supplied
-        "404":
-          description: User not found
         "200":
-          description: Ok
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulResponse'
         "401":
           description: Unathorized
-        "403":
-          description: Forbidden
-        "429":
-          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unathorized'
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
         default:
           description: default
       security:
@@ -770,12 +798,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: successful operation
-        "400":
-          description: Invalid username supplied
+        "401":
+          description: Unathorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unathorized'
         "404":
           description: User not found
-        "429":
-          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
         default:
           description: default
       security:
@@ -802,6 +836,22 @@ paths:
           description: successful operation
         "204":
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Created'
+        "400":
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        "401":
+          description: Unathorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unathorized'
       summary: Create user
       tags:
       - user
@@ -830,7 +880,35 @@ paths:
         default:
           description: successful operation
         "204":
-          description: Created
+          description: updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Updated'
+        "400":
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        "401":
+          description: Unathorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unathorized'
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
       security:
       - bearerAuth: []
       summary: Update user
@@ -876,10 +954,10 @@ paths:
           description: succesfull operation
         "401":
           description: Unauthorized
-        "404":
-          description: Not Found
-        "429":
-          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unathorized'
       security:
       - bearerAuth: []
       summary: list users
@@ -903,10 +981,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/security_controller_login_200_response'
           description: Successfully authenticated
+        "400":
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
         "401":
           description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unathorized'
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequests'
         default:
           description: default
       security: []
@@ -924,8 +1016,16 @@ paths:
           description: successful operation
         "200":
           description: OK
-        "404":
-          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulResponse'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
       security:
       - bearerAuth: []
       summary: Logs out current logged in user session
@@ -934,6 +1034,110 @@ paths:
       x-openapi-router-controller: openapi_server.controllers.user_controller
 components:
   schemas:
+    Updated:
+      additionalProperties: false
+      example:
+        message: Updated
+      properties:
+        message:
+          example: Updated
+          maxLength: 255
+          pattern: "^[0-9a-zA-Z]+$"
+          title: message
+          type: string
+      title: Updated
+      type: object
+    NotFound:
+      additionalProperties: false
+      example:
+        message: Not Found
+      properties:
+        message:
+          example: Not Found
+          maxLength: 255
+          pattern: "^[0-9a-zA-Z]+$"
+          title: message
+          type: string
+      title: NotFound
+      type: object
+    TooManyRequests:
+      additionalProperties: false
+      example:
+        message: Too Many Requests
+      properties:
+        message:
+          example: Too Many Requests
+          maxLength: 255
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          title: message
+          type: string
+      title: TooManyRequests
+      type: object
+    Created:
+      additionalProperties: false
+      example:
+        message: Created
+      properties:
+        message:
+          example: Created
+          maxLength: 255
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          title: message
+          type: string
+      title: Created
+      type: object
+    SuccessfulResponse:
+      additionalProperties: false
+      example:
+        message: Successful operation
+      properties:
+        message:
+          example: Successful operation
+          maxLength: 255
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          title: message
+          type: string
+      title: SuccessfulResponse
+      type: object
+    InvalidRequest:
+      additionalProperties: false
+      example:
+        message: Invalid Request
+      properties:
+        message:
+          example: Invalid Request
+          maxLength: 255
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          title: message
+          type: string
+      title: InvalidRequest
+      type: object
+    InternalServerError:
+      additionalProperties: false
+      example:
+        message: Internal Server Error
+      properties:
+        message:
+          example: Internal Server Error
+          maxLength: 255
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          title: message
+          type: string
+      title: InternalServerError
+      type: object
+    Unathorized:
+      additionalProperties: false
+      example:
+        message: Unathorized
+      properties:
+        message:
+          example: Unathorized
+          maxLength: 255
+          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          title: message
+          type: string
+      title: Unathorized
+      type: object
     Settings:
       additionalProperties: false
       example:

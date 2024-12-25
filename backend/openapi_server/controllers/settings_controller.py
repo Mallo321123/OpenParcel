@@ -61,4 +61,4 @@ def settings_update():  # noqa: E501
         db.commit()
         close_db(db)
         return "Ok", 200
-    return 400
+    return "invalid Request", 400
