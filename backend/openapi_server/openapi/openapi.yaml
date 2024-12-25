@@ -460,7 +460,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Orders_add'
+                  $ref: '#/components/schemas/Orders_response'
                 maxItems: 200
                 type: array
           description: successful operation
@@ -504,7 +504,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Orders_add'
+              $ref: '#/components/schemas/Orders_change'
+      parameters:
+      - description: The order that needs to be updated
+        explode: true
+        in: query
+        name: id
+        required: true
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
       responses:
         "200":
           description: successful operation

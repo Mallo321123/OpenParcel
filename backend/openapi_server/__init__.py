@@ -89,7 +89,7 @@ def prepare_database():
         customer VARCHAR(255),
         addDate DATE,
         closeDate DATE DEFAULT NULL,
-        products VARCHAR(255),
+        products TEXT,
         comment TEXT DEFAULT NULL,
         state VARCHAR(255),
         shipmentType VARCHAR(255)
