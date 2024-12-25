@@ -15,7 +15,6 @@ import jwt
 import hashlib
 import os
 from datetime import datetime, timedelta
-import re
 import json
 
 
@@ -26,8 +25,11 @@ def create_user(user=None):  # noqa: E501
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
         
-        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', user.email):
-            return "Invalid email", 400
+        cursor.execute("SELECT valze FROM settings WHERE name = %s", ("min_password_length",))
+        min_password_length = cursor.fetchone()[0]
+            
+        if len(user.password) < min_password_length:
+            return f"Password must be at least {min_password_length} characters long", 400
         
         cursor.execute("SELECT * FROM users WHERE username = %s", (user.username,))
         if cursor.fetchone() is not None:
@@ -209,6 +211,12 @@ def update_user(username, user=None):  # noqa: E501
             update_fields['lastname'] = user['last_name']
 
         if user.get('password') is not None:
+            cursor.execute("SELECT valze FROM settings WHERE name = %s", ("min_password_length",))
+            min_password_length = cursor.fetchone()[0]
+            
+            if len(user['password']) < min_password_length:
+                return f"Password must be at least {min_password_length} characters long", 400
+            
             password_hash = hashlib.md5(user['password'].encode()).hexdigest()
             cross_hash = hashlib.md5(username.encode() + user['password'].encode()).hexdigest()
             update_fields['password_hash'] = password_hash
