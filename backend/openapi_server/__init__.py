@@ -87,8 +87,8 @@ def prepare_database():
     cursor.execute("""CREATE TABLE IF NOT EXISTS orders (
         id INT AUTO_INCREMENT PRIMARY KEY,
         customer VARCHAR(255),
-        addDate DATE,
-        closeDate DATE DEFAULT NULL,
+        addDate DATETIME,
+        closeDate DATETIME DEFAULT NULL,
         products TEXT,
         comment TEXT DEFAULT NULL,
         state VARCHAR(255),

@@ -51,8 +51,8 @@ def orders_get(limit=None, page=None):  # noqa: E501
             dateClose=orders[i][3],
             comment=orders[i][5],
             products=products,
-            state=products[i][6],
-            shipmentType=products[i][7]
+            state=orders[i][6],
+            shipmentType=orders[i][7]
         )
     return orders, 200
 

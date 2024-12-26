@@ -1295,15 +1295,15 @@ components:
           title: state
           type: string
         dateAdd:
-          example: 2024-12-19T20:35:19.772
-          maxLength: 30
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          example: 2024-12-26 23:58:48.260781
+          maxLength: 255
+          pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$
           title: dateAdd
           type: string
         dateClosed:
-          example: 2024-12-19T20:35:19.772
-          maxLength: 30
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          example: 2024-12-26 23:58:48.260781
+          maxLength: 255
+          pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$
           title: dateClosed
           type: string
         comment:
@@ -1358,15 +1358,15 @@ components:
           title: state
           type: string
         dateAdd:
-          example: 2024-12-19T20:35:19.772
-          maxLength: 30
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          example: 2024-12-26 23:58:48.260781
+          maxLength: 255
+          pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$
           title: dateAdd
           type: string
         dateClosed:
-          example: 2024-12-19T20:35:19.772
-          maxLength: 30
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
+          example: 2024-12-26 23:58:48.260781
+          maxLength: 255
+          pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$
           title: dateClosed
           type: string
         comment:
