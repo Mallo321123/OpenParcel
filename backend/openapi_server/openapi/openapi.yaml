@@ -500,11 +500,6 @@ paths:
     put:
       description: updates an order
       operationId: orders_put
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Orders_change'
       parameters:
       - description: The order that needs to be updated
         explode: true
@@ -517,6 +512,11 @@ paths:
           minimum: 0
           type: integer
         style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Orders_change'
       responses:
         "200":
           description: successful operation
