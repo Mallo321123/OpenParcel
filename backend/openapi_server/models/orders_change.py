@@ -164,10 +164,10 @@ class OrdersChange(Model):
         :param date_add: The date_add of this OrdersChange.
         :type date_add: str
         """
-        if date_add is not None and len(date_add) > 30:
-            raise ValueError("Invalid value for `date_add`, length must be less than or equal to `30`")  # noqa: E501
-        if date_add is not None and not re.search(r'^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$', date_add):  # noqa: E501
-            raise ValueError(r"Invalid value for `date_add`, must be a follow pattern or equal to `/^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$/`")  # noqa: E501
+        if date_add is not None and len(date_add) > 255:
+            raise ValueError("Invalid value for `date_add`, length must be less than or equal to `255`")  # noqa: E501
+        if date_add is not None and not re.search(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$', date_add):  # noqa: E501
+            raise ValueError(r"Invalid value for `date_add`, must be a follow pattern or equal to `/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$/`")  # noqa: E501
 
         self._date_add = date_add
 
@@ -189,10 +189,10 @@ class OrdersChange(Model):
         :param date_closed: The date_closed of this OrdersChange.
         :type date_closed: str
         """
-        if date_closed is not None and len(date_closed) > 30:
-            raise ValueError("Invalid value for `date_closed`, length must be less than or equal to `30`")  # noqa: E501
-        if date_closed is not None and not re.search(r'^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$', date_closed):  # noqa: E501
-            raise ValueError(r"Invalid value for `date_closed`, must be a follow pattern or equal to `/^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$/`")  # noqa: E501
+        if date_closed is not None and len(date_closed) > 255:
+            raise ValueError("Invalid value for `date_closed`, length must be less than or equal to `255`")  # noqa: E501
+        if date_closed is not None and not re.search(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$', date_closed):  # noqa: E501
+            raise ValueError(r"Invalid value for `date_closed`, must be a follow pattern or equal to `/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$/`")  # noqa: E501
 
         self._date_closed = date_closed
 

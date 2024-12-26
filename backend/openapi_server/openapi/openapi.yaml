@@ -501,10 +501,10 @@ paths:
       description: updates an order
       operationId: orders_put
       parameters:
-      - description: The order that needs to be updated
+      - name: id
         explode: true
         in: query
-        name: id
+        description: The order that needs to be updated
         required: true
         schema:
           format: int32
@@ -1250,10 +1250,10 @@ components:
     Orders_response:
       additionalProperties: false
       example:
-        dateAdd: 2024-12-19T20:35:19.772Z
+        dateAdd: 2024-12-26 23:58:48.260781
         id: 5610
         state: open
-        dateClosed: 2024-12-19T20:35:19.772Z
+        dateClosed: 2024-12-26 23:58:48.260781
         customer: Max Mustermann
         products:
         - 101
@@ -1297,13 +1297,13 @@ components:
         dateAdd:
           example: 2024-12-26 23:58:48.260781
           maxLength: 255
-          pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$
+          pattern: "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{6}$"
           title: dateAdd
           type: string
         dateClosed:
           example: 2024-12-26 23:58:48.260781
           maxLength: 255
-          pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$
+          pattern: "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{6}$"
           title: dateClosed
           type: string
         comment:
@@ -1321,9 +1321,9 @@ components:
     Orders_change:
       additionalProperties: false
       example:
-        dateAdd: 2024-12-19T20:35:19.772Z
+        dateAdd: "2024-12-26 23:58:48.260781"
         state: open
-        dateClosed: 2024-12-19T20:35:19.772Z
+        dateClosed: "2024-12-26 23:58:48.260781"
         customer: Max Mustermann
         products:
         - 101
@@ -1360,13 +1360,13 @@ components:
         dateAdd:
           example: 2024-12-26 23:58:48.260781
           maxLength: 255
-          pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$
+          pattern: "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{6}$"
           title: dateAdd
           type: string
         dateClosed:
           example: 2024-12-26 23:58:48.260781
           maxLength: 255
-          pattern: ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$
+          pattern: "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{6}$"
           title: dateClosed
           type: string
         comment:

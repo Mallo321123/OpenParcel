@@ -47,12 +47,12 @@ def orders_get(limit=None, page=None):  # noqa: E501
         orders[i] = OrdersResponse(
             id=orders[i][0],
             customer=orders[i][1],
-            dateAdd=orders[i][2],
-            dateClose=orders[i][3],
+            date_add=orders[i][2],
+            date_closed=orders[i][3],
             comment=orders[i][5],
             products=products,
             state=orders[i][6],
-            shipmentType=orders[i][7]
+            shipment_type=orders[i][7]
         )
     return orders, 200
 
