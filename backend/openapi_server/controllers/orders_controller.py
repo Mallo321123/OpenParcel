@@ -10,6 +10,8 @@ from openapi_server.models.orders_change import OrdersChange
 
 from openapi_server.__init__ import get_db, close_db
 
+from flask import request
+
 import json
 import datetime
 
@@ -77,9 +79,11 @@ def orders_post(orders_add=None):  # noqa: E501
     return "invalid request", 400 
 
 
-def orders_put(id, orders_change=None):  # noqa: E501
+def orders_put(orders_change=None):  # noqa: E501
     db = get_db()
     cursor = db.cursor()
+    
+    id = request.args.get('id')
     
     cursor.execute("SELECT * FROM orders WHERE id = %s", (id,))
     result = cursor.fetchone()
@@ -94,14 +98,14 @@ def orders_put(id, orders_change=None):  # noqa: E501
             
         update_fields = {}
             
-        if orders_change.get("dateAdd") is not None:
-            update_fields['dateAdd'] = orders_change['dateAdd']
+        if orders_change.get("date_add") is not None:
+            update_fields['addDate'] = orders_change['date_add']
             
         if orders_change.get("state") is not None:
             update_fields['state'] = orders_change['state']
             
-        if orders_change.get("shipmentType") is not None:
-            update_fields['shipmentType'] = orders_change['shipmentType']
+        if orders_change.get("shipment_type") is not None:
+            update_fields['shipmentType'] = orders_change['shipment_type']
             
         if orders_change.get("comment") is not None:
             update_fields['comment'] = orders_change['comment']
@@ -112,8 +116,8 @@ def orders_put(id, orders_change=None):  # noqa: E501
         if orders_change.get("customer") is not None:
             update_fields['customer'] = orders_change['customer']
         
-        if orders_change.get("dateClose") is not None:
-            update_fields['dateClose'] = orders_change['dateClose']
+        if orders_change.get("date_closed") is not None:
+            update_fields['closeDate'] = orders_change['date_closed']
             
         if update_fields is None:
             return "No fields to update", 400
@@ -133,6 +137,6 @@ def orders_put(id, orders_change=None):  # noqa: E501
             return "Failed to update order", 500
         finally:
             close_db(db)
-            return "Order updated", 200
+            return orders_change, 200
         
     return "invalid request", 400
