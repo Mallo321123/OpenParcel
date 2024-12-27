@@ -20,6 +20,25 @@ tags:
 - description: Operations about user
   name: user
 paths:
+  /token:
+    get:
+      description: valids provided token
+      operationId: token_valid
+      responses:
+        "200":
+          description: Token is valid
+        "400":
+          description: Invalid Request
+        "401":
+          description: Token is invalid
+        default:
+          description: default
+      security:
+      - bearerAuth: []
+      summary: valid token
+      tags:
+      - user
+      x-openapi-router-controller: openapi_server.controllers.security_controller
   /dashboard:
     get:
       description: lists dashboard information

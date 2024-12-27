@@ -5,14 +5,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const passwordVisibilityToggle = document.getElementById('passwordVisibilityToggle');
   const alertMessage = document.getElementById('alertMessage');
 
-  // Dynamische API-URL basierend auf der aktuellen URL
-  const currentUrl = window.location.href; // Aktuelle URL der Seite
-  const baseUrl = currentUrl.split('/').slice(0, 3).join('/'); // Basis-URL (Protokoll + Domain)
-  const apiUrl = `${baseUrl}/api/user/login`; // API-URL dynamisch zusammenbauen
+  const currentUrl = window.location.href;
+  const baseUrl = currentUrl.split('/').slice(0, 3).join('/');
+  const apiUrl = `${baseUrl}/api/user/login`;
 
-  // Login-Logik
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  // check for existing token
+  if (token) {
+    window.location.href = "/dashboard";
+  }
+
+  // Login-Logic
   async function login(username, password) {
-    // Überprüfen des Benutzernamens
     if (!/^[0-9a-zA-Z]{1,15}$/.test(username)) {
       if (alertMessage) {
         alertMessage.textContent = 'Benutzername darf nur Kleinbuchstaben und Zahlen enthalten und maximal 15 Zeichen lang sein.';
@@ -33,23 +37,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }),
       });
 
-      // Fehlerbehandlung
+      // Error Handling
       if (!response.ok) {
         if (response.status === 401) {
           throw new Error('Ungültige Anmeldedaten');
         }
+        if (response.status === 400) {
+          throw new Error('Ungültige Anfrage');
+        }
         if (response.status === 429) {
           throw new Error('Zu viele Anfragen, bitte versuche es später erneut.');
         }
-        throw new Error('Login fehlgeschlagen');
+        throw new Error('Sonstiger Fehler beim Login');
       }
 
-      // Antwort im Erfolgsfall
       const data = await response.json();
 
       if (data.success) {
         localStorage.setItem('token', data.token);
-        window.location.href = '/dashboard'; // Weiterleitung nach dem erfolgreichen Login
+        window.location.href = '/dashboard'; // Redirect to dashboard
       } else {
         throw new Error(data.message || 'Unbekannter Fehler');
       }
@@ -61,7 +67,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Passwortsichtbarkeit umschalten
   function togglePasswordVisibility() {
     const inputType = passwordInput.type === 'password' ? 'text' : 'password';
     passwordInput.type = inputType;
@@ -70,13 +75,11 @@ document.addEventListener("DOMContentLoaded", function () {
     passwordVisibilityToggle.innerHTML = `<i class="${icon}"></i>`;
   }
 
-  // Formular-Submit und Login ausführen
   loginForm.addEventListener('submit', function (event) {
     event.preventDefault();
     login(usernameInput.value, passwordInput.value);
   });
 
-  // Passwort-Sichtbarkeit umschalten, wenn auf das Icon geklickt wird
   if (passwordVisibilityToggle) {
     passwordVisibilityToggle.addEventListener('click', togglePasswordVisibility);
   }

@@ -25,8 +25,8 @@ def create_user(user=None):  # noqa: E501
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
         
-        cursor.execute("SELECT valze FROM settings WHERE name = %s", ("min_password_length",))
-        min_password_length = cursor.fetchone()[0]
+        cursor.execute("SELECT value FROM settings WHERE name = %s", ("min_password_length",))
+        min_password_length = int(cursor.fetchone()[0])
             
         if len(user.password) < min_password_length:
             return f"Password must be at least {min_password_length} characters long", 400
