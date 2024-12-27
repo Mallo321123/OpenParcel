@@ -20,25 +20,6 @@ tags:
 - description: Operations about user
   name: user
 paths:
-  /token:
-    get:
-      description: valids provided token
-      operationId: token_valid
-      responses:
-        "200":
-          description: Token is valid
-        "400":
-          description: Invalid Request
-        "401":
-          description: Token is invalid
-        default:
-          description: default
-      security:
-      - bearerAuth: []
-      summary: valid token
-      tags:
-      - user
-      x-openapi-router-controller: openapi_server.controllers.security_controller
   /dashboard:
     get:
       description: lists dashboard information
@@ -62,7 +43,7 @@ paths:
         default:
           description: Not Found
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: list dashboard information
       tags:
       - dashboard
@@ -446,7 +427,7 @@ paths:
         default:
           description: default
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: delete a order
       tags:
       - orders
@@ -496,7 +477,7 @@ paths:
         default:
           description: default
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: list all orders
       tags:
       - orders
@@ -519,7 +500,7 @@ paths:
         default:
           description: default
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: add an order
       tags:
       - orders
@@ -528,10 +509,10 @@ paths:
       description: updates an order
       operationId: orders_put
       parameters:
-      - name: id
+      - description: The order that needs to be updated
         explode: true
         in: query
-        description: The order that needs to be updated
+        name: id
         required: true
         schema:
           format: int32
@@ -556,7 +537,7 @@ paths:
         default:
           description: default
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: update an order
       tags:
       - orders
@@ -776,6 +757,25 @@ paths:
       tags:
       - settings
       x-openapi-router-controller: openapi_server.controllers.settings_controller
+  /token:
+    get:
+      description: valids provided token
+      operationId: token_valid
+      responses:
+        "200":
+          description: Token is valid
+        "400":
+          description: Invalid Request
+        "401":
+          description: Token is invalid
+        default:
+          description: default
+      security:
+      - bearerAuth: []
+      summary: valid token
+      tags:
+      - user
+      x-openapi-router-controller: openapi_server.controllers.user_controller
   /user:
     delete:
       description: This can only be done by the logged in user.
@@ -1356,9 +1356,9 @@ components:
     Orders_change:
       additionalProperties: false
       example:
-        dateAdd: "2024-12-26 23:58:48.260781"
+        dateAdd: 2024-12-26 23:58:48.260781
         state: open
-        dateClosed: "2024-12-26 23:58:48.260781"
+        dateClosed: 2024-12-26 23:58:48.260781
         customer: Max Mustermann
         products:
         - 101

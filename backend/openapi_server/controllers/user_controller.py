@@ -319,3 +319,14 @@ def user_list_get(limit=None, page=None):  # noqa: E501
             user_status=users[i][8]
         )
     return jsonify(users), 200
+
+@jwt_required()
+def token_valid():  # noqa: E501
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")  # Extract username from token
+    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+
+    return "valid", 200

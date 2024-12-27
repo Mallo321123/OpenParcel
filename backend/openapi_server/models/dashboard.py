@@ -12,9 +12,11 @@ class Dashboard(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, open=None, done=None, products=None, lights=None, mappers=None):  # noqa: E501
+    def __init__(self, hold=None, open=None, done=None, products=None, lights=None, mappers=None):  # noqa: E501
         """Dashboard - a model defined in OpenAPI
 
+        :param hold: The hold of this Dashboard.  # noqa: E501
+        :type hold: int
         :param open: The open of this Dashboard.  # noqa: E501
         :type open: int
         :param done: The done of this Dashboard.  # noqa: E501
@@ -27,6 +29,7 @@ class Dashboard(Model):
         :type mappers: int
         """
         self.openapi_types = {
+            'hold': int,
             'open': int,
             'done': int,
             'products': int,
@@ -35,6 +38,7 @@ class Dashboard(Model):
         }
 
         self.attribute_map = {
+            'hold': 'hold',
             'open': 'open',
             'done': 'done',
             'products': 'products',
@@ -42,6 +46,7 @@ class Dashboard(Model):
             'mappers': 'mappers'
         }
 
+        self._hold = hold
         self._open = open
         self._done = done
         self._products = products
@@ -58,6 +63,29 @@ class Dashboard(Model):
         :rtype: Dashboard
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def hold(self) -> int:
+        """Gets the hold of this Dashboard.
+
+        count of orders on hold  # noqa: E501
+
+        :return: The hold of this Dashboard.
+        :rtype: int
+        """
+        return self._hold
+
+    @hold.setter
+    def hold(self, hold: int):
+        """Sets the hold of this Dashboard.
+
+        count of orders on hold  # noqa: E501
+
+        :param hold: The hold of this Dashboard.
+        :type hold: int
+        """
+
+        self._hold = hold
 
     @property
     def open(self) -> int:
