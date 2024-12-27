@@ -42,6 +42,8 @@ paths:
           description: Too Many Requests
         default:
           description: Not Found
+      security:
+        - bearerAuth: []
       summary: list dashboard information
       tags:
       - dashboard
@@ -424,6 +426,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+        - bearerAuth: []
       summary: delete a order
       tags:
       - orders
@@ -472,6 +476,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+        - bearerAuth: []
       summary: list all orders
       tags:
       - orders
@@ -493,6 +499,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+        - bearerAuth: []
       summary: add an order
       tags:
       - orders
@@ -528,6 +536,8 @@ paths:
           description: Too Many Requests
         default:
           description: default
+      security:
+        - bearerAuth: []
       summary: update an order
       tags:
       - orders
@@ -1172,7 +1182,13 @@ components:
         lights: 10
         mappers: 10
         products: 15
+        hold: 0
       properties:
+        hold:
+          description: count of orders on hold
+          example: 0
+          title: hold
+          type: integer
         open:
           description: count of open orders
           example: 23

@@ -9,13 +9,27 @@ from openapi_server.models.orders_response import OrdersResponse
 from openapi_server.models.orders_change import OrdersChange
 
 from openapi_server.__init__ import get_db, close_db
+from openapi_server.tokenManager import valid_token
+from openapi_server.permission_check import check_permission
 
 from flask import request
+from flask_jwt_extended import jwt_required, get_jwt
 
 import json
 import datetime
 
+@jwt_required()
 def orders_delete(id):  # noqa: E501
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")  # Extract username from token
+    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
+    if check_permission("orders", user) is False:
+        return "unauthorized", 401  # Only admins and the user himself can update the user
+    
     db = get_db()
     cursor = db.cursor()
     
@@ -29,7 +43,7 @@ def orders_delete(id):  # noqa: E501
     close_db(db)
     return "Order deleted", 200
 
-
+@jwt_required()
 def orders_get(limit=None, page=None):  # noqa: E501
     db = get_db()
     cursor = db.cursor()
@@ -58,8 +72,18 @@ def orders_get(limit=None, page=None):  # noqa: E501
         )
     return orders, 200
 
-
+@jwt_required()
 def orders_post(orders_add=None):  # noqa: E501
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")  # Extract username from token
+    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
+    if check_permission("orders", user) is False:
+        return "unauthorized", 401  # Only admins and the user himself can update the user
+    
     db = get_db()
     cursor = db.cursor()
     
@@ -80,6 +104,16 @@ def orders_post(orders_add=None):  # noqa: E501
 
 
 def orders_put(orders_change=None):  # noqa: E501
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")  # Extract username from token
+    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
+    if check_permission("orders", user) is False:
+        return "unauthorized", 401  # Only admins and the user himself can update the user
+    
     db = get_db()
     cursor = db.cursor()
     
