@@ -26,21 +26,21 @@ services:
     networks:
       - OpenParcel
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: frontend
-    volumes:
-      - ./frontend/src:/usr/share/nginx/html:ro
-      - ./frontend/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - backend
-    ports:
-     - "3000:3000"
-     - "3001:3001"
-    networks:
-      - OpenParcel
+  #frontend:
+  #  build:
+  #    context: ./frontend
+  #    dockerfile: Dockerfile
+  #  container_name: frontend
+  #  volumes:
+  #    - ./frontend/src:/usr/share/nginx/html:ro
+  #    - ./frontend/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #  depends_on:
+  #    - backend
+  #  ports:
+  #   - "3000:3000"
+  #   - "3001:3001"
+  #  networks:
+  #    - OpenParcel
 
   mysql:
     image: mysql:8.0
