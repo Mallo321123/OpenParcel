@@ -231,8 +231,6 @@ def orders_list_get(limit, page, state=None, customer=None, shipment=None, sort 
         params = [limit, offset]
         query = "SELECT * FROM orders LIMIT %s OFFSET %s"
         
-    #return query
-        
     cursor.execute(query, params)
         
     orders = cursor.fetchall()
