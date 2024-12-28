@@ -18,7 +18,7 @@ def dashboard_get():  # noqa: E501
     db = get_db()
     cursor = db.cursor()
     
-    cursor.execute("SELECT COUNT(*) AS total_done_orders FROM orders WHERE state = 'done'")
+    cursor.execute("SELECT COUNT(*) AS total_done_orders FROM orders WHERE state = 'closed'")
     done = cursor.fetchone()
     
     cursor.execute("SELECT COUNT(*) AS total_open_orders FROM orders WHERE state = 'open'")

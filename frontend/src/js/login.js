@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (data.success) {
         localStorage.setItem('token', data.token);
-        window.location.href = '/dashboard'; // Redirect to dashboard
+        window.location.href = '/dashboard.html'; // Redirect to dashboard
       } else {
         throw new Error(data.message || 'Unbekannter Fehler');
       }

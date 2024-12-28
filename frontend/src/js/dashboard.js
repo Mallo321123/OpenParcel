@@ -5,6 +5,7 @@ addEventListener("DOMContentLoaded", async function () {
 
     const orderList = document.querySelector('.order-list');
     const orderLimitSelector = document.getElementById('order-limit');
+    const loading = document.getElementById('loading');  // Ladebereich hinzufügen
     
 
     async function getDashboardData() {
@@ -60,7 +61,7 @@ addEventListener("DOMContentLoaded", async function () {
                 statValue.textContent = data.hold;
             } else if (title.textContent.trim() === "Lichter") {
                 statValue.textContent = data.lights;
-            } else if (title.textContent.trim() === "Mappers") {
+            } else if (title.textContent.trim() === "Mapper") {
                 statValue.textContent = data.mappers;
             } else if (title.textContent.trim() === "Offen") {
                 statValue.textContent = data.open;
@@ -71,6 +72,9 @@ addEventListener("DOMContentLoaded", async function () {
     }
 
     async function updateOrderList(limit, page = 0) {
+        loading.style.display = 'flex';
+        orderList.style.display = 'none'; // Bestell-Liste ausblenden
+
         const orders = await getOrders(limit, page);
 
         orderList.innerHTML = "";
@@ -102,14 +106,29 @@ addEventListener("DOMContentLoaded", async function () {
             const dateAdded = new Date(order.dateAdd).toLocaleString();
 
             orderItem.innerHTML = `
-                <h3>Bestellung #${order.id}</h3>
-                <p><strong>Kunde:</strong> ${order.customer}</p>
-                <p><strong>Datum:</strong> ${dateAdded}</p>
-                <p><strong>Produkte:</strong> ${order.products.join(', ')}</p>
+                <div class="order-row">
+                    <span><strong>#${order.id}</strong> - ${order.customer}</span>
+                    <span>${dateAdded}</span>
+                    <a href="/edit-order?id=${encodeURIComponent(order.id)}" class="edit-link" title="Bearbeiten">
+                        ✏️
+                    </a>
+                </div>
             `;
+
+            orderItem.addEventListener('click', function () {
+                window.location.href = `/view-order?id=${encodeURIComponent(order.id)}`;
+            });
+
+            const editLink = orderItem.querySelector('.edit-link');
+            editLink.addEventListener('click', function (event) {
+                event.stopPropagation();
+            });
 
             orderList.appendChild(orderItem);
         });
+
+        loading.style.display = 'none';
+        orderList.style.display = 'block'; // Bestell-Liste anzeigen
     }
 
     orderLimitSelector.addEventListener('change', function () {
