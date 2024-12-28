@@ -1,0 +1,26 @@
+body {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    margin: 0;
+  }
+
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    margin-top: 20px;
+  }
+
+  .container {
+    width: 95%;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+
+  input, textarea, select, div, nav {
+    caret-color: transparent;
+  }

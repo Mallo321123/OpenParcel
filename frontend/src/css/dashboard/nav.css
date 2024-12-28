@@ -53,8 +53,10 @@
 
 .logout-button:hover {
     background-color: #d61f1f;
+    transform: translateY(-2px);
 }
 
 .logout-button:active {
     background-color: #9e1b1b;
+    transform: translateY(2px);
 }
