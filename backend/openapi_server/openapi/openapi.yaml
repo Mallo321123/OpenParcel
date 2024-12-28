@@ -612,9 +612,9 @@ paths:
         schema:
           enum:
           - id
-          - user
+          - customer
           - state
-          - shipment
+          - shipmentType
           - addDate
           - closeDate
           maxLength: 255
