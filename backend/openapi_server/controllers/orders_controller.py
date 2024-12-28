@@ -45,6 +45,13 @@ def orders_delete(id):  # noqa: E501
 
 @jwt_required()
 def orders_get(limit=None, page=None):  # noqa: E501
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")  # Extract username from token
+    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
     db = get_db()
     cursor = db.cursor()
 
@@ -102,7 +109,7 @@ def orders_post(orders_add=None):  # noqa: E501
         
     return "invalid request", 400 
 
-
+@jwt_required()
 def orders_put(orders_change=None):  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")  # Extract username from token
@@ -174,3 +181,78 @@ def orders_put(orders_change=None):  # noqa: E501
             return orders_change, 200
         
     return "invalid request", 400
+
+
+@jwt_required()
+def orders_list_get(limit, page, state=None, customer=None, shipment=None, sort :str=None, order :str=None):  # noqa: E501
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")  # Extract username from token
+    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
+    db = get_db()
+    cursor = db.cursor()
+    
+    offset = limit * page
+    
+    query_fields = {}
+    
+    changed = False
+    
+    if state is not None:
+        query_fields['state'] = state
+        changed = True
+        
+    if customer is not None:
+        query_fields['customer'] = customer
+        changed = True
+        
+    if shipment is not None:
+        query_fields['shipmentType'] = shipment
+        changed = True
+        
+    if changed is not False:
+        set_clause = " AND ".join([f"{key} = %s" for key in query_fields.keys()])
+    else:
+        set_clause = None
+        
+    values = list(query_fields.values())
+    params = list(values) + [limit, offset]
+    
+    if sort is not None and order is not None and set_clause is not None:
+        query = f"SELECT * FROM orders WHERE {set_clause} ORDER BY {sort} {order} LIMIT %s OFFSET %s"
+    elif set_clause is not None and sort is None and order is None:
+        query = f"SELECT * FROM orders WHERE {set_clause} LIMIT %s OFFSET %s"
+    elif set_clause is None and sort is not None and order is not None:
+        query = f"SELECT * FROM orders ORDER BY {sort} {order} LIMIT %s OFFSET %s"
+    else:
+        params = [limit, offset]
+        query = "SELECT * FROM orders LIMIT %s OFFSET %s"
+        
+    #return query
+        
+    cursor.execute(query, params)
+        
+    orders = cursor.fetchall()
+    close_db(db)
+    
+    for i in range(len(orders)):
+        try:
+            products = json.loads(orders[i][4])
+        except TypeError:
+            products = []
+            
+        orders[i] = OrdersResponse(
+            id=orders[i][0],
+            customer=orders[i][1],
+            date_add=orders[i][2],
+            date_closed=orders[i][3],
+            comment=orders[i][5],
+            products=products,
+            state=orders[i][6],
+            shipment_type=orders[i][7]
+        )
+        
+    return orders, 200
