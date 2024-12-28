@@ -1,6 +1,5 @@
-from openapi_server.__init__ import get_db, close_db
+from openapi_server.db import get_db, close_db
 from openapi_server.tokenManager import valid_token
-from openapi_server.permission_check import check_permission
 
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt

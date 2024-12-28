@@ -2,7 +2,7 @@ import connexion
 from openapi_server.models.products import Products  # noqa: E501
 from openapi_server.models.products_response import ProductsResponse  # noqa: E501
 
-from openapi_server.__init__ import get_db, close_db
+from openapi_server.db import get_db, close_db
 from openapi_server.tokenManager import valid_token
 from openapi_server.permission_check import check_permission
 

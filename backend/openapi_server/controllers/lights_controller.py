@@ -1,16 +1,12 @@
 import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
 
 from openapi_server.models.groups import Groups  # noqa: E501
 from openapi_server.models.groups_response import GroupsResponse  # noqa: E501
 from openapi_server.models.lights import Lights  # noqa: E501
 from openapi_server.models.lights_response import LightsResponse  # noqa: E501
 from openapi_server.models.map import Map  # noqa: E501
-from openapi_server import util
 
-from openapi_server.__init__ import get_db, close_db
+from openapi_server.db import get_db, close_db
 
 import json
 

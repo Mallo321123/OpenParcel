@@ -1,4 +1,4 @@
-from openapi_server.__init__ import get_db, close_db
+from openapi_server.db import get_db, close_db
 import json
 
 def check_permission(permission: str, username: str) -> bool:

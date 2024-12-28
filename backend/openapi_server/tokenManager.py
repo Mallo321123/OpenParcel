@@ -1,4 +1,4 @@
-from openapi_server.__init__ import get_redis, close_redis
+from openapi_server.db import get_redis, close_redis
 from jwt import ExpiredSignatureError, InvalidTokenError
 
 

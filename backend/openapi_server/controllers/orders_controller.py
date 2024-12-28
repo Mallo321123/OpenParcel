@@ -1,19 +1,17 @@
 import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
 
 from openapi_server.models.orders_add import OrdersAdd  # noqa: E501
-from openapi_server import util
 from openapi_server.models.orders_response import OrdersResponse
 from openapi_server.models.orders_change import OrdersChange
 
-from openapi_server.__init__ import get_db, close_db
+from openapi_server.db import get_db, close_db
 from openapi_server.tokenManager import valid_token
 from openapi_server.permission_check import check_permission
 
-from flask import request
+from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt
+
+from typing import Optional
 
 import json
 import datetime
@@ -22,7 +20,10 @@ import datetime
 def orders_delete(id):  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")  # Extract username from token
-    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    auth_header = request.headers.get("Authorization")
+    if auth_header is None:
+        return "unauthorized", 401
+    token = auth_header.split(" ")[1]  # Extract token
     
     if not valid_token(user, token):
         return "unauthorized", 401
@@ -47,7 +48,10 @@ def orders_delete(id):  # noqa: E501
 def orders_get(limit=None, page=None):  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")  # Extract username from token
-    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    auth_header = request.headers.get("Authorization")
+    if auth_header is None:
+        return "unauthorized", 401
+    token = auth_header.split(" ")[1]  # Extract token
     
     if not valid_token(user, token):
         return "unauthorized", 401
@@ -77,13 +81,16 @@ def orders_get(limit=None, page=None):  # noqa: E501
             state=orders[i][6],
             shipment_type=orders[i][7]
         )
-    return orders, 200
+    return jsonify(orders), 200
 
 @jwt_required()
 def orders_post(orders_add=None):  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")  # Extract username from token
-    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    auth_header = request.headers.get("Authorization")
+    if auth_header is None:
+        return "unauthorized", 401
+    token = auth_header.split(" ")[1]  # Extract token
     
     if not valid_token(user, token):
         return "unauthorized", 401
@@ -113,7 +120,10 @@ def orders_post(orders_add=None):  # noqa: E501
 def orders_put(orders_change=None):  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")  # Extract username from token
-    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    auth_header = request.headers.get("Authorization")
+    if auth_header is None:
+        return "unauthorized", 401
+    token = auth_header.split(" ")[1]  # Extract token
     
     if not valid_token(user, token):
         return "unauthorized", 401
@@ -173,7 +183,7 @@ def orders_put(orders_change=None):  # noqa: E501
         try:
             cursor.execute(update_query, tuple(values))
             db.commit()
-        except Exception as e:
+        except Exception:
             db.rollback()
             return "Failed to update order", 500
         finally:
@@ -184,10 +194,13 @@ def orders_put(orders_change=None):  # noqa: E501
 
 
 @jwt_required()
-def orders_list_get(limit, page, state=None, customer=None, shipment=None, sort :str=None, order :str=None):  # noqa: E501
+def orders_list_get(limit, page, state=None, customer=None, shipment=None, sort: Optional[str] = None, order: Optional[str] = None):  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")  # Extract username from token
-    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
+    auth_header = request.headers.get("Authorization")
+    if auth_header is None:
+        return "unauthorized", 401
+    token = auth_header.split(" ")[1]  # Extract token
     
     if not valid_token(user, token):
         return "unauthorized", 401

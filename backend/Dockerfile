@@ -11,7 +11,7 @@ COPY . /usr/src/app
 
 EXPOSE 8080
 
-# Falls USE_GUNICORN true ist, Gunicorn starten, sonst Python3
+# Dev mode option
 CMD if [ "$DEV_SERVER" = "false" ]; then \
         exec gunicorn --bind 0.0.0.0:8080 openapi_server.__main__:app; \
     else \

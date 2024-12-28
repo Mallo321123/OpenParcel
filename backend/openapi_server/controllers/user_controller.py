@@ -4,7 +4,7 @@ from openapi_server.models.security_controller_login_request import SecurityCont
 from openapi_server.models.user import User  # noqa: E501
 from openapi_server.models.user_response import UserResponse
 
-from openapi_server.__init__ import get_db, close_db, get_redis
+from openapi_server.db import get_db, close_db, get_redis
 from openapi_server.tokenManager import valid_token, delete_token
 from openapi_server.permission_check import check_permission
 
