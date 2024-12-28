@@ -766,7 +766,7 @@ paths:
           description: Token is valid
         "400":
           description: Invalid Request
-        "401":
+        "204":
           description: Token is invalid
         default:
           description: default

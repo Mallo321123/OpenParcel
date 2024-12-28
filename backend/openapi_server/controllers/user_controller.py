@@ -327,6 +327,6 @@ def token_valid():  # noqa: E501
     token = request.headers.get("Authorization").split(" ")[1]  # Extract token
     
     if not valid_token(user, token):
-        return "unauthorized", 401
+        return "unauthorized", 204
 
     return "valid", 200

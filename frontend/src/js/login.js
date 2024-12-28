@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   // check for existing token
   if (token) {
-    window.location.href = "/dashboard";
+    window.location.href = "/dashboard.html";
   }
 
   // Login-Logic

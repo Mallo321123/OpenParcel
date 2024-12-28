@@ -7,9 +7,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (token) {
         const isValid = await valid_token(token);
         
-        if (isValid) {
-            window.location.href = "/dashboard.html";
-        } else {
+        if (!isValid) {
             localStorage.removeItem("token");
             sessionStorage.removeItem("token");
             window.location.href = "/login.html";

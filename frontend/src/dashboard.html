@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="css/dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <div class="Statistics">
+        <div class="header"></div>
+            <h1>Statistiken</h1>
+        </div>
+        <div class="dashboard-card">
+            <div class="stat">
+                <h3 class="stat-title">Abgeschlossen</h3>
+                <p class="stat-value">Laden</p>
+            </div>
+            <div class="stat">
+                <h3 class="stat-title">Wartend</h3>
+                <p class="stat-value">Laden</p>
+            </div>
+            <div class="stat">
+                <h3 class="stat-title">Offen</h3>
+                <p class="stat-value">Laden</p>
+            </div>
+            <div class="stat">
+                <h3 class="stat-title">Mappers</h3>
+                <p class="stat-value">Laden</p>
+            </div>
+            <div class="stat">
+                <h3 class="stat-title">Lichter</h3>
+                <p class="stat-value">Laden</p>
+            </div>
+            <div class="stat">
+                <h3 class="stat-title">Produkte</h3>
+                <p class="stat-value">Laden</p>
+            </div>
+        </div>
+    </div>
+    <div class="order-list-container">
+        <div class="header">
+            <h1>Bestellungs Übersicht</h1>
+        </div>
+        <div class="order-header">
+            <label for="order-limit">Anzahl anzeigen:</label>
+            <select id="order-limit">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+            </select>
+        </div>
+        <div class="order-list">
+            <!-- Dynamicly generated List -->
+        </div>
+    </div>
+        
+    <script src="js/dashboard.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
