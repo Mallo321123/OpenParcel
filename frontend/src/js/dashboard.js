@@ -5,7 +5,7 @@ addEventListener("DOMContentLoaded", async function () {
 
     const orderList = document.querySelector('.order-list');
     const orderLimitSelector = document.getElementById('order-limit');
-    const loading = document.getElementById('loading');  // Ladebereich hinzufügen
+    const loading = document.getElementById('loading');
     
 
     async function getDashboardData() {

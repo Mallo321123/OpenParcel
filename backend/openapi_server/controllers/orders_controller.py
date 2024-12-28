@@ -70,12 +70,18 @@ def orders_get(limit=None, page=None):  # noqa: E501
             products = json.loads(orders[i][4])
         except TypeError:
             products = []
+        
+        if orders[i][3] is None:
+            dateClosed = "-"
+        else:
+            dateClosed = orders[i][3]
+    
             
         orders[i] = OrdersResponse(
             id=orders[i][0],
             customer=orders[i][1],
             date_add=orders[i][2],
-            date_closed=orders[i][3],
+            date_closed=dateClosed,
             comment=orders[i][5],
             products=products,
             state=orders[i][6],
@@ -255,11 +261,16 @@ def orders_list_get(limit, page, state=None, customer=None, shipment=None, sort:
         except TypeError:
             products = []
             
+        if orders[i][3] is None:
+            dateClosed = "-"
+        else:
+            dateClosed = orders[i][3]
+            
         orders[i] = OrdersResponse(
             id=orders[i][0],
             customer=orders[i][1],
             date_add=orders[i][2],
-            date_closed=orders[i][3],
+            date_closed=dateClosed,
             comment=orders[i][5],
             products=products,
             state=orders[i][6],
