@@ -23,4 +23,5 @@ from openapi_server.models.too_many_requests import TooManyRequests
 from openapi_server.models.unathorized import Unathorized
 from openapi_server.models.updated import Updated
 from openapi_server.models.user import User
+from openapi_server.models.user_change import UserChange
 from openapi_server.models.user_response import UserResponse

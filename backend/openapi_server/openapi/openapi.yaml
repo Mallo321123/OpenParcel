@@ -1105,7 +1105,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/User_change'
         description: Update an existent user in the store
       responses:
         default:
@@ -1646,6 +1646,66 @@ components:
           pattern: "^[0-9a-zA-Z]+$"
           title: username
           type: string
+        firstName:
+          example: John
+          maxLength: 20
+          pattern: "^[a-zA-Z]+$"
+          title: firstName
+          type: string
+        lastName:
+          example: James
+          maxLength: 20
+          pattern: "^[a-zA-Z]+$"
+          title: lastName
+          type: string
+        email:
+          example: john@email.com
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+          title: email
+          type: string
+        password:
+          example: "12345"
+          maxLength: 255
+          pattern: ^.*$
+          title: password
+          type: string
+        userStatus:
+          description: User Status
+          example: 1
+          format: int32
+          maximum: 1
+          minimum: 0
+          title: userStatus
+          type: integer
+        userGroups:
+          items:
+            enum:
+            - admin
+            - products
+            - lights
+            - settings
+            - orders
+            example: admin
+            maxLength: 200
+            type: string
+          maxItems: 100
+          title: userGroups
+          type: array
+      title: User
+      type: object
+    User_change:
+      additionalProperties: false
+      example:
+        firstName: John
+        lastName: James
+        userGroups:
+        - admin
+        - lights
+        password: "12345"
+        userStatus: 1
+        email: john@email.com
+      properties:
         firstName:
           example: John
           maxLength: 20

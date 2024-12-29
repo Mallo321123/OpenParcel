@@ -268,16 +268,6 @@ def update_user(username, user=None):  # noqa: E501
                 return "unauthorized", 401      # Only admins can change user status
             
             update_fields['status'] = user['user_status']
-        
-        if user.get("username") is not None:
-            if check_permission("admin", user) is False:
-                return "unauthorized", 401      # Only admins can change usernames
-            
-            cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
-            if cursor.fetchone() is not None:
-                return "Username already taken", 400    # Username already taken
-            
-            update_fields['username'] = user['username']
 
         if update_fields is None:
             return "No fields to update", 400
