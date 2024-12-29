@@ -17,8 +17,20 @@ import os
 from datetime import datetime, timedelta
 import json
 
-
+#@jwt_required()
 def create_user(user=None):  # noqa: E501
+    #jwt_data = get_jwt()
+    #user = jwt_data.get("user")
+    
+    #if check_permission("admin", user) is False:
+    #    return "unauthorized", 401
+    
+    #token = request.headers.get("Authorization").split(" ")[1]
+    
+    #if not valid_token(user, token):
+    #    return "unauthorized", 401
+    
+    
     db = get_db()
     cursor = db.cursor()
 
@@ -226,7 +238,7 @@ def update_user(username, user=None):  # noqa: E501
             update_fields['lastname'] = user['last_name']
 
         if user.get('password') is not None:
-            cursor.execute("SELECT valze FROM settings WHERE name = %s", ("min_password_length",))
+            cursor.execute("SELECT value FROM settings WHERE name = %s", ("min_password_length",))
             min_password_length = cursor.fetchone()[0]
             
             if len(user['password']) < min_password_length:
@@ -251,6 +263,9 @@ def update_user(username, user=None):  # noqa: E501
             update_fields['status'] = user['user_status']
         
         if user.get("username") is not None:
+            if check_permission("admin", user) is False:
+                return "unauthorized", 401      # Only admins can change usernames
+            
             cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
             if cursor.fetchone() is not None:
                 return "Username already taken", 400    # Username already taken
@@ -285,9 +300,6 @@ def user_list_get(limit=None, page=None):  # noqa: E501
     
     jwt_data = get_jwt()  # Alle Claims aus dem Token abrufen
     user = jwt_data.get("user")  # Benutzername abrufen
-    
-    if check_permission("admin", user) is False:
-        return "unauthorized", 401
     
     token = request.headers.get("Authorization").split(" ")[1]  # Token abrufen
     

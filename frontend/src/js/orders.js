@@ -34,6 +34,8 @@ addEventListener("DOMContentLoaded", async function () {
     updateData();
 });
 
+const loading = document.getElementById('loading');
+
 async function updateData() {
     const searchCustomer = document.getElementById('search-customer').value;
     const searchShipment = document.getElementById('search-shipmentType').value;
@@ -61,11 +63,8 @@ async function updateData() {
 
 async function updateOrderList(orders, limit) {
     const orderList = document.querySelector('.order-list');
-    const loading = document.getElementById('loading');
 
-    
-
-    //loading.style.display = 'flex';
+    loading.style.display = 'flex';
     orderList.style.display = 'none';
 
     orderList.innerHTML = "";
@@ -113,14 +112,14 @@ async function updateOrderList(orders, limit) {
                 <span class="order-date">${dateAdded}</span>
                 <span class="shipment-type">${order.shipmentType}</span>
                 <span class="close-date">${dateClose}</span>
-                <a href="/edit-order?id=${encodeURIComponent(order.id)}" class="edit-link" title="Bearbeiten">
+                <a href="/edit-order.html?id=${encodeURIComponent(order.id)}" class="edit-link" title="Bearbeiten">
                     ✏️
                 </a>
             </div>
         `;
 
         orderItem.addEventListener('click', function () {
-            window.location.href = `/view-order?id=${encodeURIComponent(order.id)}`;
+            window.location.href = `/view-order.html?id=${encodeURIComponent(order.id)}`;
         });
 
         const editLink = orderItem.querySelector('.edit-link');
@@ -131,8 +130,8 @@ async function updateOrderList(orders, limit) {
         orderList.appendChild(orderItem);
     });
 
-    //loading.style.display = 'none';
-    orderList.style.display = 'block'; // Bestell-Liste anzeigen
+    loading.style.display = 'none';
+    orderList.style.display = 'block';
 }
 
 async function getOrdersSorted( limit, page, state=null, customer=null, shipment=null, sortField=null, sortOrder=null ) {
