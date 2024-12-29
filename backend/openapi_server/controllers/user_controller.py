@@ -73,6 +73,8 @@ def security_controller_login():  # noqa: E501
     max_attempts = 5
     block_time = 600  # 10 Minuten (in Sekunden)
     
+    token_expiration = 24  # 24 Stunden
+    
     attempts = redis_connection.get(redis_key)
     if attempts and int(attempts) >= max_attempts:
         return {
@@ -114,7 +116,7 @@ def security_controller_login():  # noqa: E501
         token = jwt.encode(token_payload, secret_key, algorithm="HS256")
 
         # Store token in Redis
-        redis_connection.setex(f"jwt:{user[4]}", timedelta(hours=24), token)
+        redis_connection.setex(f"jwt:{user[4]}", timedelta(hours=token_expiration), token)
 
         return {
             "success": True,

@@ -658,6 +658,43 @@ paths:
       tags:
       - orders
       x-openapi-router-controller: openapi_server.controllers.orders_controller
+  /orders/info:
+    get:
+      description: returns information about a specific order
+      operationId: orders_info_get
+      parameters:
+      - description: The order that needs to be fetched
+        explode: true
+        in: query
+        name: id
+        required: true
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orders_response'
+          description: successful operation
+        "401":
+          description: Unathorized
+        "404":
+          description: Not Found
+        "429":
+          description: Too Many Requests
+        default:
+          description: default
+      security:
+      - bearerAuth: []
+      summary: order information
+      tags:
+      - orders
+      x-openapi-router-controller: openapi_server.controllers.orders_controller
   /products:
     delete:
       description: deletes a product
@@ -797,6 +834,43 @@ paths:
       security:
       - bearerAuth: []
       summary: update product
+      tags:
+      - products
+      x-openapi-router-controller: openapi_server.controllers.products_controller
+  /products/info:
+    get:
+      description: returns information about a specific product
+      operationId: products_info_get
+      parameters:
+      - description: The product that needs to be fetched
+        explode: true
+        in: query
+        name: id
+        required: true
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products_response'
+          description: successful operation
+        "401":
+          description: Unathorized
+        "404":
+          description: Not Found
+        "429":
+          description: Too Many Requests
+        default:
+          description: default
+      security:
+      - bearerAuth: []
+      summary: product information
       tags:
       - products
       x-openapi-router-controller: openapi_server.controllers.products_controller
@@ -1306,6 +1380,27 @@ components:
           maximum: 1024
           minimum: 0
           title: minPasswordLength
+          type: integer
+        tokenExpiration:
+          example: 24
+          format: int64
+          maximum: 2147483647
+          minimum: 0
+          title: tokenExpiration
+          type: integer
+        maxLoginTries:
+          example: 5
+          format: int64
+          maximum: 2147483647
+          minimum: 0
+          title: maxLoginTries
+          type: integer
+        blockTime:
+          example: 600
+          format: int64
+          maximum: 2147483647
+          minimum: 0
+          title: blockTime
           type: integer
       title: Settings
       type: object
