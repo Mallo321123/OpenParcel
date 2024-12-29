@@ -182,15 +182,42 @@ def update_product(name, products=None):  # noqa: E501
         return "Product updated", 200
     return "Invalid input", 400
 
-
+@jwt_required()
 def products_info_get(id):  # noqa: E501
-    """product information
-
-    returns information about a specific product # noqa: E501
-
-    :param id: The product that needs to be fetched
-    :type id: int
-
-    :rtype: Union[ProductsResponse, Tuple[ProductsResponse, int], Tuple[ProductsResponse, int, Dict[str, str]]
-    """
-    return 'do some magic!'
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")
+    
+    if check_permission("products", user) is False:
+        return "unauthorized", 401
+    
+    token = request.headers.get("Authorization").split(" ")[1]
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
+    db = get_db()
+    cursor = db.cursor()
+    
+    cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
+    product = cursor.fetchone()
+    
+    close_db(db)
+    
+    if product is None:
+        return "Product not found", 400
+    
+    try:
+        customerGroups = json.loads(product[3])
+    except TypeError:
+        customerGroups = []
+            
+    product = ProductsResponse(
+        id=product[0],
+        name=product[1],
+        comment=product[2],
+        customer_groups=customerGroups,
+        difficulty=product[4],
+        build_time=product[5]
+    )
+    
+    return product, 200
