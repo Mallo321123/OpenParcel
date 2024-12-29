@@ -55,6 +55,9 @@ def settings_default():
     
     if result is None:
         cursor.execute("INSERT INTO settings (name, value) VALUES ('min_password_length', '5')")
+        cursor.execute("INSERT INTO settings (name, value) VALUES ('blockTime', '600')")
+        cursor.execute("INSERT INTO settings (name, value) VALUES ('maxLoginAttempts', '5')")
+        cursor.execute("INSERT INTO settings (name, value) VALUES ('tokenExpire', '24')")
         db.commit()
 
 

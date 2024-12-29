@@ -26,10 +26,22 @@ def settings_list():  # noqa: E501
     
     cursor.execute("SELECT value FROM settings WHERE name = 'min_password_length'")
     min_password_length = cursor.fetchone()
+    
+    cursor.execute("SELECT value FROM settings WHERE name = 'blockTime'")
+    block_time = cursor.fetchone()
+    
+    cursor.execute("SELECT value FROM settings WHERE name = 'maxLoginAttempts'")
+    max_login_attempts = cursor.fetchone()
+    
+    cursor.execute("SELECT value FROM settings WHERE name = 'tokenExpire'")
+    token_expire = cursor.fetchone()
     close_db(db)
     
     response = {
-        "minPasswordLength": int(min_password_length[0])
+        "minPasswordLength": int(min_password_length[0]),
+        "blockTime": int(block_time[0]),
+        "maxLoginAttempts": int(max_login_attempts[0]),
+        "tokenExpire": int(token_expire[0])
     }
     
     return response, 200
@@ -57,6 +69,15 @@ def settings_update():  # noqa: E501
         
         if settings.get('min_password_length') is not None:
             cursor.execute("UPDATE settings SET value = %s WHERE name = 'min_password_length'", (settings.get('min_password_length'),))
+            
+        if settings.get('block_time') is not None:
+            cursor.execute("UPDATE settings SET value = %s WHERE name = 'blockTime'", (settings.get('block_time'),))
+            
+        if settings.get('max_login_attempts') is not None:
+            cursor.execute("UPDATE settings SET value = %s WHERE name = 'maxLoginAttempts'", (settings.get('max_login_attempts'),))
+        
+        if settings.get('token_expire') is not None:
+            cursor.execute("UPDATE settings SET value = %s WHERE name = 'tokenExpire'", (settings.get('token_expire'),))
         
         db.commit()
         close_db(db)

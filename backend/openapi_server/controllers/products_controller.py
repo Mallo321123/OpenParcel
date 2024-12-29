@@ -181,3 +181,16 @@ def update_product(name, products=None):  # noqa: E501
         
         return "Product updated", 200
     return "Invalid input", 400
+
+
+def products_info_get(id):  # noqa: E501
+    """product information
+
+    returns information about a specific product # noqa: E501
+
+    :param id: The product that needs to be fetched
+    :type id: int
+
+    :rtype: Union[ProductsResponse, Tuple[ProductsResponse, int], Tuple[ProductsResponse, int, Dict[str, str]]
+    """
+    return 'do some magic!'

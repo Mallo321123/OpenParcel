@@ -542,6 +542,43 @@ paths:
       tags:
       - orders
       x-openapi-router-controller: openapi_server.controllers.orders_controller
+  /orders/info:
+    get:
+      description: returns information about a specific order
+      operationId: orders_info_get
+      parameters:
+      - description: The order that needs to be fetched
+        explode: true
+        in: query
+        name: id
+        required: true
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orders_response'
+          description: successful operation
+        "401":
+          description: Unathorized
+        "404":
+          description: Not Found
+        "429":
+          description: Too Many Requests
+        default:
+          description: default
+      security:
+      - bearerAuth: []
+      summary: order information
+      tags:
+      - orders
+      x-openapi-router-controller: openapi_server.controllers.orders_controller
   /orders/list:
     get:
       description: list orders after certain criteria
@@ -655,43 +692,6 @@ paths:
       security:
       - bearerAuth: []
       summary: list orders
-      tags:
-      - orders
-      x-openapi-router-controller: openapi_server.controllers.orders_controller
-  /orders/info:
-    get:
-      description: returns information about a specific order
-      operationId: orders_info_get
-      parameters:
-      - description: The order that needs to be fetched
-        explode: true
-        in: query
-        name: id
-        required: true
-        schema:
-          format: int32
-          maximum: 2147483647
-          minimum: 0
-          type: integer
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Orders_response'
-          description: successful operation
-        "401":
-          description: Unathorized
-        "404":
-          description: Not Found
-        "429":
-          description: Too Many Requests
-        default:
-          description: default
-      security:
-      - bearerAuth: []
-      summary: order information
       tags:
       - orders
       x-openapi-router-controller: openapi_server.controllers.orders_controller

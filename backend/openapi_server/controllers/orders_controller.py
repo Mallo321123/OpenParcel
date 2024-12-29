@@ -278,3 +278,16 @@ def orders_list_get(limit, page, state=None, customer=None, shipment=None, sort:
         )
         
     return orders, 200
+
+
+def orders_info_get(id):  # noqa: E501
+    """order information
+
+    returns information about a specific order # noqa: E501
+
+    :param id: The order that needs to be fetched
+    :type id: int
+
+    :rtype: Union[OrdersResponse, Tuple[OrdersResponse, int], Tuple[OrdersResponse, int, Dict[str, str]]
+    """
+    return 'do some magic!'
