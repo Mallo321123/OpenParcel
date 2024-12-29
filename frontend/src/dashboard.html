@@ -1,95 +1,104 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="css/dashboard/dashboard.css" rel="stylesheet">
-    <link href="css/dashboard/orders.css" rel="stylesheet">
-    <link href="css/dashboard/stats.css" rel="stylesheet">
-    <link href="css/dashboard/nav.css" rel="stylesheet">
-</head>
-<body>
-    <nav class="navbar"> <!-- nav bar -->
-        <div class="nav-pages">
-            <div class="nav-item">
-                <a href="settings.html" class="nav-button">Einstellungen</a>
-            </div>
-            <div class="nav-item">
-                <a href="orders.html" class="nav-button">Bestellungen</a>
-            </div>
-            <div class="nav-item">
-                <a href="products.html" class="nav-button">Produkte</a>
-            </div>
-            <div class="nav-item">
-                <a href="mappers.html" class="nav-button">Mapper</a>
-            </div>
-            <div class="nav-item">
-                <a href="lights.html" class="nav-button">Lichter</a>
-            </div>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="css/dashboard/dashboard.css" rel="stylesheet" />
+    <link href="css/dashboard/orders.css" rel="stylesheet" />
+    <link href="css/dashboard/stats.css" rel="stylesheet" />
+    <link href="css/dashboard/nav.css" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <!-- nav bar -->
+      <div class="nav-pages">
+        <div class="nav-item">
+          <a href="settings.html" class="nav-button">Einstellungen</a>
         </div>
-        <div class="nav-logout">
-            <a href="logout.html" class="logout-button">Logout</a>
+        <div class="nav-item">
+          <a href="orders.html" class="nav-button">Bestellungen</a>
         </div>
+        <div class="nav-item">
+          <a href="products.html" class="nav-button">Produkte</a>
+        </div>
+        <div class="nav-item">
+          <a href="mappers.html" class="nav-button">Mapper</a>
+        </div>
+        <div class="nav-item">
+          <a href="lights.html" class="nav-button">Lichter</a>
+        </div>
+      </div>
+      <div class="nav-logout">
+        <a href="logout.html" class="logout-button">Logout</a>
+      </div>
     </nav>
-    <div class="container"> <!-- Statistics Container -->
-        <div class="header">
-            <h1>Statistiken</h1>
-        </div>
-        <div class="dashboard-card">
-            <a href="orders.html" class="stat" title="Orders">
-                <h3 class="stat-title">Abgeschlossen</h3>
-                <p class="stat-value">Laden</p>
-            </a>
-            <a href="orders.html" class="stat" title="Orders">
-                <h3 class="stat-title">Wartend</h3>
-                <p class="stat-value">Laden</p>
-            </a>
-            <a href="orders.html" class="stat" title="Orders">
-                <h3 class="stat-title">Offen</h3>
-                <p class="stat-value">Laden</p>
-            </a>
-            <a href="mappers.html" class="stat" title="Mappers">
-                <h3 class="stat-title">Mapper</h3>
-                <p class="stat-value">Laden</p>
-            </a>
-            <a href="lights.html" class="stat" title="Lights">
-                <h3 class="stat-title">Lichter</h3>
-                <p class="stat-value">Laden</p>
-            </a>
-            <a href="products.html" class="stat" title="Poducts">
-                <h3 class="stat-title">Produkte</h3>
-                <p class="stat-value">Laden</p>
-            </a>
-        </div>
+    <div class="container">
+      <!-- Statistics Container -->
+      <div class="header">
+        <h1>Statistiken</h1>
+      </div>
+      <div class="dashboard-card">
+        <a href="orders.html" class="stat" title="Orders">
+          <h3 class="stat-title">Abgeschlossen</h3>
+          <p class="stat-value">Laden</p>
+        </a>
+        <a href="orders.html" class="stat" title="Orders">
+          <h3 class="stat-title">Wartend</h3>
+          <p class="stat-value">Laden</p>
+        </a>
+        <a href="orders.html" class="stat" title="Orders">
+          <h3 class="stat-title">Offen</h3>
+          <p class="stat-value">Laden</p>
+        </a>
+        <a href="mappers.html" class="stat" title="Mappers">
+          <h3 class="stat-title">Mapper</h3>
+          <p class="stat-value">Laden</p>
+        </a>
+        <a href="lights.html" class="stat" title="Lights">
+          <h3 class="stat-title">Lichter</h3>
+          <p class="stat-value">Laden</p>
+        </a>
+        <a href="products.html" class="stat" title="Poducts">
+          <h3 class="stat-title">Produkte</h3>
+          <p class="stat-value">Laden</p>
+        </a>
+      </div>
     </div>
-    <div class="container"> <!-- Order Container -->
-        <div class="header">
-            <h1>Bestellungs Übersicht</h1>
+    <div class="container">
+      <!-- Order Container -->
+      <div class="header">
+        <h1>Bestellungs Übersicht</h1>
+      </div>
+      <div class="order-header">
+        <label for="order-limit">Anzahl anzeigen:</label>
+        <select id="order-limit">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+        </select>
+      </div>
+      <div class="order-list">
+        <div id="loading" class="loading-container">
+          <div class="loader">
+            <embed src="loader.html" width="100%" height="500px" />
+          </div>
         </div>
-        <div class="order-header">
-            <label for="order-limit">Anzahl anzeigen:</label>
-            <select id="order-limit">
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200">200</option>
-            </select>
-        </div>
-        <div class="order-list">
-            <div id="loading" class="loading-container">
-                <div class="loader">
-                    <embed src="loader.html" width="100%" height="500px">
-		        </div>
-	        </div>
-            <!-- Dynamicly generated List -->
-            <div id="order-list" style="display: none;"></div>
-        </div>
+        <!-- Dynamicly generated List -->
+        <div id="order-list" style="display: none"></div>
+      </div>
     </div>
     <script src="js/dashboard.js"></script>
     <script src="js/auth.js"></script>
-</body>
+  </body>
 </html>

@@ -196,8 +196,6 @@ class OrdersResponse(Model):
         """
         if date_add is not None and len(date_add) > 255:
             raise ValueError("Invalid value for `date_add`, length must be less than or equal to `255`")  # noqa: E501
-        if date_add is not None and not re.search(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$', date_add):  # noqa: E501
-            raise ValueError(r"Invalid value for `date_add`, must be a follow pattern or equal to `/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$/`")  # noqa: E501
 
         self._date_add = date_add
 
@@ -221,8 +219,6 @@ class OrdersResponse(Model):
         """
         if date_closed is not None and len(date_closed) > 255:
             raise ValueError("Invalid value for `date_closed`, length must be less than or equal to `255`")  # noqa: E501
-        if date_closed is not None and not re.search(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$', date_closed):  # noqa: E501
-            raise ValueError(r"Invalid value for `date_closed`, must be a follow pattern or equal to `/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}$/`")  # noqa: E501
 
         self._date_closed = date_closed
 
