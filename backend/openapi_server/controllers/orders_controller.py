@@ -198,7 +198,6 @@ def orders_put(orders_change=None):  # noqa: E501
         
     return "invalid request", 400
 
-
 @jwt_required()
 def orders_list_get(limit, page, state=None, customer=None, shipment=None, sort: Optional[str] = None, order: Optional[str] = None):  # noqa: E501
     jwt_data = get_jwt()
@@ -279,15 +278,49 @@ def orders_list_get(limit, page, state=None, customer=None, shipment=None, sort:
         
     return orders, 200
 
-
+@jwt_required()
 def orders_info_get(id):  # noqa: E501
-    """order information
-
-    returns information about a specific order # noqa: E501
-
-    :param id: The order that needs to be fetched
-    :type id: int
-
-    :rtype: Union[OrdersResponse, Tuple[OrdersResponse, int], Tuple[OrdersResponse, int, Dict[str, str]]
-    """
-    return 'do some magic!'
+    jwt_data = get_jwt()
+    user = jwt_data.get("user")  # Extract username from token
+    auth_header = request.headers.get("Authorization")
+    if auth_header is None:
+        return "unauthorized", 401
+    token = auth_header.split(" ")[1]  # Extract token
+    
+    if not valid_token(user, token):
+        return "unauthorized", 401
+    
+    db = get_db()
+    cursor = db.cursor()
+    
+    cursor.execute("SELECT * FROM orders WHERE id = %s", (id,))
+    order = cursor.fetchone()
+    
+    close_db(db)
+    
+    if order is None:
+        return "Order not found", 404
+    
+    for i in range(len(order)):
+        try:
+            products = json.loads(order[i][4])
+        except TypeError:
+            products = []
+        
+        if order[i][3] is None:
+            dateClosed = "-"
+        else:
+            dateClosed = order[i][3]
+    
+            
+        order[i] = OrdersResponse(
+            id=order[i][0],
+            customer=order[i][1],
+            date_add=order[i][2],
+            date_closed=dateClosed,
+            comment=order[i][5],
+            products=products,
+            state=order[i][6],
+            shipment_type=order[i][7]
+        )
+    return jsonify(order), 200
