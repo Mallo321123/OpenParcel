@@ -301,26 +301,25 @@ def orders_info_get(id):  # noqa: E501
     if order is None:
         return "Order not found", 404
     
-    for i in range(len(order)):
-        try:
-            products = json.loads(order[i][4])
-        except TypeError:
-            products = []
+    try:
+        products = json.loads(order[4])
+    except TypeError:
+        products = []
         
-        if order[i][3] is None:
-            dateClosed = "-"
-        else:
-            dateClosed = order[i][3]
+    if order[3] is None:
+        dateClosed = "-"
+    else:
+        dateClosed = order[3]
     
             
-        order[i] = OrdersResponse(
-            id=order[i][0],
-            customer=order[i][1],
-            date_add=order[i][2],
-            date_closed=dateClosed,
-            comment=order[i][5],
-            products=products,
-            state=order[i][6],
-            shipment_type=order[i][7]
-        )
+    order = OrdersResponse(
+        id=order[0],
+        customer=order[1],
+        date_add=order[2],
+        date_closed=dateClosed,
+        comment=order[5],
+        products=products,
+        state=order[6],
+        shipment_type=order[7]
+    )
     return jsonify(order), 200
