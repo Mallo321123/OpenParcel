@@ -70,10 +70,15 @@ def security_controller_login():  # noqa: E501
     
     client_ip = connexion.request.remote_addr
     redis_key = f"login_attempts:{client_ip}"
-    max_attempts = 5
-    block_time = 600  # 10 Minuten (in Sekunden)
     
-    token_expiration = 24  # 24 Stunden
+    cursor.execute("SELECT value FROM settings WHERE name = %s", ("maxLoginAttempts",))
+    max_attempts = int(cursor.fetchone()[0])
+    
+    cursor.execute("SELECT value FROM settings WHERE name = %s", ("blockTime",))
+    block_time = int(cursor.fetchone()[0])  # Time in Seconds
+
+    cursor.execute("SELECT value FROM settings WHERE name = %s", ("tokenExpire",))
+    token_expiration = int(cursor.fetchone()[0])  # Time in Hours
     
     attempts = redis_connection.get(redis_key)
     if attempts and int(attempts) >= max_attempts:
