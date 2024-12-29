@@ -7,8 +7,6 @@ from openapi_server import encoder
 from openapi_server.db import prepare_database
 from flask_jwt_extended import JWTManager
 
-from flask.json.provider import DefaultJSONProvider
-
 from flask_cors import CORS  # Importiere CORS
 
 

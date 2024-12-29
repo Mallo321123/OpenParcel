@@ -6,7 +6,29 @@ addEventListener("DOMContentLoaded", async function () {
     const orderList = document.querySelector('.order-list');
     const orderLimitSelector = document.getElementById('order-limit');
     const loading = document.getElementById('loading');
+
+    const links = document.querySelectorAll('.dashboard-card a');
     
+    links.forEach(link => {
+        link.addEventListener('click', (event) => {
+    
+            const clickedCard = event.currentTarget;
+            const cardTitle = clickedCard.querySelector('.stat-title').textContent;
+            
+            if (cardTitle === "Abgeschlossen") {
+                key = "closed";
+            } else if (cardTitle === "Wartend") {
+                key = "hold";
+            } else if (cardTitle === "Offen") {
+                key = "open";
+            } else {
+                key = null
+            }
+
+            this.localStorage.setItem('search-state', key);
+        });
+    });
+
 
     async function getDashboardData() {
         const response = await fetch(`${baseUrl}/api/dashboard`, {

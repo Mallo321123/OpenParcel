@@ -31,6 +31,13 @@ addEventListener("DOMContentLoaded", async function () {
         button.addEventListener('click', handleSortClick);
     });
 
+    const statusSelect = document.getElementById('search-state');
+    if (localStorage.getItem('search-state') !== "null") {
+        statusSelect.value = localStorage.getItem('search-state');
+        this.localStorage.setItem('search-state', null);
+    }
+
+
     updateData();
 });
 
