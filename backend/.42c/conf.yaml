@@ -1,3 +1,0 @@
-apis:
-  openapi_server/openapi/openapi.yaml:
-    alias: openparcel
