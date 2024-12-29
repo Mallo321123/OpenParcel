@@ -216,3 +216,47 @@
     padding: 10px;
     border-bottom: 1px solid #ccc;
 }
+
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#search-type {
+  padding: 5px;
+  width: 150px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: white;  /* Hintergrundfarbe für das Dropdown */
+  color: black;  /* Textfarbe */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Leichter Schatten für bessere Sichtbarkeit */
+  display: block;  /* Stelle sicher, dass es als Block angezeigt wird */
+}
+
+#search-field-container {
+  display: inline-block;
+}
+
+#search-input {
+  padding: 5px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+#status-select {
+  padding: 5px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: white;  /* Hintergrundfarbe für das Dropdown */
+  color: black;  /* Textfarbe */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Leichter Schatten für bessere Sichtbarkeit */
+  display: block;  /* Stelle sicher, dass es als Block angezeigt wird */
+}

@@ -31,6 +31,26 @@
             </select>
         </div>
         <div class="order-header">
+            <div class="search-container">
+                <label for="search-type">Kunde:</label>
+                <input type="text" id="search-customer" placeholder="Kunde">
+            </div>
+            <div class="search-container">
+                <label for="search-type">Versandart</label>
+                <input type="text" id="search-shipmentType" placeholder="Versandart">
+            </div>
+            <div class="search-container">
+                <label for="search-type">Status</label>
+                <select id="search-state" onchange="handleInputChange()">
+                    <option value="">-</option>
+                    <option value="open">Offen</option>
+                    <option value="hold">In Bearbeitung</option>
+                    <option value="working">Wartend</option>
+                    <option value="closed">Abgeschlossen</option>
+                </select>
+            </div>
+        </div>   
+        <div class="order-header">
             <div class="sort-controls">
                 <div class="sort-id">
                     <button class="sort-btn" data-field="id" data-order="asc">▲</button>
