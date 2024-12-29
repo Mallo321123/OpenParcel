@@ -17,7 +17,7 @@ def product_add(products=None):  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")
     
-    if check_permission("products", user) is False:
+    if not (check_permission("products", user) or check_permission("admin", user)):
         return "unauthorized", 401
     
     token = request.headers.get("Authorization").split(" ")[1]
@@ -55,7 +55,7 @@ def products_delete(id):  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")
     
-    if check_permission("products", user) is False:
+    if not (check_permission("products", user) or check_permission("admin", user)):
         return "unauthorized", 401
     
     token = request.headers.get("Authorization").split(" ")[1]
@@ -80,9 +80,6 @@ def products_delete(id):  # noqa: E501
 def products_list(limit=None, page=None):  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")
-    
-    if check_permission("products", user) is False:
-        return "unauthorized", 401
     
     token = request.headers.get("Authorization").split(" ")[1]
     
@@ -121,7 +118,7 @@ def update_product(name, products=None):  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")
     
-    if check_permission("products", user) is False:
+    if not (check_permission("products", user) or check_permission("admin", user)):
         return "unauthorized", 401
     
     token = request.headers.get("Authorization").split(" ")[1]
@@ -183,12 +180,11 @@ def update_product(name, products=None):  # noqa: E501
     return "Invalid input", 400
 
 @jwt_required()
-def products_info_get(id):  # noqa: E501
+def products_info_get():  # noqa: E501
     jwt_data = get_jwt()
     user = jwt_data.get("user")
     
-    if check_permission("products", user) is False:
-        return "unauthorized", 401
+    id = request.args.get("id")
     
     token = request.headers.get("Authorization").split(" ")[1]
     
