@@ -131,20 +131,18 @@ addEventListener("DOMContentLoaded", async function () {
 
 			orderItem.innerHTML = `
                 <div class="order-row">
-                    <span><strong>#${order.id}</strong> - ${
-				order.customer
-			}</span>
-                    <span>${dateAdded}</span>
-                    <a href="/edit-order.html?id=${encodeURIComponent(
-											order.id
-										)}" class="edit-link" title="Bearbeiten">
+                    <span><strong>#${order.id}</strong> - ${order.customer}</span>
+                    <text>${dateAdded}</text>
+                    <a href="/edit-order.html?id=${encodeURIComponent(order.id)}" class="edit-link" title="Bearbeiten">
                         ✏️
                     </a>
                 </div>
             `;
 
 			orderItem.addEventListener("click", function () {
-				window.location.href = `/view-order.html?id=${encodeURIComponent(order.id)}`;
+				window.location.href = `/view-order.html?id=${encodeURIComponent(
+					order.id
+				)}`;
 			});
 
 			const editLink = orderItem.querySelector(".edit-link");

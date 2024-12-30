@@ -1,114 +1,129 @@
-  .order-header {
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    padding: 10px 15px;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .order-header select {
-    padding: 5px;
-    border: 1px solid #fff;
-    border-radius: 4px;
-  }
-  
-  .order-list {
-    max-height: 500px;
-    overflow-y: auto;
-    background-color: #fff;
+.order-header {
+	display: flex;
+	justify-content: right;
+	align-items: center;
+	padding: 10px 15px;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+}
 
-    scrollbar-width: thin;
-    scrollbar-color: #1100ff #cacaca;
-  }
-  
-  .order-item {
-    border-bottom: 1px solid #ddd;
-    background-color: #fff;
-    transition: background-color 0.3s;
-  }
+.order-header select {
+	padding: 5px;
+	border: 1px solid #fff;
+	border-radius: 4px;
+}
 
-  .order-item.open {
-    background-color: #f8c11d;
-    color: #000;
-  }
-  
-  .order-item.closed {
-    background-color: #23bb46;
-    color: #fff;
-  }
+.order-list {
+	max-height: 500px;
+	overflow-y: auto;
+	background-color: #fff;
 
-  .order-item.working {
-    background-color: rgb(54, 54, 228);
-    color: #fff;
-  }
+	scrollbar-width: thin;
+	scrollbar-color: #1100ff #cacaca;
+}
 
-  .order-item.hold {
-    background-color: rgb(241, 160, 174);
-    color: #000;
-  }
+.order-item {
+	border-bottom: 1px solid #ddd;
+	background-color: #fff;
+	transition: background-color 0.3s;
+}
 
+.order-item.open {
+	background-color: #f8c11d;
+	color: #000;
+}
 
-  .order-row {
-    display: flex;
-    justify-content: space-between; /* Abstand zwischen Kunde, Datum und Stift */
-    align-items: center; /* Vertikal zentriert */
-    padding: 15px;
-    border-bottom: 1px solid #ccc;
-    cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
-  }
-  
-  .order-row:hover {
-    background-color: #00000011;
-    transform: scale(1.01);
-  }
-  
-  .edit-link {
-    text-decoration: none;
-    font-size: 1.2em;
-    color: #007bff;
-    transition: transform 0.2s ease, color 0.2s ease;
-  }
+.order-item.closed {
+	background-color: #23bb46;
+	color: #fff;
+}
 
-  .edit-link:hover {
-    transform: scale(1.5);
-    color: #0056b3;
-  }
+.order-item.working {
+	background-color: rgb(54, 54, 228);
+	color: #fff;
+}
 
+.order-item.hold {
+	background-color: rgb(241, 160, 174);
+	color: #000;
+}
+
+.order-row {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 15px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.order-row span {
+  flex-shrink: 0;
+  margin-right: auto;
+}
+
+.order-row text {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.order-row a {
+  flex-shrink: 0;
+  margin-left: auto;
+}
 
 
-  #order-limit {
-    appearance: none; /* Entfernt das Standard-Dropdown-Styling */
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #333;
-    font-size: 14px;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s ease;
-  }
-  
-  #order-limit:hover {
-    border-color: #007bff; /* Farbe des Rahmens beim Hover */
-  }
-  
-  #order-limit:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Leuchtender Rahmen beim Fokus */
-  }
-  
-  #order-limit option {
-    padding: 10px;
-    background-color: #fff; /* Option-Hintergrund */
-  }
+.order-row:hover {
+	background-color: #00000011;
+	transform: scale(1.01);
+}
 
-  #order-limit {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-    padding-right: 30px; /* Platz für den Pfeil */
-  }
+.edit-link {
+	text-decoration: none;
+	font-size: 1.2em;
+	color: #007bff;
+	transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.edit-link:hover {
+	transform: scale(1.5);
+	color: #0056b3;
+}
+
+#order-limit {
+	appearance: none; /* Entfernt das Standard-Dropdown-Styling */
+	padding: 6px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: #fff;
+	color: #333;
+	font-size: 14px;
+	cursor: pointer;
+	outline: none;
+	transition: all 0.3s ease;
+}
+
+#order-limit:hover {
+	border-color: #007bff; /* Farbe des Rahmens beim Hover */
+}
+
+#order-limit:focus {
+	border-color: #007bff;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Leuchtender Rahmen beim Fokus */
+}
+
+#order-limit option {
+	padding: 10px;
+	background-color: #fff; /* Option-Hintergrund */
+}
+
+#order-limit {
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+	background-size: 12px;
+	padding-right: 30px; /* Platz für den Pfeil */
+}
