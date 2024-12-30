@@ -3,6 +3,40 @@ addEventListener("DOMContentLoaded", async function () {
 	const id = urlParams.get("id");
 	const order = await getOrderData(id);
 
+	const textCustomer = document.getElementById("customer");
+	const textComment = document.getElementById("comment");
+	const dateAdd = document.getElementById("addDate");
+	const closeDate = document.getElementById("closeDate");
+	const textShipment = document.getElementById("shipment");
+
+	const deleteButton = document.getElementById("deleteOrderButton");
+
+	deleteButton.addEventListener("click", () => {
+        deleteOrder(id).then(() => {
+			window.location.href = "orders.html";
+		});
+    });
+
+	textCustomer.addEventListener("change", function () {
+		textChange();
+	});
+
+	textComment.addEventListener("change", function () {
+		textChange();
+	});
+
+	dateAdd.addEventListener("change", function () {
+		textChange();
+	});
+
+	closeDate.addEventListener("change", function () {
+		textChange();
+	});
+
+	textShipment.addEventListener("change", function () {
+		textChange();
+	});
+
 	document
 		.getElementById("addProductButton")
 		.addEventListener("click", addProductToList);
@@ -10,7 +44,7 @@ addEventListener("DOMContentLoaded", async function () {
 	if (order.dateClosed == "-") {
 		var dateClosed = "-";
 	} else {
-		var dateClosed = new Date(order.dateClosed).toLocaleString();
+		var dateClosed = order.dateClosed;
 	}
 
 	document.getElementById("order-id").textContent = id;
@@ -23,8 +57,6 @@ addEventListener("DOMContentLoaded", async function () {
 	document.getElementById("state").value = order.state;
 
 	buildProductList(order);
-
-	//var test = findBestMatchId(await buildJsonBomb(), "openDTUabbeed");
 });
 
 async function getOrderData(id) {
@@ -90,6 +122,32 @@ async function getProductInfo(id) {
 	throw new Error("Unbekannter Fehler beim Abrufen der Daten");
 }
 
+async function deleteOrder(id) {
+	const token =
+		localStorage.getItem("token") || sessionStorage.getItem("token");
+	const currentUrl = window.location.href;
+	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
+
+	const response = await fetch(`${baseUrl}/api/orders?id=${id}`, {
+		method: "DELETE",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${token}`,
+		},
+	});
+
+	if (response.status === 200) {
+		return true;
+	}
+	if (response.status === 400) {
+		throw new Error("Ungültige Anfrage");
+	}
+	if (response.status === 401) {
+		throw new Error("Ungültiger Token");
+	}
+	throw new Error("Unbekannter Fehler beim Abrufen der Daten");
+}
+
 function buildProductList(order) {
 	const productListElement = document.getElementById("productList");
 
@@ -111,6 +169,14 @@ function buildProductList(order) {
 		deleteButton.onclick = () => {
 			order.products.splice(index, 1);
 			listItem.remove();
+
+			delete order.comment;
+			delete order.customer;
+			delete order.dateAdd;
+			delete order.dateClosed;
+			delete order.shipmentType;
+			delete order.state;
+
 			saveOrder(order);
 		};
 		listItem.appendChild(deleteButton);
@@ -254,8 +320,43 @@ async function addProductToList() {
 		productInput.value = "";
 		order.products.push(id);
 		buildProductList(order);
-        saveOrder(order);
+
+		delete order.comment;
+		delete order.customer;
+		delete order.dateAdd;
+		delete order.dateClosed;
+		delete order.shipmentType;
+		delete order.state;
+
+		saveOrder(order);
 	} else {
 		alert("Bitte geben Sie einen Produktnamen ein.");
 	}
 }
+
+async function textChange() {
+	const textCustomer = document.getElementById("customer").value;
+	const textComment = document.getElementById("comment").value;
+	const dateAdd = document.getElementById("addDate").value;
+	const closeDate = document.getElementById("closeDate").value;
+	const textShipment = document.getElementById("shipment").value;
+
+	const order = {};
+
+	order.customer = textCustomer;
+	order.comment = textComment;
+	order.dateAdd = dateAdd;
+	order.dateClosed = closeDate;
+	order.shipmentType = textShipment;
+
+	saveOrder(order);
+}
+
+async function handleInputChange(event) {
+	const value = document.getElementById("state").value;
+
+	const order = {};
+	order.state = value;
+	saveOrder(order);
+}
+

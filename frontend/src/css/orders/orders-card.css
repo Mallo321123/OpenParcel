@@ -1,262 +1,298 @@
 .order-header {
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    padding: 10px 15px;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .order-header select {
-    padding: 5px;
-    border: 1px solid #fff;
-    border-radius: 4px;
-  }
-  
-  .order-list {
-    max-height: 700px;
-    overflow-y: auto;
-    background-color: #fff;
-
-    scrollbar-width: thin;
-    scrollbar-color: #1100ff #cacaca;
-  }
-  
-  .order-item {
-    border-bottom: 1px solid #ddd;
-    background-color: #fff;
-    transition: background-color 0.3s;
-  }
-
-  .order-item.open {
-    background-color: #f8c11d;
-    color: #000;
-  }
-  
-  .order-item.closed {
-    background-color: #23bb46;
-    color: #fff;
-  }
-
-  .order-item.working {
-    background-color: rgb(54, 54, 228);
-    color: #fff;
-  }
-
-  .order-item.hold {
-    background-color: rgb(241, 160, 174);
-    color: #000;
-  }
-
-
-  .order-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #ccc;
-    cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
-  }
-  
-  .order-row:hover {
-    background-color: #00000011;
-    transform: scale(1.01);
-  }
-
-  .order-id-customer {
-    flex: 1;
-    text-align: left;
-  }
-
-  .order-date {
-    flex: 1;
-    text-align: center;
-    min-width: 120px;
-  }
-
-  .shipment-type {
-    flex: 1;
-    text-align: center;
-  }
-
-  .close-date {
-    flex: 1;
-    text-align: center;
-  }
-  
-  .edit-link {
-    text-decoration: none;
-    font-size: 1.2em;
-    color: #007bff;
-    transition: transform 0.2s ease, color 0.2s ease;
-  }
-
-  .edit-link:hover {
-    transform: scale(1.5);
-    color: #0056b3;
-  }
-
-
-
-  #order-limit {
-    appearance: none; /* Entfernt das Standard-Dropdown-Styling */
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #333;
-    font-size: 14px;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s ease;
-  }
-  
-  #order-limit:hover {
-    border-color: #007bff; /* Farbe des Rahmens beim Hover */
-  }
-  
-  #order-limit:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Leuchtender Rahmen beim Fokus */
-  }
-  
-  #order-limit option {
-    padding: 10px;
-    background-color: #fff; /* Option-Hintergrund */
-  }
-
-  #order-limit {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-    padding-right: 30px; /* Platz für den Pfeil */
-  }
-
-  .sort-controls {
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding: 0 15px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
+	display: flex;
+	justify-content: right;
+	align-items: center;
+	padding: 10px 15px;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
 }
 
-  .sort-id {
-    flex: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: left;
-  }
+.add-order-button {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+}
 
-  .sort-customer {
-    flex: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: left;
-  }
+.order-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 15px;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+}
 
-  .sort-addDate {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding-left: 240px;
-  }
+.order-head button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #3cff00;
+  color: #000000;
+  cursor: pointer;
+  align-content: left;
+  transition: background-color 0.3s;
+}
 
-  .sort-shipmentType {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
+.order-head button:hover {
+  background-color: #00ff00;
+}
+
+.order-head select {
+	padding: 5px;
+	border: 1px solid #fff;
+	border-radius: 4px;
+}
+
+.order-header select {
+	padding: 5px;
+	border: 1px solid #fff;
+	border-radius: 4px;
+}
+
+.order-list {
+	max-height: 700px;
+	overflow-y: auto;
+	background-color: #fff;
+
+	scrollbar-width: thin;
+	scrollbar-color: #1100ff #cacaca;
+}
+
+.order-item {
+	border-bottom: 1px solid #ddd;
+	background-color: #fff;
+	transition: background-color 0.3s;
+}
+
+.order-item.open {
+	background-color: #f8c11d;
+	color: #000;
+}
+
+.order-item.closed {
+	background-color: #23bb46;
+	color: #fff;
+}
+
+.order-item.working {
+	background-color: rgb(54, 54, 228);
+	color: #fff;
+}
+
+.order-item.hold {
+	background-color: rgb(241, 160, 174);
+	color: #000;
+}
+
+.order-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
+	border-bottom: 1px solid #ccc;
+	cursor: pointer;
+	transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.order-row:hover {
+	background-color: #00000011;
+	transform: scale(1.01);
+}
+
+.order-id-customer {
+	flex: 1;
+	text-align: left;
+}
+
+.order-date {
+	flex: 1;
+	text-align: center;
+	min-width: 120px;
+}
+
+.shipment-type {
+	flex: 1;
+	text-align: center;
+}
+
+.close-date {
+	flex: 1;
+	text-align: center;
+}
+
+.edit-link {
+	text-decoration: none;
+	font-size: 1.2em;
+	color: #007bff;
+	transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.edit-link:hover {
+	transform: scale(1.5);
+	color: #0056b3;
+}
+
+#order-limit {
+	appearance: none; /* Entfernt das Standard-Dropdown-Styling */
+	padding: 6px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: #fff;
+	color: #333;
+	font-size: 14px;
+	cursor: pointer;
+	outline: none;
+	transition: all 0.3s ease;
+}
+
+#order-limit:hover {
+	border-color: #007bff; /* Farbe des Rahmens beim Hover */
+}
+
+#order-limit:focus {
+	border-color: #007bff;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Leuchtender Rahmen beim Fokus */
+}
+
+#order-limit option {
+	padding: 10px;
+	background-color: #fff; /* Option-Hintergrund */
+}
+
+#order-limit {
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray"><path d="M7 10l5 5 5-5z"/></svg>');
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+	background-size: 12px;
+	padding-right: 30px; /* Platz für den Pfeil */
+}
+
+.sort-controls {
+	flex: 1;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	padding: 0 15px;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+}
+
+.sort-id {
+	flex: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: left;
+}
+
+.sort-customer {
+	flex: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: left;
+}
+
+.sort-addDate {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding-left: 240px;
+}
+
+.sort-shipmentType {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
 
 .sort-closeDate {
-  flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
 }
 
 .sort-state {
-  flex: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: left;
+	flex: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: left;
 }
 
 .sort-btn {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    font-size: 10px;
-    margin: 2px 0;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	padding: 5px 10px;
+	font-size: 10px;
+	margin: 2px 0;
+	border-radius: 3px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
 }
 
 .sort-btn:hover {
-    background-color: #0056b3;
+	background-color: #0056b3;
 }
 
 .order-list .order-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+	border-bottom: 1px solid #ccc;
 }
 
-
 .search-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background-color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	background-color: #fff;
+	padding: 10px;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 #search-type {
-  padding: 5px;
-  width: 150px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  background-color: white;  /* Hintergrundfarbe für das Dropdown */
-  color: black;  /* Textfarbe */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Leichter Schatten für bessere Sichtbarkeit */
-  display: block;  /* Stelle sicher, dass es als Block angezeigt wird */
+	padding: 5px;
+	width: 150px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	background-color: white; /* Hintergrundfarbe für das Dropdown */
+	color: black; /* Textfarbe */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Leichter Schatten für bessere Sichtbarkeit */
+	display: block; /* Stelle sicher, dass es als Block angezeigt wird */
+}
+
+.search-container input {
+  caret-color: auto;
 }
 
 #search-field-container {
-  display: inline-block;
+	display: inline-block;
 }
 
 #search-input {
-  padding: 5px;
-  width: 200px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+	padding: 5px;
+	width: 200px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
 }
 
 #status-select {
-  padding: 5px;
-  width: 200px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  background-color: white;  /* Hintergrundfarbe für das Dropdown */
-  color: black;  /* Textfarbe */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Leichter Schatten für bessere Sichtbarkeit */
-  display: block;  /* Stelle sicher, dass es als Block angezeigt wird */
+	padding: 5px;
+	width: 200px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	background-color: white; /* Hintergrundfarbe für das Dropdown */
+	color: black; /* Textfarbe */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Leichter Schatten für bessere Sichtbarkeit */
+	display: block; /* Stelle sicher, dass es als Block angezeigt wird */
 }

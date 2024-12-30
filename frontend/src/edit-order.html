@@ -14,6 +14,7 @@
 		/>
 		<link href="css/edit-order/edit-order.css" rel="stylesheet" />
 		<link href="css/edit-order/info.css" rel="stylesheet" />
+		<link href="css/edit-order/delete.css" rel="stylesheet" />
 	</head>
 	<body>
 		<div class="container">
@@ -70,7 +71,7 @@
 
 					<div class="info-item">
 						<label for="state">Status:</label>
-						<select id="state" name="state">
+						<select id="state" name="state" onchange="handleInputChange()">
 							<option value="hold">Wartend</option>
 							<option value="working">In Bearbeitung</option>
 							<option value="open">Offen</option>
@@ -79,6 +80,7 @@
 					</div>
 				</div>
 			</div>
+			<button id="deleteOrderButton">❌ Bestellung Löschen</button>
 		</div>
 
 		<script src="js/edit-order.js"></script>
