@@ -1,0 +1,141 @@
+.product-header {
+	display: flex;
+	justify-content: right;
+	align-items: center;
+	padding: 10px 15px;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+}
+
+.add-product-button {
+	margin-right: auto;
+	display: flex;
+	align-items: center;
+}
+
+.product-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 15px;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+}
+
+.product-head button {
+	padding: 5px 10px;
+	border: none;
+	border-radius: 4px;
+	background-color: #3cff00;
+	color: #000000;
+	cursor: pointer;
+	align-content: left;
+	transition: background-color 0.3s;
+}
+
+.product-head button:hover {
+	background-color: #00ff00;
+}
+
+.product-head select {
+	padding: 5px;
+	border: 1px solid #fff;
+	border-radius: 4px;
+}
+
+.product-header select {
+	padding: 5px;
+	border: 1px solid #fff;
+	border-radius: 4px;
+}
+
+.sort-controls {
+	flex: 1;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	padding: 0 15px;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+}
+
+.sort-name {
+	flex: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: left;
+    padding-left: 10%;
+}
+
+.sort-difficulty {
+	flex: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: left;
+    padding-right: 10%;
+}
+
+.sort-btn {
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	padding: 5px 10px;
+	font-size: 10px;
+	margin: 2px 0;
+	border-radius: 3px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.sort-btn:hover {
+	background-color: #0056b3;
+}
+
+.product-list {
+	max-height: 700px;
+	overflow-y: auto;
+	background-color: #fff;
+
+	scrollbar-width: thin;
+	scrollbar-color: #1100ff #cacaca;
+}
+
+.product-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
+	border-bottom: 1px solid #ccc;
+	cursor: pointer;
+	transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.product-row:hover {
+	background-color: #00000011;
+	transform: scale(1.01);
+}
+
+.product-name {
+	flex: 1;
+	text-align: left;
+}
+
+.product-difficulty {
+	flex: 1;
+	text-align: center;
+	min-width: 120px;
+}
+
+.edit-link {
+	text-decoration: none;
+	font-size: 1.2em;
+	color: #007bff;
+	transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.edit-link:hover {
+	transform: scale(1.5);
+	color: #0056b3;
+}
