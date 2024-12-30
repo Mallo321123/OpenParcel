@@ -1444,31 +1444,49 @@ components:
           type: integer
       title: Dashboard
       type: object
+    Order_products:
+      additionalProperties: false
+      example:
+        id: 2
+        count: 5
+      properties:
+        id:
+          example: 2
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          title: id
+          type: integer
+        count:
+          example: 5
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          title: count
+          type: integer
+      title: Order_products
+      type: object
     Orders_add:
       additionalProperties: false
       example:
         state: open
         customer: Max Mustermann
         products:
-        - 101
-        - 42
+        - id: 101
+          count: 1
+        - id: 42
+          count: 1
         comment: Example comment
         shipmentType: DHL
       properties:
         customer:
           example: Max Mustermann
           maxLength: 255
-          pattern: "^[A-ZÄÖÜa-zäöüß]+(?:[-' ][A-ZÄÖÜa-zäöüß]+)+$"
           title: customer
           type: string
         products:
           items:
-            example: 5610
-            format: int32
-            maximum: 2147483647
-            minimum: 0
-            title: id
-            type: integer
+            $ref: '#/components/schemas/Order_products'
           maxItems: 255
           title: products
           type: array
@@ -1502,8 +1520,10 @@ components:
         dateClosed: 2024-12-26 23:58:48.260781
         customer: Max Mustermann
         products:
-        - 101
-        - 42
+        - id: 101
+          count: 1
+        - id: 42
+          count: 1
         comment: Example comment
         shipmentType: DHL
       properties:
@@ -1517,17 +1537,11 @@ components:
         customer:
           example: Max Mustermann
           maxLength: 255
-          pattern: "^[A-ZÄÖÜa-zäöüß]+(?:[-' ][A-ZÄÖÜa-zäöüß]+)+$"
           title: customer
           type: string
         products:
           items:
-            example: 5610
-            format: int32
-            maximum: 2147483647
-            minimum: 0
-            title: id
-            type: integer
+            $ref: '#/components/schemas/Order_products'
           maxItems: 255
           title: products
           type: array
@@ -1570,25 +1584,21 @@ components:
         dateClosed: 2024-12-26 23:58:48.260781
         customer: Max Mustermann
         products:
-        - 101
-        - 42
+        - id: 101
+          count: 1
+        - id: 42
+          count: 1
         comment: Example comment
         shipmentType: DHL
       properties:
         customer:
           example: Max Mustermann
           maxLength: 255
-          pattern: "^[A-ZÄÖÜa-zäöüß]+(?:[-' ][A-ZÄÖÜa-zäöüß]+)+$"
           title: customer
           type: string
         products:
           items:
-            example: 5610
-            format: int32
-            maximum: 2147483647
-            minimum: 0
-            title: id
-            type: integer
+            $ref: '#/components/schemas/Order_products'
           maxItems: 255
           title: products
           type: array

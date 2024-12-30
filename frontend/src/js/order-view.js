@@ -101,16 +101,24 @@ async function getProductInfo(id) {
 async function displayProducts(order) {
 	const productListElement = document.getElementById("productList");
 
+    // Leere die Produktliste
+	productListElement.innerHTML = "";
+
+    // Iteriere durch die Produkte
 	order.products.forEach(async (product) => {
 		const listItem = document.createElement("li");
 		listItem.classList.add("product-item");
 
-		const productInfo = await getProductInfo(product);
+        // Hole Produktinformationen basierend auf der ID
+		const productInfo = await getProductInfo(product.id);
 		const productName = productInfo.name;
-		const productLink = document.createElement("a");
-		productLink.href = `view-product.html?id=${encodeURIComponent(product)}`;
-		productLink.textContent = productName;
 
+        // Erstelle den Link für das Produkt
+		const productLink = document.createElement("a");
+		productLink.href = `view-product.html?id=${encodeURIComponent(product.id)}`;
+		productLink.textContent = `${productName} (x${product.count})`;
+
+        // Füge die Elemente der Liste hinzu
 		listItem.appendChild(productLink);
 		productListElement.appendChild(listItem);
 	});

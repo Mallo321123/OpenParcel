@@ -3,9 +3,11 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from openapi_server.models.base_model import Model
+from openapi_server.models.order_products import OrderProducts
 import re
 from openapi_server import util
 
+from openapi_server.models.order_products import OrderProducts  # noqa: E501
 import re  # noqa: E501
 
 class OrdersChange(Model):
@@ -20,7 +22,7 @@ class OrdersChange(Model):
         :param customer: The customer of this OrdersChange.  # noqa: E501
         :type customer: str
         :param products: The products of this OrdersChange.  # noqa: E501
-        :type products: List[int]
+        :type products: List[OrderProducts]
         :param state: The state of this OrdersChange.  # noqa: E501
         :type state: str
         :param date_add: The date_add of this OrdersChange.  # noqa: E501
@@ -34,7 +36,7 @@ class OrdersChange(Model):
         """
         self.openapi_types = {
             'customer': str,
-            'products': List[int],
+            'products': List[OrderProducts],
             'state': str,
             'date_add': str,
             'date_closed': str,
@@ -91,28 +93,26 @@ class OrdersChange(Model):
         """
         if customer is not None and len(customer) > 255:
             raise ValueError("Invalid value for `customer`, length must be less than or equal to `255`")  # noqa: E501
-        if customer is not None and not re.search(r'^[A-ZÄÖÜa-zäöüß]+(?:[-\' ][A-ZÄÖÜa-zäöüß]+)+$', customer):  # noqa: E501
-            raise ValueError(r"Invalid value for `customer`, must be a follow pattern or equal to `/^[A-ZÄÖÜa-zäöüß]+(?:[-' ][A-ZÄÖÜa-zäöüß]+)+$/`")  # noqa: E501
 
         self._customer = customer
 
     @property
-    def products(self) -> List[int]:
+    def products(self) -> List[OrderProducts]:
         """Gets the products of this OrdersChange.
 
 
         :return: The products of this OrdersChange.
-        :rtype: List[int]
+        :rtype: List[OrderProducts]
         """
         return self._products
 
     @products.setter
-    def products(self, products: List[int]):
+    def products(self, products: List[OrderProducts]):
         """Sets the products of this OrdersChange.
 
 
         :param products: The products of this OrdersChange.
-        :type products: List[int]
+        :type products: List[OrderProducts]
         """
         if products is not None and len(products) > 255:
             raise ValueError("Invalid value for `products`, number of items must be less than or equal to `255`")  # noqa: E501

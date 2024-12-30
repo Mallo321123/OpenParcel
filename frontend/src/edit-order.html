@@ -55,13 +55,23 @@
 						<ul class="product-list" id="productList">
 							<!-- Produkte werden hier dynamisch hinzugefügt -->
 						</ul>
-						<button id="addProductButton">Produkt hinzufügen</button>
-						<input
-							type="prduct-name"
-							id="productName"
-							name="productName"
-							value=""
-						/>
+						<div class="add-product-container">
+							<input
+								type="text"
+								id="productName"
+								name="productName"
+								placeholder="Produktname"
+							/>
+							<input
+								type="number"
+								id="productCount"
+								name="productCount"
+								placeholder="Anzahl"
+								min="1"
+								value="1"
+							/>
+							<button id="addProductButton">Produkt hinzufügen</button>
+						</div>
 					</div>
 
 					<div class="info-item">

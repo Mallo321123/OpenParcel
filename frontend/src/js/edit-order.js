@@ -1,3 +1,5 @@
+// This script is everything but efficient, but it works, so I am happy with it (for now)
+
 addEventListener("DOMContentLoaded", async function () {
 	const urlParams = new URLSearchParams(window.location.search);
 	const id = urlParams.get("id");
@@ -151,25 +153,33 @@ async function deleteOrder(id) {
 function buildProductList(order) {
 	const productListElement = document.getElementById("productList");
 
+    // Leere die Produktliste
 	productListElement.innerHTML = "";
 
+    // Iteriere über die Produkte
 	order.products.forEach(async (product, index) => {
 		const listItem = document.createElement("li");
 		listItem.classList.add("product-item");
 
-		const productInfo = await getProductInfo(product);
+        // Hole die Produktinformationen basierend auf der ID
+		const productInfo = await getProductInfo(product.id);
 		const productName = productInfo.name;
-		const productLink = document.createElement("a");
-		productLink.href = `view-product.html?id=${encodeURIComponent(product)}`;
-		productLink.textContent = productName;
 
+        // Erstelle den Link für das Produkt
+		const productLink = document.createElement("a");
+		productLink.href = `view-product.html?id=${encodeURIComponent(product.id)}`;
+		productLink.textContent = `${productName} (x${product.count})`;
+
+        // Erstelle den Löschen-Button
 		const deleteButton = document.createElement("button");
 		deleteButton.textContent = "❌";
 		deleteButton.classList.add("delete-button");
 		deleteButton.onclick = () => {
+            // Entferne das Produkt aus der Liste
 			order.products.splice(index, 1);
 			listItem.remove();
 
+            // Lösche nicht benötigte Eigenschaften, falls erforderlich
 			delete order.comment;
 			delete order.customer;
 			delete order.dateAdd;
@@ -177,14 +187,18 @@ function buildProductList(order) {
 			delete order.shipmentType;
 			delete order.state;
 
+            // Speichere die geänderte Bestellung
 			saveOrder(order);
 		};
+
+        // Füge die Elemente zur Liste hinzu
 		listItem.appendChild(deleteButton);
 		listItem.appendChild(productLink);
 
 		productListElement.appendChild(listItem);
 	});
 }
+
 
 // From here
 async function getProducts(limit = 200, page = 0) {
@@ -308,17 +322,30 @@ async function saveOrder(order) {
 
 async function addProductToList() {
 	const productInput = document.getElementById("productName");
+	const productCountInput = document.getElementById("productCount");
+
 	const productName = productInput.value.trim();
+	const productCount = parseInt(productCountInput.value, 10);
 
 	const urlParams = new URLSearchParams(window.location.search);
 	const id = urlParams.get("id");
 
 	const order = await getOrderData(id);
 
-	if (productName) {
-		const id = findBestMatchId(await buildJsonBomb(), productName);
+	if (productName && productCount > 0) {
+		const productId = findBestMatchId(await buildJsonBomb(), productName);
+
+		const existingProduct = order.products.find((product) => product.id === productId);
+
+		if (existingProduct) {
+			existingProduct.count += productCount;
+		} else {
+			order.products.push({ id: productId, count: productCount });
+		}
+
 		productInput.value = "";
-		order.products.push(id);
+		productCountInput.value = "1";
+
 		buildProductList(order);
 
 		delete order.comment;
@@ -330,9 +357,11 @@ async function addProductToList() {
 
 		saveOrder(order);
 	} else {
-		alert("Bitte geben Sie einen Produktnamen ein.");
+		alert("Bitte geben Sie einen gültigen Produktnamen und eine Anzahl ein.");
 	}
 }
+
+
 
 async function textChange() {
 	const textCustomer = document.getElementById("customer").value;

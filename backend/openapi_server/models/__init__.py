@@ -10,6 +10,7 @@ from openapi_server.models.lights import Lights
 from openapi_server.models.lights_response import LightsResponse
 from openapi_server.models.map import Map
 from openapi_server.models.not_found import NotFound
+from openapi_server.models.order_products import OrderProducts
 from openapi_server.models.orders_add import OrdersAdd
 from openapi_server.models.orders_change import OrdersChange
 from openapi_server.models.orders_response import OrdersResponse

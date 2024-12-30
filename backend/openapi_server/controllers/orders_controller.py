@@ -75,15 +75,13 @@ def orders_get(limit=None, page=None):  # noqa: E501
     close_db(db)
 
     for i in range(len(orders)):
-        try:
-            products = json.loads(orders[i][4])
-        except TypeError:
-            products = []
 
         if orders[i][3] is None:
             dateClosed = "-"
         else:
             dateClosed = orders[i][3]
+            
+        products_str = orders[i][4]
 
         orders[i] = OrdersResponse(
             id=orders[i][0],
@@ -91,7 +89,7 @@ def orders_get(limit=None, page=None):  # noqa: E501
             date_add=orders[i][2],
             date_closed=dateClosed,
             comment=orders[i][5],
-            products=products,
+            products=json.loads(products_str.replace("'", '"')),
             state=orders[i][6],
             shipment_type=orders[i][7],
         )
@@ -110,11 +108,11 @@ def orders_post(orders_add=None):  # noqa: E501
     if not valid_token(user, token):
         return "unauthorized", 401
 
-    if not (check_permission("orders", user) or not check_permission("admin", user)):
+    if not (check_permission("orders", user) or check_permission("admin", user)):
         return (
             "unauthorized",
             401,
-        )  # Only admins and the user himself can update the user
+        )  # Only admins and users in the orders group can add orders
 
     db = get_db()
     cursor = db.cursor()
@@ -122,15 +120,13 @@ def orders_post(orders_add=None):  # noqa: E501
     if connexion.request.is_json:
         orders_add = OrdersAdd.from_dict(connexion.request.get_json())  # noqa: E501
 
-        products_json = json.dumps(orders_add.products)
-
         cursor.execute(
             """INSERT INTO orders 
                    (customer, addDate, products, comment, state, shipmentType) VALUES (%s, %s, %s, %s, %s, %s)""",
             (
                 orders_add.customer,
                 datetime.datetime.now(),
-                products_json,
+                str(orders_add.products),
                 orders_add.comment,
                 orders_add.state,
                 orders_add.shipment_type,
@@ -150,15 +146,15 @@ def orders_put(orders_change=None):  # noqa: E501
     user = jwt_data.get("user")  # Extract username from token
     auth_header = request.headers.get("Authorization")
     if auth_header is None:
-        return "unauthorized", 401
+        return "unauthorized header", 401
     token = auth_header.split(" ")[1]  # Extract token
 
     if not valid_token(user, token):
-        return "unauthorized", 401
+        return "unauthorized token", 401
 
-    if not (check_permission("orders", user) or not check_permission("admin", user)):
+    if not (check_permission("orders", user) or check_permission("admin", user)):
         return (
-            "unauthorized",
+            "unauthorized permission",
             401,
         )  # Only admins and the user himself can update the user
 
@@ -193,7 +189,7 @@ def orders_put(orders_change=None):  # noqa: E501
             update_fields["comment"] = orders_change["comment"]
 
         if orders_change.get("products") is not None:
-            update_fields["products"] = json.dumps(orders_change["products"])
+            update_fields["products"] = str(orders_change["products"])
 
         if orders_change.get("customer") is not None:
             update_fields["customer"] = orders_change["customer"]
@@ -211,14 +207,10 @@ def orders_put(orders_change=None):  # noqa: E501
 
         update_query = f"UPDATE orders SET {set_clause} WHERE id = %s"
 
-        try:
-            cursor.execute(update_query, tuple(values))
-            db.commit()
-            close_db(db)
-            return "ok", 200
-        except Exception:
-            db.rollback()
-            return "Failed to update order", 500
+        cursor.execute(update_query, tuple(values))
+        db.commit()
+        close_db(db)
+        return "ok", 200
 
     return "invalid request", 400
 
@@ -288,15 +280,13 @@ def orders_list_get(
     close_db(db)
 
     for i in range(len(orders)):
-        try:
-            products = json.loads(orders[i][4])
-        except TypeError:
-            products = []
 
         if orders[i][3] is None:
             dateClosed = "-"
         else:
             dateClosed = orders[i][3]
+            
+        products_str = orders[i][4]
 
         orders[i] = OrdersResponse(
             id=orders[i][0],
@@ -304,7 +294,7 @@ def orders_list_get(
             date_add=orders[i][2],
             date_closed=dateClosed,
             comment=orders[i][5],
-            products=products,
+            products=json.loads(products_str.replace("'", '"')),
             state=orders[i][6],
             shipment_type=orders[i][7],
         )
@@ -336,11 +326,8 @@ def orders_info_get():  # noqa: E501
 
     if order is None:
         return "Order not found", 404
-
-    try:
-        products = json.loads(order[4])
-    except TypeError:
-        products = []
+    
+    products_str = order[4]
 
     if order[3] is None:
         dateClosed = "-"
@@ -353,7 +340,7 @@ def orders_info_get():  # noqa: E501
         date_add=order[2],
         date_closed=dateClosed,
         comment=order[5],
-        products=products,
+        products=json.loads(products_str.replace("'", '"')),
         state=order[6],
         shipment_type=order[7],
     )
