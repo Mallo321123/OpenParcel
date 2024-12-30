@@ -874,6 +874,107 @@ paths:
       tags:
       - products
       x-openapi-router-controller: openapi_server.controllers.products_controller
+  /products/list:
+    get:
+      description: lists products after certain criteria
+      operationId: products_list_get
+      parameters:
+      - description: items per page
+        explode: true
+        in: query
+        name: limit
+        required: true
+        schema:
+          format: int32
+          maximum: 200
+          minimum: 0
+          type: integer
+        style: form
+      - description: page number
+        explode: true
+        in: query
+        name: page
+        required: true
+        schema:
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+        style: form
+      - description: name of the product
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          maxLength: 255
+          pattern: "^[0-9a-zA-Z]+$"
+          type: string
+        style: form
+      - description: difficulty of the product
+        explode: true
+        in: query
+        name: difficulty
+        required: false
+        schema:
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          format: int32
+          type: integer
+        style: form
+      - description: Sort by
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          enum:
+          - name
+          - difficulty
+          maxLength: 255
+          pattern: "^[0-9a-zA-Z]+$"
+          type: string
+        style: form
+      - description: Sort order
+        explode: true
+        in: query
+        name: order
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          maxLength: 255
+          pattern: "^[0-9a-zA-Z]+$"
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Products_response'
+                maxItems: 200
+                type: array
+          description: successful operation
+        "401":
+          description: Unathorized
+        "404":
+          description: Not Found
+        "429":
+          description: Too Many Requests
+        default:
+          description: default
+      tags:
+      - products
+      security:
+        - bearerAuth: []
+      x-openapi-router-controller: openapi_server.controllers.products_controller
   /settings:
     get:
       description: list all current settings states
