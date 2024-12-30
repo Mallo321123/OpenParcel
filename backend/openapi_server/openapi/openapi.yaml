@@ -1941,13 +1941,11 @@ components:
         name:
           example: openDTU
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           title: name
           type: string
         comment:
           example: example comment
           maxLength: 65535
-          pattern: "^(?!.*<.*?>)[\\w\\s.,!?-]+$"
           title: comment
           type: string
         difficulty:
@@ -1963,13 +1961,11 @@ components:
         buildTime:
           example: 20-30 min
           maxLength: 255
-          pattern: "^[0-9a-zA-Z- ]+$"
           title: buildTime
           type: string
         customerGroups:
           items:
             maxLength: 255
-            pattern: "^[0-9a-zA-Z]+$"
             type: string
           maxItems: 100
           title: customerGroups
@@ -1998,13 +1994,11 @@ components:
         name:
           example: openDTU
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           title: name
           type: string
         comment:
           example: example comment
           maxLength: 65535
-          pattern: "^(?!.*<.*?>)[\\w\\s.,!?-]+$"
           title: comment
           type: string
         difficulty:
@@ -2020,13 +2014,11 @@ components:
         buildTime:
           example: 20-30 min
           maxLength: 255
-          pattern: "^[0-9a-zA-Z- ]+$"
           title: buildTime
           type: string
         customerGroups:
           items:
             maxLength: 255
-            pattern: "^[0-9a-zA-Z]+$"
             type: string
           maxItems: 100
           title: customerGroups

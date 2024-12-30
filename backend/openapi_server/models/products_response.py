@@ -111,8 +111,6 @@ class ProductsResponse(Model):
         """
         if name is not None and len(name) > 255:
             raise ValueError("Invalid value for `name`, length must be less than or equal to `255`")  # noqa: E501
-        if name is not None and not re.search(r'^[0-9a-zA-Z]+$', name):  # noqa: E501
-            raise ValueError(r"Invalid value for `name`, must be a follow pattern or equal to `/^[0-9a-zA-Z]+$/`")  # noqa: E501
 
         self._name = name
 
@@ -136,8 +134,6 @@ class ProductsResponse(Model):
         """
         if comment is not None and len(comment) > 65535:
             raise ValueError("Invalid value for `comment`, length must be less than or equal to `65535`")  # noqa: E501
-        if comment is not None and not re.search(r'^(?!.*<.*?>)[\w\s.,!?-]+$', comment):  # noqa: E501
-            raise ValueError(r"Invalid value for `comment`, must be a follow pattern or equal to `/^(?!.*<.*?>)[\w\s.,!?-]+$/`")  # noqa: E501
 
         self._comment = comment
 
@@ -188,8 +184,6 @@ class ProductsResponse(Model):
         """
         if build_time is not None and len(build_time) > 255:
             raise ValueError("Invalid value for `build_time`, length must be less than or equal to `255`")  # noqa: E501
-        if build_time is not None and not re.search(r'^[0-9a-zA-Z- ]+$', build_time):  # noqa: E501
-            raise ValueError(r"Invalid value for `build_time`, must be a follow pattern or equal to `/^[0-9a-zA-Z- ]+$/`")  # noqa: E501
 
         self._build_time = build_time
 
