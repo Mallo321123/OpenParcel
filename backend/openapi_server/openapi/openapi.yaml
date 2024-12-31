@@ -628,7 +628,6 @@ paths:
         required: false
         schema:
           maxLength: 255
-          pattern: "^[A-ZÄÖÜa-zäöüß]+(?:[-' ][A-ZÄÖÜa-zäöüß]+)+$"
           type: string
         style: form
       - description: shipment type
