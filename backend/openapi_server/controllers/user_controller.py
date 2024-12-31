@@ -12,7 +12,7 @@ from flask_jwt_extended import jwt_required, get_jwt
 from flask import request, jsonify
 
 import jwt
-import hashlib
+from argon2 import PasswordHasher
 import os
 from datetime import datetime, timedelta
 import json
@@ -47,8 +47,9 @@ def create_user(user=None):  # noqa: E501
         if cursor.fetchone() is not None:
             return "User already exists", 400
         
-        password_hash = hashlib.md5(user.password.encode()).hexdigest()
-        cross_hash = hashlib.md5(user.username.encode() + user.password.encode()).hexdigest()
+        ph = PasswordHasher()
+        password_hash = ph.hash(user.password.encode())
+        cross_hash = ph.hash(user.username.encode() + user.password.encode())
         
         user_groups_json = json.dumps(user.user_groups)
         
@@ -98,9 +99,9 @@ def security_controller_login():  # noqa: E501
             redis_connection.expire(redis_key, block_time)  # Set timeout
             return "Login or password Invalid", 401
         
-        password_hash = hashlib.md5(login.password.encode()).hexdigest()
-        cross_hash = hashlib.md5(login.username.encode() + login.password.encode()).hexdigest()
-    
+        ph = PasswordHasher()
+        password_hash = ph.hash(login.password.encode())
+        cross_hash = ph.hash(login.username.encode() + login.password.encode())
         
         if user[5] != password_hash or user[6] != cross_hash:
             redis_connection.incr(redis_key)  # count Fails
@@ -251,8 +252,9 @@ def update_user(username, user=None):  # noqa: E501
             if len(user['password']) < min_password_length:
                 return f"Password must be at least {min_password_length} characters long", 400
             
-            password_hash = hashlib.md5(user['password'].encode()).hexdigest()
-            cross_hash = hashlib.md5(username.encode() + user['password'].encode()).hexdigest()
+            ph = PasswordHasher()
+            password_hash = ph.hash(user['password'])
+            cross_hash = ph.hash(username + user['password'])
             update_fields['password_hash'] = password_hash
             update_fields['cross_hash'] = cross_hash
 
