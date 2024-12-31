@@ -239,7 +239,6 @@ def products_info_get():  # noqa: E501
 
 
 def sort_by_similarity(entries, input_name):
-    """Einträge nach Ähnlichkeit sortieren."""
     names = [entry[1] for entry in entries]  # Extrahiert nur die Namen
     results = process.extract(input_name, names, scorer=fuzz.ratio)
 
@@ -287,34 +286,35 @@ def products_list_get(
         )
         products = cursor.fetchall()
 
-
     elif sort is not None and order is not None:
-        cursor.execute(
-            "SELECT * FROM products ORDER BY %s %s LIMIT %s OFFSET %s",
-            (sort, order, limit, offset),
-        )
-        products = cursor.fetchall()
+        ALLOWED_SORT_COLUMNS = {"name", "difficulty", "build_time"}
+        ALLOWED_ORDER_DIRECTIONS = {"asc", "desc"}
 
+        if sort not in ALLOWED_SORT_COLUMNS or order.lower() not in ALLOWED_ORDER_DIRECTIONS:
+            return "Invalid sort or order parameter", 400
+
+        query = f"SELECT * FROM products ORDER BY {sort} {order.upper()} LIMIT %s OFFSET %s"
+        cursor.execute(query, (limit, offset))
+        products = cursor.fetchall()
 
     elif difficulty is not None and sort is not None and order is not None:
-        cursor.execute(
-            "SELECT * FROM products WHERE difficulty = %s ORDER BY %s %s LIMIT %s OFFSET %s",
-            (difficulty, sort, order, limit, offset),
+        ALLOWED_SORT_COLUMNS = {"name", "difficulty", "build_time"}
+        ALLOWED_ORDER_DIRECTIONS = {"asc", "desc"}
+
+        if sort not in ALLOWED_SORT_COLUMNS or order.lower() not in ALLOWED_ORDER_DIRECTIONS:
+            return "Invalid sort or order parameter", 400
+
+        query = (
+            f"SELECT * FROM products WHERE difficulty = %s ORDER BY {sort} {order.upper()} "
+            "LIMIT %s OFFSET %s"
         )
+        cursor.execute(query, (difficulty, limit, offset))
         products = cursor.fetchall()
-
-        for i in range(len(products)):
-            try:
-                customerGroups = json.loads(products[i][3])
-            except TypeError:
-                customerGroups = []
-
-            
-            
     else:
         return "Invalid input", 400
-    close_db
-    
+
+    close_db(db)
+
     for i in range(len(products)):
         try:
             customerGroups = json.loads(products[i][3])
