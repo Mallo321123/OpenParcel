@@ -240,52 +240,57 @@ def orders_list_get(
 
     offset = limit * page
 
+    # Validate and sanitize sort and order inputs
+    ALLOWED_SORT_COLUMNS = {"id", "customer", "addDate", "closeDate", "state", "shipmentType"}
+    ALLOWED_ORDER_DIRECTIONS = {"asc", "desc"}
+    ALLOWED_STATES = {"open", "closed", "working", "hold"}
+
+    if sort is not None and sort not in ALLOWED_SORT_COLUMNS:
+        return "Invalid sort parameter", 400
+
+    if order is not None and order.lower() not in ALLOWED_ORDER_DIRECTIONS:
+        return "Invalid order parameter", 400
+    
+    if state is not None and state.lower() not in ALLOWED_STATES:
+        return "Invalid state parameter", 400
+
+    # Build the WHERE clause dynamically
     query_fields = {}
-
-    changed = False
-
     if state is not None:
         query_fields["state"] = state
-        changed = True
 
     if customer is not None:
         query_fields["customer"] = customer
-        changed = True
 
     if shipment is not None:
         query_fields["shipmentType"] = shipment
-        changed = True
 
-    if changed is not False:
-        set_clause = " AND ".join([f"{key} = %s" for key in query_fields.keys()])
-    else:
-        set_clause = None
-
+    set_clause = " AND ".join([f"{key} = %s" for key in query_fields.keys()])
     values = list(query_fields.values())
-    params = list(values) + [limit, offset]
 
-    if sort is not None and order is not None and set_clause is not None:
-        query = f"SELECT * FROM orders WHERE {set_clause} ORDER BY {sort} {order} LIMIT %s OFFSET %s"
-    elif set_clause is not None and sort is None and order is None:
-        query = f"SELECT * FROM orders WHERE {set_clause} LIMIT %s OFFSET %s"
-    elif set_clause is None and sort is not None and order is not None:
-        query = f"SELECT * FROM orders ORDER BY {sort} {order} LIMIT %s OFFSET %s"
-    else:
-        params = [limit, offset]
-        query = "SELECT * FROM orders LIMIT %s OFFSET %s"
+    # Build the final query
+    query = "SELECT * FROM orders"
+    if set_clause:
+        query += f" WHERE {set_clause}"
 
+    if sort and order:
+        query += f" ORDER BY {sort} {order.upper()}"
+
+    query += " LIMIT %s OFFSET %s"
+    params = values + [limit, offset]
+
+    # Execute the query
     cursor.execute(query, params)
-
     orders = cursor.fetchall()
     close_db(db)
 
+    # Process the results
     for i in range(len(orders)):
-
         if orders[i][3] is None:
             dateClosed = "-"
         else:
             dateClosed = orders[i][3]
-            
+
         products_str = orders[i][4]
 
         orders[i] = OrdersResponse(
@@ -300,6 +305,7 @@ def orders_list_get(
         )
 
     return orders, 200
+
 
 
 @jwt_required()
