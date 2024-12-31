@@ -9,24 +9,25 @@ def normalize_input(input_value: str) -> str:
 # Check if the value contains any SQL injection keywords
 def check_sql_inject_value(value: str) -> bool:
     if not isinstance(value, str):
-        return True
+        return False
 
     value = normalize_input(value)
 
     sql_injection_regex = re.compile(
-        r"""
-        [;'"--]|
-        (\b(SELECT|DROP|INSERT|DELETE|UPDATE|UNION|OR|AND)\b)  # SQL-keywords
+    r"""
+    [;'"--]
+    |(\b(SELECT|DROP|INSERT|DELETE|UPDATE|UNION|OR|AND)\b)
+    |(\b(SELECT\s.*FROM|DROP\s.*TABLE)\b)
     """,
-        re.IGNORECASE | re.VERBOSE,
-    )
-
-    return not bool(sql_injection_regex.search(value))
+    re.IGNORECASE | re.VERBOSE,
+)
 
 
-def check_sql_inject_json(**kwargs) -> bool:
+    return bool(sql_injection_regex.search(value))
+
+def check_sql_inject_json(**kwargs: dict) -> bool:
     for key, value in kwargs.items():
-        if not check_sql_inject_value(value):
+        if isinstance(value, str) and check_sql_inject_value(value):
             print(f"Unsichere Eingabe erkannt: {key} = {value}")
-            return False
-    return True
+            return True
+    return False

@@ -7,7 +7,7 @@ from openapi_server.models.lights_response import LightsResponse  # noqa: E501
 from openapi_server.models.map import Map  # noqa: E501
 
 from openapi_server.db import get_db, close_db
-from openapi_server.security import check_sql_inject_value, check_sql_inject_json
+from openapi_server.security import check_sql_inject_json
 
 import json
 
@@ -74,9 +74,6 @@ def lights_group_delete(id):  # noqa: E501
     db = get_db()
     cursor = db.cursor()
     
-    if check_sql_inject_value(id):
-        return "Invalid value", 400
-    
     cursor.execute("SELECT * FROM groups WHERE id = %s", (id,))
     if cursor.fetchone() is None:
         return "Group does not exist", 404
@@ -90,9 +87,6 @@ def lights_group_delete(id):  # noqa: E501
 def lights_group_get(limit=None, page=None):  # noqa: E501
     db = get_db()
     cursor = db.cursor()
-    
-    if check_sql_inject_value(limit) or check_sql_inject_value(page):
-        return "Invalid value", 400
     
     offset = limit * page
 

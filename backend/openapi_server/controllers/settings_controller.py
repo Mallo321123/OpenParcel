@@ -63,11 +63,11 @@ def settings_update():  # noqa: E501
     if connexion.request.is_json:
         settings = Settings.from_dict(connexion.request.get_json())  # noqa: E501
         
-        if check_sql_inject_json(settings):
-            return "Invalid value", 400
-        
         if isinstance(settings, Settings):
             settings = settings.to_dict()
+            
+        if check_sql_inject_json(**settings):
+            return "Invalid value", 400
         
         db = get_db()
         cursor = db.cursor()
