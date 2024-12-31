@@ -174,6 +174,8 @@ async function updateData(products) {
 }
 
 async function handleSortClick(event) {
+	document.getElementById("search-name").value = "";
+
 	const button = event.target;
 
 	const sortField = button.getAttribute("data-field");
