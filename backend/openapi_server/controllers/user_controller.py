@@ -39,6 +39,9 @@ def create_user(user=None):  # noqa: E501
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
         
+        if check_sql_inject_json(user):
+            return "Invalid Request", 400
+        
         cursor.execute("SELECT value FROM settings WHERE name = %s", ("min_password_length",))
         min_password_length = int(cursor.fetchone()[0])
             
@@ -324,6 +327,9 @@ def user_list_get(limit=None, page=None):  # noqa: E501
     
     db = get_db()
     cursor = db.cursor()
+    
+    if check_sql_inject_value(limit) or check_sql_inject_value(page):
+        return "Invalid value", 400
 
     offset = limit * page
 

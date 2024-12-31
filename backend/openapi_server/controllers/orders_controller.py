@@ -37,6 +37,9 @@ def orders_delete():  # noqa: E501
         )  # Only admins and the user himself can update the user
 
     id = request.args.get("id")
+    
+    if not check_sql_inject_value(id):
+        return "Invalid input", 400
 
     db = get_db()
     cursor = db.cursor()
@@ -66,6 +69,9 @@ def orders_get(limit=None, page=None):  # noqa: E501
 
     db = get_db()
     cursor = db.cursor()
+    
+    if not check_sql_inject_value(limit) or not check_sql_inject_value(page):
+        return "Invalid input", 400
 
     offset = limit * page
 
@@ -165,6 +171,9 @@ def orders_put(orders_change=None):  # noqa: E501
     cursor = db.cursor()
 
     id = request.args.get("id")
+
+    if not check_sql_inject_value(id):
+        return "Invalid input", 400
 
     cursor.execute("SELECT * FROM orders WHERE id = %s", (id,))
     result = cursor.fetchone()
@@ -342,6 +351,9 @@ def orders_info_get():  # noqa: E501
         return "unauthorized", 401
 
     id = request.args.get("id")
+
+    if not check_sql_inject_value(id):
+        return "Invalid input", 400
 
     db = get_db()
     cursor = db.cursor()
