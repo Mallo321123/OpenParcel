@@ -7,6 +7,7 @@ from openapi_server.models.lights_response import LightsResponse  # noqa: E501
 from openapi_server.models.map import Map  # noqa: E501
 
 from openapi_server.db import get_db, close_db
+from openapi_server.security import check_sql_inject_value, check_sql_inject_json
 
 import json
 
@@ -112,6 +113,9 @@ def lights_group_post(groups):  # noqa: E501
     
     if connexion.request.is_json:
         groups = Groups.from_dict(connexion.request.get_json())  # noqa: E501
+        
+        if check_sql_inject_json(groups):
+            return "Invalid value", 400
         
         cursor.execute("SELECT * FROM groups WHERE name = %s", (groups.name,))
         if cursor.fetchone() is not None:

@@ -11,6 +11,8 @@ from openapi_server.permission_check import check_permission
 from flask_jwt_extended import jwt_required, get_jwt
 from flask import request, jsonify
 
+from openapi_server.security import check_sql_inject_value, check_sql_inject_json
+
 import jwt
 from argon2 import PasswordHasher
 import os
@@ -91,6 +93,8 @@ def security_controller_login():  # noqa: E501
     if connexion.request.is_json:
         login = SecurityControllerLoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
         
+        if check_sql_inject_value(login.username):
+            return "Invalid Request", 400
         
         cursor.execute("SELECT * FROM users WHERE username = %s", (login.username,))
         user = cursor.fetchone()
@@ -150,6 +154,9 @@ def delete_user(username):  # noqa: E501
     
     db = get_db()
     cursor = db.cursor()
+    
+    if check_sql_inject_value(username):
+        return "Invalid value", 400
 
     cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
     if cursor.fetchone() is None:
@@ -174,6 +181,9 @@ def get_user_by_name(username):  # noqa: E501
     
     db = get_db()
     cursor = db.cursor()
+    
+    if check_sql_inject_value(username):
+        return "Invalid value", 400
 
     cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
     user = cursor.fetchone()
@@ -224,12 +234,18 @@ def update_user(username, user=None):  # noqa: E501
     db = get_db()
     cursor = db.cursor()
     
+    if check_sql_inject_value(username):
+        return "Invalid value", 400
+    
     cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
     if cursor.fetchone() is None:
         return "User not found", 404
     
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
+        
+        if check_sql_inject_json(user):
+            return "Invalid request", 400
         
         if isinstance(user, User):
             user = user.to_dict()

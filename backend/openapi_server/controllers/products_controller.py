@@ -11,6 +11,8 @@ from flask import request
 
 from typing import Optional
 
+from openapi_server.security import check_sql_inject_value, check_sql_inject_json
+
 import json
 from rapidfuzz import process, fuzz
 
@@ -33,6 +35,9 @@ def product_add(products=None):  # noqa: E501
 
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
+
+        if check_sql_inject_json(products):
+            return "Invalid input", 400
 
         cursor.execute("SELECT * FROM products WHERE name = %s", (products.name,))
         if cursor.fetchone() is not None:
@@ -145,8 +150,14 @@ def update_product(name, products=None):  # noqa: E501
     db = get_db()
     cursor = db.cursor()
 
+    if check_sql_inject_value(name):
+        return "Invalid input", 400
+
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
+
+        if check_sql_inject_json(products):
+            return "Invalid input", 400
 
         if isinstance(products, Products):
             products = products.to_dict()
@@ -270,6 +281,14 @@ def products_list_get(
     db = get_db()
     cursor = db.cursor()
 
+    if (
+        check_sql_inject_value(name)
+        or check_sql_inject_value(difficulty)
+        or check_sql_inject_value(sort)
+        or check_sql_inject_value(order)
+    ):
+        return "Invalid input", 400
+
     offset = limit * page
 
     if name is not None:
@@ -290,10 +309,15 @@ def products_list_get(
         ALLOWED_SORT_COLUMNS = {"name", "difficulty", "build_time"}
         ALLOWED_ORDER_DIRECTIONS = {"asc", "desc"}
 
-        if sort not in ALLOWED_SORT_COLUMNS or order.lower() not in ALLOWED_ORDER_DIRECTIONS:
+        if (
+            sort not in ALLOWED_SORT_COLUMNS
+            or order.lower() not in ALLOWED_ORDER_DIRECTIONS
+        ):
             return "Invalid sort or order parameter", 400
 
-        query = f"SELECT * FROM products ORDER BY {sort} {order.upper()} LIMIT %s OFFSET %s"
+        query = (
+            f"SELECT * FROM products ORDER BY {sort} {order.upper()} LIMIT %s OFFSET %s"
+        )
         cursor.execute(query, (limit, offset))
         products = cursor.fetchall()
 
@@ -301,7 +325,10 @@ def products_list_get(
         ALLOWED_SORT_COLUMNS = {"name", "difficulty", "build_time"}
         ALLOWED_ORDER_DIRECTIONS = {"asc", "desc"}
 
-        if sort not in ALLOWED_SORT_COLUMNS or order.lower() not in ALLOWED_ORDER_DIRECTIONS:
+        if (
+            sort not in ALLOWED_SORT_COLUMNS
+            or order.lower() not in ALLOWED_ORDER_DIRECTIONS
+        ):
             return "Invalid sort or order parameter", 400
 
         query = (

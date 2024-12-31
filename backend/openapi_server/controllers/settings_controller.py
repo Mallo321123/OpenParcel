@@ -9,6 +9,8 @@ from openapi_server.db import get_db, close_db
 from openapi_server.tokenManager import valid_token
 from openapi_server.permission_check import check_permission
 
+from openapi_server.security import check_sql_inject_json
+
 @jwt_required()
 def settings_list():  # noqa: E501
     jwt_data = get_jwt()
@@ -60,6 +62,9 @@ def settings_update():  # noqa: E501
     
     if connexion.request.is_json:
         settings = Settings.from_dict(connexion.request.get_json())  # noqa: E501
+        
+        if check_sql_inject_json(settings):
+            return "Invalid value", 400
         
         if isinstance(settings, Settings):
             settings = settings.to_dict()
