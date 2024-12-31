@@ -15,6 +15,7 @@ from typing import Optional
 
 import json
 import datetime
+import re
 
 
 @jwt_required()
@@ -75,12 +76,11 @@ def orders_get(limit=None, page=None):  # noqa: E501
     close_db(db)
 
     for i in range(len(orders)):
-
         if orders[i][3] is None:
             dateClosed = "-"
         else:
             dateClosed = orders[i][3]
-            
+
         products_str = orders[i][4]
 
         orders[i] = OrdersResponse(
@@ -241,16 +241,35 @@ def orders_list_get(
     offset = limit * page
 
     # Validate and sanitize sort and order inputs
-    ALLOWED_SORT_COLUMNS = {"id", "customer", "addDate", "closeDate", "state", "shipmentType"}
+    ALLOWED_SORT_COLUMNS = {
+        "id",
+        "customer",
+        "addDate",
+        "closeDate",
+        "state",
+        "shipmentType",
+    }
     ALLOWED_ORDER_DIRECTIONS = {"asc", "desc"}
     ALLOWED_STATES = {"open", "closed", "working", "hold"}
+
+    SQL_INJECTION_REGEX = re.compile(
+        r"[;'\"--]|(\b(SELECT|DROP|INSERT|DELETE|UPDATE|UNION|OR|AND)\b)", re.IGNORECASE
+    )
+
+    # Check customer for SQL injection patterns
+    if customer is not None and SQL_INJECTION_REGEX.search(customer):
+        return "Invalid customer parameter", 400
+
+    # Check shipment for SQL injection patterns
+    if shipment is not None and SQL_INJECTION_REGEX.search(shipment):
+        return "Invalid shipment parameter", 400
 
     if sort is not None and sort not in ALLOWED_SORT_COLUMNS:
         return "Invalid sort parameter", 400
 
     if order is not None and order.lower() not in ALLOWED_ORDER_DIRECTIONS:
         return "Invalid order parameter", 400
-    
+
     if state is not None and state.lower() not in ALLOWED_STATES:
         return "Invalid state parameter", 400
 
@@ -307,7 +326,6 @@ def orders_list_get(
     return orders, 200
 
 
-
 @jwt_required()
 def orders_info_get():  # noqa: E501
     jwt_data = get_jwt()
@@ -332,7 +350,7 @@ def orders_info_get():  # noqa: E501
 
     if order is None:
         return "Order not found", 404
-    
+
     products_str = order[4]
 
     if order[3] is None:
