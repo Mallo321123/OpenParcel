@@ -11,6 +11,8 @@ from flask import request
 
 from typing import Optional
 
+from openapi_server.security import check_sql_inject_value, check_sql_inject_json
+
 import json
 from rapidfuzz import process, fuzz
 
@@ -33,6 +35,9 @@ def product_add(products=None):  # noqa: E501
 
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
+        
+        if check_sql_inject_json(products):
+            return "Invalid input", 400
 
         cursor.execute("SELECT * FROM products WHERE name = %s", (products.name,))
         if cursor.fetchone() is not None:
@@ -77,6 +82,9 @@ def products_delete(id):  # noqa: E501
 
     db = get_db()
     cursor = db.cursor()
+    
+    if check_sql_inject_value(id):
+        return "Invalid input", 400
 
     cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
     if cursor.fetchone() is None:
@@ -101,6 +109,9 @@ def products_list(limit=None, page=None):  # noqa: E501
 
     db = get_db()
     cursor = db.cursor()
+    
+    if check_sql_inject_value(limit) or check_sql_inject_value(page):
+        return "Invalid input", 400
 
     offset = limit * page
 
@@ -144,9 +155,15 @@ def update_product(name, products=None):  # noqa: E501
 
     db = get_db()
     cursor = db.cursor()
+    
+    if check_sql_inject_value(name):
+        return "Invalid input", 400
 
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
+        
+        if check_sql_inject_json(products):
+            return "Invalid input", 400
 
         if isinstance(products, Products):
             products = products.to_dict()
@@ -212,6 +229,9 @@ def products_info_get():  # noqa: E501
 
     db = get_db()
     cursor = db.cursor()
+    
+    if check_sql_inject_value(id):
+        return "Invalid input", 400
 
     cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
     product = cursor.fetchone()
@@ -269,6 +289,12 @@ def products_list_get(
 
     db = get_db()
     cursor = db.cursor()
+    
+    if check_sql_inject_value(limit) or check_sql_inject_value(page):
+        return "Invalid input", 400
+    
+    if check_sql_inject_value(name) or check_sql_inject_value(difficulty) or check_sql_inject_value(sort) or check_sql_inject_value(order):
+        return "Invalid input", 400
 
     offset = limit * page
 

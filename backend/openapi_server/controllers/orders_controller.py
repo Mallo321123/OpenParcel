@@ -13,10 +13,10 @@ from flask_jwt_extended import jwt_required, get_jwt
 
 from typing import Optional
 
+from openapi_server.security import check_sql_inject_value, check_sql_inject_json
+
 import json
 import datetime
-import re
-
 
 @jwt_required()
 def orders_delete():  # noqa: E501
@@ -37,6 +37,9 @@ def orders_delete():  # noqa: E501
         )  # Only admins and the user himself can update the user
 
     id = request.args.get("id")
+    
+    if not check_sql_inject_value(id):
+        return "Invalid input", 400
 
     db = get_db()
     cursor = db.cursor()
@@ -66,6 +69,9 @@ def orders_get(limit=None, page=None):  # noqa: E501
 
     db = get_db()
     cursor = db.cursor()
+    
+    if not check_sql_inject_value(limit) or not check_sql_inject_value(page):
+        return "Invalid input", 400
 
     offset = limit * page
 
@@ -120,6 +126,9 @@ def orders_post(orders_add=None):  # noqa: E501
     if connexion.request.is_json:
         orders_add = OrdersAdd.from_dict(connexion.request.get_json())  # noqa: E501
 
+        if check_sql_inject_json(**orders_add.to_dict()):
+            return "Invalid input", 400
+        
         cursor.execute(
             """INSERT INTO orders 
                    (customer, addDate, products, comment, state, shipmentType) VALUES (%s, %s, %s, %s, %s, %s)""",
@@ -163,6 +172,9 @@ def orders_put(orders_change=None):  # noqa: E501
 
     id = request.args.get("id")
 
+    if not check_sql_inject_value(id):
+        return "Invalid input", 400
+
     cursor.execute("SELECT * FROM orders WHERE id = %s", (id,))
     result = cursor.fetchone()
     if result is None:
@@ -173,6 +185,9 @@ def orders_put(orders_change=None):  # noqa: E501
 
         if isinstance(orders_change, OrdersChange):
             orders_change = orders_change.to_dict()
+
+        if not check_sql_inject_json(**orders_change):
+            return "Invalid input", 400
 
         update_fields = {}
 
@@ -240,6 +255,15 @@ def orders_list_get(
 
     offset = limit * page
 
+    if (
+        not check_sql_inject_value(state)
+        or not check_sql_inject_value(customer)
+        or not check_sql_inject_value(shipment)
+        or not check_sql_inject_value(sort)
+        or not check_sql_inject_value(order)
+    ):
+        return "Invalid input", 400
+
     # Validate and sanitize sort and order inputs
     ALLOWED_SORT_COLUMNS = {
         "id",
@@ -251,18 +275,6 @@ def orders_list_get(
     }
     ALLOWED_ORDER_DIRECTIONS = {"asc", "desc"}
     ALLOWED_STATES = {"open", "closed", "working", "hold"}
-
-    SQL_INJECTION_REGEX = re.compile(
-        r"[;'\"--]|(\b(SELECT|DROP|INSERT|DELETE|UPDATE|UNION|OR|AND)\b)", re.IGNORECASE
-    )
-
-    # Check customer for SQL injection patterns
-    if customer is not None and SQL_INJECTION_REGEX.search(customer):
-        return "Invalid customer parameter", 400
-
-    # Check shipment for SQL injection patterns
-    if shipment is not None and SQL_INJECTION_REGEX.search(shipment):
-        return "Invalid shipment parameter", 400
 
     if sort is not None and sort not in ALLOWED_SORT_COLUMNS:
         return "Invalid sort parameter", 400
@@ -339,6 +351,9 @@ def orders_info_get():  # noqa: E501
         return "unauthorized", 401
 
     id = request.args.get("id")
+
+    if not check_sql_inject_value(id):
+        return "Invalid input", 400
 
     db = get_db()
     cursor = db.cursor()
