@@ -156,8 +156,6 @@ class OrdersAdd(Model):
         """
         if comment is not None and len(comment) > 255:
             raise ValueError("Invalid value for `comment`, length must be less than or equal to `255`")  # noqa: E501
-        if comment is not None and not re.search(r'^.*$', comment):  # noqa: E501
-            raise ValueError(r"Invalid value for `comment`, must be a follow pattern or equal to `/^.*$/`")  # noqa: E501
 
         self._comment = comment
 
@@ -181,7 +179,5 @@ class OrdersAdd(Model):
         """
         if shipment_type is not None and len(shipment_type) > 255:
             raise ValueError("Invalid value for `shipment_type`, length must be less than or equal to `255`")  # noqa: E501
-        if shipment_type is not None and not re.search(r'^[0-9a-zA-Z]+$', shipment_type):  # noqa: E501
-            raise ValueError(r"Invalid value for `shipment_type`, must be a follow pattern or equal to `/^[0-9a-zA-Z]+$/`")  # noqa: E501
 
         self._shipment_type = shipment_type

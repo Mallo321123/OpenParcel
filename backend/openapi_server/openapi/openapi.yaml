@@ -1606,7 +1606,6 @@ components:
           type: string
         shipmentType:
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           title: shipmentType
           type: string
       title: Orders_add
