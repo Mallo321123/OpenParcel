@@ -100,10 +100,11 @@ def security_controller_login():  # noqa: E501
             return "Login or password Invalid", 401
         
         ph = PasswordHasher()
-        password_hash = ph.hash(login.password.encode())
-        cross_hash = ph.hash(login.username.encode() + login.password.encode())
         
-        if user[5] != password_hash or user[6] != cross_hash:
+        try:
+            ph.verify(user[5], login.password.encode())
+            ph.verify(user[6], login.username.encode() + login.password.encode())
+        except:
             redis_connection.incr(redis_key)  # count Fails
             redis_connection.expire(redis_key, block_time)  # Set timeout
             return "Login or password Invalid", 401
