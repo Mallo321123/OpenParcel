@@ -18,6 +18,8 @@ CORS(flask_app, resources={r"/api/*": {"origins": "*"}})
 
 flask_app.config['JWT_SECRET_KEY'] = os.getenv('SECRET_KEY', 'secret')
 flask_app.config["JWT_IDENTITY_CLAIM"] = "user"
+flask_app.config["JWT_TOKEN_LOCATION"] = "cookies"
+flask_app.config["JWT_ACCESS_COOKIE_NAME"] = "access_token"
 jwt = JWTManager(flask_app)
     
 app.app.json_encoder = encoder.JSONEncoder

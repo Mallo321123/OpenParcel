@@ -43,7 +43,6 @@ paths:
         default:
           description: Not Found
       security:
-      - bearerAuth: []
       - cookieAuth: []
       summary: list dashboard information
       tags:
