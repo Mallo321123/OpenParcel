@@ -283,13 +283,16 @@ async function saveOrder(order) {
 
 	delete order.id;
 
+	const csrfToken = getCookie("csrf_token");
+
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
 	const response = await fetch(`${baseUrl}/api/orders?id=${id}`, {
 		method: "PUT",
 		headers: {
-			"Content-Type": "application/json"
+			"Content-Type": "application/json",
+			"X-CSRF-Token": csrfToken
 		},
 		body: JSON.stringify(order),
 	});
@@ -371,4 +374,13 @@ async function handleInputChange(event) {
 	const order = {};
 	order.state = value;
 	saveOrder(order);
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+        return parts.pop().split(";").shift();
+    }
+    return null;
 }

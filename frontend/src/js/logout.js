@@ -24,6 +24,7 @@ addEventListener("DOMContentLoaded", async function () {
 	await logout();
 
   deleteCookie("access_token");
+  deleteCookie("csrf_token");
 
 	window.location.href = "/";
 });

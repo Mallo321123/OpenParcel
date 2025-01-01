@@ -1,6 +1,9 @@
 from openapi_server.db import get_redis, close_redis
 from jwt import ExpiredSignatureError, InvalidTokenError
 
+from openapi_server.config import get_logging
+
+logging = get_logging()
 
 def valid_token(username, token):
     redis_connection = get_redis()
@@ -10,22 +13,22 @@ def valid_token(username, token):
         redis_token = redis_connection.get(f"jwt:{username}")
 
         if redis_token is None:
-            print("Token not found in Redis.")
+            logging.error(f"Token not found for user {username}.")
             return False
 
         # Compare tokens
         if redis_token != token:
-            print("Token mismatch.")
+            logging.error(f"Token mismatch for user {username}.")
             return False
 
         return True
 
     except ExpiredSignatureError:
-        print("Token has expired.")
+        logging.error(f"Expired token user: {username}.")
         return False
 
     except InvalidTokenError:
-        print("Invalid token.")
+        logging.error(f"Invalid token user: {username}.")
         return False
     
     finally:
@@ -34,4 +37,5 @@ def valid_token(username, token):
 def delete_token(username):
     redis_connection = get_redis()
     redis_connection.delete(f"jwt:{username}")
+    logging.info(f"Token deleted for user {username}.")
     close_redis(redis_connection)

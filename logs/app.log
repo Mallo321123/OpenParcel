@@ -1,0 +1,284 @@
+2025-01-01 17:59:27,788 - root - ERROR - Preparing database...
+2025-01-01 18:00:26,757 - root - ERROR - Preparing database...
+2025-01-01 18:00:31,820 - root - ERROR - Preparings Database ... done
+2025-01-01 18:00:31,821 - connexion.app - DEBUG - Starting flask HTTP server..
+2025-01-01 18:00:31,821 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:00:31,822 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:00:43,240 - root - INFO - Preparing database...
+2025-01-01 18:00:48,304 - root - INFO - Preparings Database ... done
+2025-01-01 18:00:48,305 - connexion.app - DEBUG - Starting flask HTTP server..
+2025-01-01 18:00:48,305 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:00:48,305 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:00:54,645 - connexion.apis.flask_api - DEBUG - Getting data and status code
+2025-01-01 18:00:54,645 - connexion.decorators.parameter - DEBUG - Function Arguments: []
+2025-01-01 18:00:54,645 - connexion.decorators.parameter - DEBUG - Context parameter 'user' not in function arguments
+2025-01-01 18:00:54,646 - connexion.apis.flask_api - DEBUG - Getting data and status code
+2025-01-01 18:00:54,646 - connexion.decorators.parameter - DEBUG - Context parameter 'token_info' not in function arguments
+2025-01-01 18:00:54,646 - connexion.decorators.validation - DEBUG - http://127.0.0.1/api/orders/info?id=38 validating parameters...
+2025-01-01 18:00:54,647 - connexion.decorators.parameter - DEBUG - Function Arguments: []
+2025-01-01 18:00:54,647 - connexion.operations.abstract - DEBUG - Query Parameter 'id' (sanitized: 'id_') not in function arguments
+2025-01-01 18:00:54,647 - connexion.decorators.parameter - DEBUG - Context parameter 'user' not in function arguments
+2025-01-01 18:00:54,647 - connexion.decorators.parameter - DEBUG - Context parameter 'token_info' not in function arguments
+2025-01-01 18:00:54,648 - connexion.apis.abstract - DEBUG - Getting data and status code
+2025-01-01 18:00:54,648 - connexion.apis.abstract - DEBUG - Prepared body and status code (204)
+2025-01-01 18:00:54,648 - connexion.apis.abstract - DEBUG - Got framework response
+2025-01-01 18:00:54,648 - connexion.apis.abstract - DEBUG - Getting data and status code
+2025-01-01 18:00:54,649 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:00:54] "[35m[1mGET /api/token HTTP/1.0[0m" 204 -
+2025-01-01 18:00:54,649 - connexion.apis.abstract - DEBUG - Prepared body and status code (401)
+2025-01-01 18:00:54,649 - connexion.apis.abstract - DEBUG - Got framework response
+2025-01-01 18:00:54,649 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:00:54] "[31m[1mGET /api/orders/info?id=38 HTTP/1.0[0m" 401 -
+2025-01-01 18:01:22,109 - root - INFO - Preparing database...
+2025-01-01 18:01:27,173 - root - INFO - Preparings Database ... done
+2025-01-01 18:01:27,175 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:01:27,175 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:30:13,954 - root - INFO - Preparing database...
+2025-01-01 18:30:13,955 - root - WARNING - Datenbank Verbindung fehlgeschlagen: 2003 (HY000): Can't connect to MySQL server on 'mysql:3306' (111), neuer Versuch in 5 Sekunden...
+2025-01-01 18:30:19,024 - root - INFO - Preparings Database ... done
+2025-01-01 18:30:19,025 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:30:19,026 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:30:32,570 - root - INFO - User theUser logged in
+2025-01-01 18:30:32,572 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:30:32] "POST /api/user/login HTTP/1.0" 200 -
+2025-01-01 18:30:32,938 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:30:32] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:30:32,966 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:30:32] "GET /api/dashboard HTTP/1.0" 200 -
+2025-01-01 18:30:33,034 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:30:33] "GET /api/orders?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:30:40,676 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:30:40] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:30:40,698 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:30:40] "GET /api/products?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:32:21,130 - root - INFO - Preparing database...
+2025-01-01 18:32:21,132 - root - WARNING - Datenbank Verbindung fehlgeschlagen: 2003 (HY000): Can't connect to MySQL server on 'mysql:3306' (111), neuer Versuch in 5 Sekunden...
+2025-01-01 18:32:26,193 - root - INFO - Preparings Database ... done
+2025-01-01 18:32:26,195 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:32:26,195 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:32:31,291 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:32:31] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:32:31,316 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:32:31] "GET /api/products?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:32:37,291 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:32:37] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:32:37,313 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:32:37] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:32:42,246 - root - ERROR - User theUser has no permission for products.
+2025-01-01 18:32:42,247 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:32:42] "[31m[1mPUT /api/products?id=1 HTTP/1.0[0m" 401 -
+2025-01-01 18:34:25,011 - root - INFO - Preparing database...
+2025-01-01 18:34:25,012 - root - WARNING - Datenbank Verbindung fehlgeschlagen: 2003 (HY000): Can't connect to MySQL server on 'mysql:3306' (111), neuer Versuch in 5 Sekunden...
+2025-01-01 18:34:30,085 - root - INFO - Preparings Database ... done
+2025-01-01 18:34:30,086 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:34:30,086 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:34:35,103 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:34:35] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:34:35,126 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:34:35] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:34:37,239 - __main__ - ERROR - Exception on /api/products [PUT]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 2529, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 1825, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 1823, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 1799, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/decorators/decorator.py", line 68, in wrapper
+    response = function(request)
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/security/security_handler_factory.py", line 388, in wrapper
+    return function(request)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/decorators/uri_parsing.py", line 149, in wrapper
+    response = function(request)
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/decorators/validation.py", line 196, in wrapper
+    response = function(request)
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/decorators/validation.py", line 399, in wrapper
+    return function(request)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/decorators/parameter.py", line 120, in wrapper
+    return function(**kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask_jwt_extended/view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/openapi_server/controllers/products_controller.py", line 140, in update_product
+    if check_sql_inject_json(products):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: check_sql_inject_json() takes 0 positional arguments but 1 was given
+2025-01-01 18:34:37,240 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:34:37] "[35m[1mPUT /api/products?id=1 HTTP/1.0[0m" 500 -
+2025-01-01 18:35:10,329 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:10] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:35:10,353 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:10] "GET /api/dashboard HTTP/1.0" 200 -
+2025-01-01 18:35:10,414 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:10] "GET /api/orders?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:35:11,405 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:11] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:35:11,428 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:11] "GET /api/orders/list?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:35:12,842 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:12] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:35:12,864 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:12] "GET /api/orders/info?id=38 HTTP/1.0" 200 -
+2025-01-01 18:35:13,036 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:13] "GET /api/products/info?id=3 HTTP/1.0" 200 -
+2025-01-01 18:35:13,038 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:13] "GET /api/products/info?id=7 HTTP/1.0" 200 -
+2025-01-01 18:35:13,038 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:13] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:35:15,774 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:15] "PUT /api/orders?id=38 HTTP/1.0" 200 -
+2025-01-01 18:35:25,487 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:25] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:35:25,510 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:25] "GET /api/orders/info?id=38 HTTP/1.0" 200 -
+2025-01-01 18:35:25,669 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:25] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:35:25,670 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:25] "GET /api/products/info?id=3 HTTP/1.0" 200 -
+2025-01-01 18:35:28,445 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:28] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:35:28,469 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:28] "GET /api/dashboard HTTP/1.0" 200 -
+2025-01-01 18:35:28,545 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:28] "GET /api/orders?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:35:29,302 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:29] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:35:29,324 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:35:29] "GET /api/products?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:35:58,398 - root - INFO - Preparing database...
+2025-01-01 18:35:58,399 - root - WARNING - Datenbank Verbindung fehlgeschlagen: 2003 (HY000): Can't connect to MySQL server on 'mysql:3306' (111), neuer Versuch in 5 Sekunden...
+2025-01-01 18:36:03,463 - root - INFO - Preparings Database ... done
+2025-01-01 18:36:03,464 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:36:03,464 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:36:13,123 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:13] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:36:13,148 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:13] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:36:17,428 - __main__ - ERROR - Exception on /api/products [PUT]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 2529, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 1825, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 1823, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 1799, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/decorators/decorator.py", line 68, in wrapper
+    response = function(request)
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/security/security_handler_factory.py", line 388, in wrapper
+    return function(request)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/decorators/uri_parsing.py", line 149, in wrapper
+    response = function(request)
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/decorators/validation.py", line 196, in wrapper
+    response = function(request)
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/decorators/validation.py", line 399, in wrapper
+    return function(request)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/connexion/decorators/parameter.py", line 120, in wrapper
+    return function(**kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask_jwt_extended/view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/app/openapi_server/controllers/products_controller.py", line 140, in update_product
+    if check_sql_inject_json(products.to_dict()):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: check_sql_inject_json() takes 0 positional arguments but 1 was given
+2025-01-01 18:36:17,430 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:17] "[35m[1mPUT /api/products?id=1 HTTP/1.0[0m" 500 -
+2025-01-01 18:36:35,267 - root - INFO - Preparing database...
+2025-01-01 18:36:35,268 - root - WARNING - Datenbank Verbindung fehlgeschlagen: 2003 (HY000): Can't connect to MySQL server on 'mysql:3306' (111), neuer Versuch in 5 Sekunden...
+2025-01-01 18:36:40,331 - root - INFO - Preparings Database ... done
+2025-01-01 18:36:40,332 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:36:40,332 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:36:43,315 - root - INFO - User theUser logged in
+2025-01-01 18:36:43,317 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:43] "POST /api/user/login HTTP/1.0" 200 -
+2025-01-01 18:36:43,586 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:43] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:36:43,610 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:43] "GET /api/dashboard HTTP/1.0" 200 -
+2025-01-01 18:36:43,662 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:43] "GET /api/orders?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:36:44,974 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:44] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:36:44,997 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:44] "GET /api/products?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:36:46,020 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:46] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:36:46,042 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:46] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:36:47,453 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:36:47] "[35m[1mPUT /api/products?id=1 HTTP/1.0[0m" 500 -
+2025-01-01 18:38:29,000 - root - INFO - Preparing database...
+2025-01-01 18:38:29,001 - root - WARNING - Datenbank Verbindung fehlgeschlagen: 2003 (HY000): Can't connect to MySQL server on 'mysql:3306' (111), neuer Versuch in 5 Sekunden...
+2025-01-01 18:38:34,065 - root - INFO - Preparings Database ... done
+2025-01-01 18:38:34,066 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:38:34,067 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:38:40,109 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:38:40] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:38:40,131 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:38:40] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:38:42,529 - root - ERROR - Failed to update product: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE id = 1' at line 1
+2025-01-01 18:38:42,531 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:38:42] "[35m[1mPUT /api/products?id=1 HTTP/1.0[0m" 500 -
+2025-01-01 18:39:52,812 - root - INFO - Preparing database...
+2025-01-01 18:39:52,814 - root - WARNING - Datenbank Verbindung fehlgeschlagen: 2003 (HY000): Can't connect to MySQL server on 'mysql:3306' (111), neuer Versuch in 5 Sekunden...
+2025-01-01 18:39:57,878 - root - INFO - Preparings Database ... done
+2025-01-01 18:39:57,879 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:39:57,879 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:40:00,145 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:40:00] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:40:00,169 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:40:00] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:40:02,448 - root - INFO - running update query: UPDATE products SET  WHERE id = %s with values: [1]
+2025-01-01 18:40:02,448 - root - ERROR - Failed to update product: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE id = 1' at line 1
+2025-01-01 18:40:02,449 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:40:02] "[35m[1mPUT /api/products?id=1 HTTP/1.0[0m" 500 -
+2025-01-01 18:43:34,393 - root - INFO - Preparing database...
+2025-01-01 18:43:34,394 - root - WARNING - Datenbank Verbindung fehlgeschlagen: 2003 (HY000): Can't connect to MySQL server on 'mysql:3306' (111), neuer Versuch in 5 Sekunden...
+2025-01-01 18:43:39,455 - root - INFO - Preparings Database ... done
+2025-01-01 18:43:39,456 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:43:39,456 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:43:55,126 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:43:55] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:43:55,148 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:43:55] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:43:56,236 - root - INFO - recieved products: {'name': None, 'comment': None, 'difficulty': None, 'build_time': None, 'customer_groups': ['adults']}
+2025-01-01 18:43:56,237 - root - INFO - running update query: UPDATE products SET  WHERE id = %s with values: [1]
+2025-01-01 18:43:56,237 - root - ERROR - Failed to update product: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE id = 1' at line 1
+2025-01-01 18:43:56,238 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:43:56] "[35m[1mPUT /api/products?id=1 HTTP/1.0[0m" 500 -
+2025-01-01 18:44:36,686 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:44:36] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:44:36,709 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:44:36] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:44:37,617 - root - INFO - recieved products: {'name': None, 'comment': None, 'difficulty': None, 'build_time': None, 'customer_groups': ['adults']}
+2025-01-01 18:44:37,617 - root - INFO - running update query: UPDATE products SET  WHERE id = %s with values: [1]
+2025-01-01 18:44:37,617 - root - ERROR - Failed to update product: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE id = 1' at line 1
+2025-01-01 18:44:37,618 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:44:37] "[35m[1mPUT /api/products?id=1 HTTP/1.0[0m" 500 -
+2025-01-01 18:47:24,872 - root - INFO - Preparing database...
+2025-01-01 18:47:24,873 - root - WARNING - Datenbank Verbindung fehlgeschlagen: 2003 (HY000): Can't connect to MySQL server on 'mysql:3306' (111), neuer Versuch in 5 Sekunden...
+2025-01-01 18:47:29,940 - root - INFO - Preparings Database ... done
+2025-01-01 18:47:29,941 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.18.0.4:8080
+2025-01-01 18:47:29,941 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-01-01 18:47:42,103 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:47:42] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:47:42,125 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:47:42] "GET /api/products/info?id=1 HTTP/1.0" 200 -
+2025-01-01 18:47:44,214 - root - INFO - recieved products: {'name': None, 'comment': None, 'difficulty': None, 'build_time': None, 'customer_groups': ['adults']}
+2025-01-01 18:47:44,214 - root - INFO - running update query: UPDATE products SET customerGroups = %s WHERE id = %s with values: ['["adults"]', 1]
+2025-01-01 18:47:44,218 - root - INFO - Product with id 1 updated
+2025-01-01 18:47:44,218 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:47:44] "PUT /api/products?id=1 HTTP/1.0" 200 -
+2025-01-01 18:48:12,077 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:48:12] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:48:12,101 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:48:12] "GET /api/dashboard HTTP/1.0" 200 -
+2025-01-01 18:48:12,248 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:48:12] "GET /api/orders?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:48:13,159 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:48:13] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:48:13,181 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:48:13] "GET /api/orders/list?limit=200&page=0 HTTP/1.0" 200 -
+2025-01-01 18:48:14,475 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:48:14] "GET /api/token HTTP/1.0" 200 -
+2025-01-01 18:48:14,497 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:48:14] "GET /api/orders/info?id=57 HTTP/1.0" 200 -
+2025-01-01 18:48:14,605 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:48:14] "GET /api/products/info?id=3 HTTP/1.0" 200 -
+2025-01-01 18:48:14,606 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:48:14] "GET /api/products/info?id=4 HTTP/1.0" 200 -
+2025-01-01 18:48:16,838 - werkzeug - INFO - 172.18.0.5 - - [01/Jan/2025 18:48:16] "PUT /api/orders?id=57 HTTP/1.0" 200 -

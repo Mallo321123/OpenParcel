@@ -5,6 +5,10 @@ import redis
 
 from mysql.connector import Error
 
+from openapi_server.config import get_logging
+
+logging = get_logging()
+
 # Create Database connection
 def get_db():
     retries = 5
@@ -19,10 +23,11 @@ def get_db():
             )
             break
         except Error as e:
-            print(f"Verbindung fehlgeschlagen: {e}, neuer Versuch in 5 Sekunden...")
+            logging.warning(f"Datenbank Verbindung fehlgeschlagen: {e}, neuer Versuch in 5 Sekunden...")
             retries -= 1
             time.sleep(5)
     if not db:
+        logging.error("MySQL-Datenbank konnte nach mehreren Versuchen nicht erreicht werden.")
         raise ConnectionError("MySQL-Datenbank konnte nach mehreren Versuchen nicht erreicht werden.")
     return db
 
@@ -37,7 +42,7 @@ def get_redis():
         redis_connection = redis.StrictRedis(host=os.getenv('REDIS_HOST', 'redis'), port=os.getenv('REDIS_PORT', '6379'), decode_responses=True)
 
     except redis.ConnectionError:
-        print("Redis connection error.")
+        logging.error("Redis connection error.")
         return None
     return redis_connection
 
@@ -58,10 +63,12 @@ def settings_default():
         cursor.execute("INSERT INTO settings (name, value) VALUES ('blockTime', '600')")
         cursor.execute("INSERT INTO settings (name, value) VALUES ('maxLoginAttempts', '5')")
         cursor.execute("INSERT INTO settings (name, value) VALUES ('tokenExpire', '24')")
+        logging.info("Settings default values set.")
         db.commit()
 
 
 def prepare_database():
+    logging.info("Preparing database...")
     db = get_db()
     cursor = db.cursor()
     cursor.execute("CREATE DATABASE IF NOT EXISTS OpenParcel")
@@ -73,7 +80,7 @@ def prepare_database():
         value TEXT
         )""")
     
-    settings_default()  # Only sets settings, if database is empty
+    settings_default()
     
     cursor.execute("""CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -127,3 +134,4 @@ def prepare_database():
         )""")
     db.commit()
     close_db(db)
+    logging.info("Preparings Database ... done")

@@ -7,11 +7,11 @@ from openapi_server.models.user import User  # noqa: E501
 from openapi_server.models.user_response import UserResponse
 
 from openapi_server.db import get_db, close_db, get_redis
-from openapi_server.tokenManager import valid_token, delete_token
+from openapi_server.tokenManager import delete_token
 from openapi_server.permission_check import check_permission
 
-from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
-from flask import request, jsonify, make_response
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask import jsonify, make_response
 
 from openapi_server.security import check_sql_inject_value, check_auth
 
@@ -20,6 +20,13 @@ from argon2 import PasswordHasher
 import os
 from datetime import datetime, timedelta
 import json
+
+from flask_wtf.csrf import CSRFProtect
+from openapi_server.config import get_logging
+
+logging = get_logging()
+csrf = CSRFProtect()
+
 
 
 # @jwt_required()
@@ -46,6 +53,7 @@ def create_user(user=None):  # noqa: E501
 
         cursor.execute("SELECT * FROM users WHERE username = %s", (user.username,))
         if cursor.fetchone() is not None:
+            logging.warning(f"User {user.username} already exists")
             return "User already exists", 400
 
         ph = PasswordHasher()
@@ -71,12 +79,15 @@ def create_user(user=None):  # noqa: E501
         )
         db.commit()
         close_db(db)
-
+        
+        logging.info(f"User {user.username} created")
         return "User created", 204
 
+    logging.warning("Invalid create User request")
     return "Invalid Request", 400
 
 
+@csrf.exempt
 def security_controller_login():  # noqa: E501
     db = get_db()
     cursor = db.cursor()
@@ -96,6 +107,7 @@ def security_controller_login():  # noqa: E501
 
     attempts = redis_connection.get(redis_key)
     if attempts and int(attempts) >= max_attempts:
+        logging.warning(f"Too many failed login attempts from {client_ip}")
         return {
             "success": False,
             "message": f"Too many failed attempts. Try again in {block_time // 60} minutes.",
@@ -112,6 +124,7 @@ def security_controller_login():  # noqa: E501
         if user is None:
             redis_connection.incr(redis_key)  # count Fails
             redis_connection.expire(redis_key, block_time)  # Set timeout
+            logging.warning(f"User {login.username} not found ip: {client_ip}")
             return "Login or password Invalid", 401
 
         ph = PasswordHasher()
@@ -122,15 +135,25 @@ def security_controller_login():  # noqa: E501
         except:
             redis_connection.incr(redis_key)  # count Fails
             redis_connection.expire(redis_key, block_time)  # Set timeout
+            logging.warning(f"User {login.username} failed to login ip: {client_ip}")
             return "Login or password Invalid", 401
 
         # Delete login attempts counter due to successful login
         redis_connection.delete(redis_key)
-
+        
+        logging.info(f"User {login.username} logged in")
+        
         # Generate JWT token
         secret_key = os.getenv("SECRET_KEY", "default_secret")
         expiration_time = datetime.utcnow() + timedelta(hours=24)
-        token_payload = {"user": user[4], "id": user[0], "exp": expiration_time}
+
+        csrf_token = jwt.encode(
+            {"user": user[4], "id": user[0], "type": "csrf", "exp": expiration_time},
+            secret_key,
+            algorithm="HS256",
+        )
+
+        token_payload = {"user": user[4], "id": user[0], "exp": expiration_time, "csrf": csrf_token}
         token = jwt.encode(token_payload, secret_key, algorithm="HS256")
 
         response = make_response(
@@ -143,13 +166,22 @@ def security_controller_login():  # noqa: E501
             samesite="Strict",
         )
 
+        response.set_cookie(
+            "csrf_token",
+            csrf_token,
+            secure=True,
+            samesite="Strict",
+        )
+
         # Store token in Redis
         redis_connection.setex(
             f"jwt:{user[4]}", timedelta(hours=token_expiration), token
         )
 
+        close_db(db)
         return response
 
+    logging.warning(f"Invalid login request ip: {client_ip}")
     close_db(db)
     return "Invalid Request", 400
 
@@ -167,13 +199,14 @@ def delete_user(username):  # noqa: E501
 
     cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
     if cursor.fetchone() is None:
+        logging.warning(f"User {username} not found for deletion")
         return "User not found", 404
 
     cursor.execute("DELETE FROM users WHERE username = %s", (username,))
     db.commit()
 
     delete_token(username)
-
+    logging.info(f"User {username} deleted")
     return "User deleted", 200
 
 

@@ -3,22 +3,23 @@ from openapi_server.models.products import Products  # noqa: E501
 from openapi_server.models.products_response import ProductsResponse  # noqa: E501
 
 from openapi_server.db import get_db, close_db
-from openapi_server.tokenManager import valid_token
-from openapi_server.permission_check import check_permission
-
-from flask_jwt_extended import jwt_required, get_jwt
-from flask import request
-
+from flask_jwt_extended import jwt_required
 from typing import Optional
+
+from flask import request
 
 from openapi_server.security import (
     check_sql_inject_value,
     check_sql_inject_json,
     check_auth,
 )
-
 import json
 from rapidfuzz import process, fuzz
+from openapi_server.config import get_logging
+
+logging = get_logging()
+
+
 
 
 @jwt_required()
@@ -121,26 +122,19 @@ def products_list(limit=None, page=None):  # noqa: E501
 
 
 @jwt_required()
-def update_product(name, products=None):  # noqa: E501
+def update_product(products=None):  # noqa: E501
     if not check_auth("products"):
         return "unauthorized", 401
 
     db = get_db()
     cursor = db.cursor()
-
-    if check_sql_inject_value(name):
-        return "Invalid input", 400
-
-    if check_sql_inject_value(name):
-        return "Invalid input", 400
+    
+    id = request.args.get("id")
 
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
 
-        if check_sql_inject_json(products):
-            return "Invalid input", 400
-
-        if check_sql_inject_json(products):
+        if check_sql_inject_json(**products.to_dict()):
             return "Invalid input", 400
 
         if isinstance(products, Products):
@@ -149,14 +143,14 @@ def update_product(name, products=None):  # noqa: E501
         # Prepare a dictionary of fields to update
         update_fields = {}
 
-        if products.get("buildTime") is not None:
-            update_fields["buildTime"] = products["BuildTime"]
+        if products.get("build_time") is not None:
+            update_fields["buildTime"] = products["Build_time"]
 
         if products.get("comment") is not None:
             update_fields["comment"] = products["comment"]
 
-        if products.get("customerGroups") is not None:
-            customer_groups_json = json.dumps(products["customerGroups"])
+        if products.get("customer_groups") is not None:
+            customer_groups_json = json.dumps(products["customer_groups"])
             update_fields["customerGroups"] = customer_groups_json
 
         if products.get("difficulty") is not None:
@@ -171,25 +165,30 @@ def update_product(name, products=None):  # noqa: E501
             update_fields["name"] = products["name"]
 
         if update_fields is None:
+            logging.info("No fields to update in product_update")
             return "No fields to update", 400
 
         # Construct the SQL update statement dynamically
         set_clause = ", ".join([f"{key} = %s" for key in update_fields.keys()])
         values = list(update_fields.values())
-        values.append(name)
+        values.append(int(id))
 
-        update_query = f"UPDATE products SET {set_clause} WHERE name = %s"
+        update_query = f"UPDATE products SET {set_clause} WHERE id = %s"
 
         try:
             cursor.execute(update_query, tuple(values))
             db.commit()
         except Exception as e:
             db.rollback()
-            return f"Failed to update product: {e}", 500
+            logging.error(f"Failed to update product: {e}")
+            return "Failed to update product", 500
         finally:
             close_db(db)
 
+        logging.info(f"Product with id {id} updated")
         return "Product updated", 200
+    
+    logging.warning("Invalid input in product_update")
     return "Invalid input", 400
 
 
@@ -200,6 +199,8 @@ def products_info_get():  # noqa: E501
 
     db = get_db()
     cursor = db.cursor()
+    
+    id = request.args.get("id")
 
     cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
     product = cursor.fetchone()

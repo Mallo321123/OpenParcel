@@ -7,6 +7,10 @@ from openapi_server.permission_check import check_permission
 from flask_jwt_extended import get_jwt_identity
 from flask import request
 
+from openapi_server.config import get_logging
+
+logging = get_logging()
+
 
 def normalize_input(input_value: str) -> str:
     return unicodedata.normalize("NFKC", input_value)
@@ -28,13 +32,15 @@ def check_sql_inject_value(value: str) -> bool:
     re.IGNORECASE | re.VERBOSE,
 )
 
-
-    return bool(sql_injection_regex.search(value))
+    response = bool(sql_injection_regex.search(value))
+    if response:
+        logging.critical(f"Möglicher SQL Inject versuch erkannt: {value}")
+    return response
 
 def check_sql_inject_json(**kwargs: dict) -> bool:
     for key, value in kwargs.items():
         if isinstance(value, str) and check_sql_inject_value(value):
-            print(f"Unsichere Eingabe erkannt: {key} = {value}")
+            logging.critical(f"Möglicher SQL Inject versuch erkannt: {key} = {value}")
             return True
     return False
 
@@ -44,13 +50,16 @@ def check_auth(group = None):
     try:
         user = get_jwt_identity()
     except Exception:
+        logging.error("No user found in JWT Token.")
         return False
     
     if not valid_token(user, token):
+        logging.error(f"Token invalid for user {user}.")
         return False
     
     if group is not None:
-        if not check_permission(group, user) or not check_permission("admin", user):
+        if not (check_permission(group, user) or check_permission("admin", user)):
+            logging.error(f"User {user} has no permission for {group}.")
             return False
         
     return True
