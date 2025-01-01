@@ -152,7 +152,7 @@ def update_product(products=None):  # noqa: E501
         update_fields = {}
 
         if products.get("build_time") is not None:
-            update_fields["buildTime"] = products["Build_time"]
+            update_fields["buildTime"] = products["build_time"]
 
         if products.get("comment") is not None:
             update_fields["comment"] = products["comment"]
@@ -162,7 +162,7 @@ def update_product(products=None):  # noqa: E501
             update_fields["customerGroups"] = customer_groups_json
 
         if products.get("difficulty") is not None:
-            update_fields["difficulty"] = products["difficulty"]
+            update_fields["difficulty"] = int(products["difficulty"])
 
         if products.get("name") is not None:
             cursor.execute(
@@ -211,16 +211,14 @@ def products_info_get():  # noqa: E501
     id = request.args.get("id")
 
     cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
-    if cursor.fetchone() is None:
-        logging.warning(f"Product {id} not found")
-        return "Product not found", 404
     
     product = cursor.fetchone()
 
     close_db(db)
 
     if product is None:
-        return "Product not found", 400
+        logging.warning(f"Product {id} not found")
+        return "Product not found", 404
 
     try:
         customerGroups = json.loads(product[3])
