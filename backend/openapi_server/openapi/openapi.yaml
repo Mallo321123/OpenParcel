@@ -76,7 +76,7 @@ paths:
         default:
           description: Too Many Requests
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: delete a light
       tags:
@@ -127,7 +127,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: list lights
       tags:
@@ -152,7 +152,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: add light device
       tags:
@@ -179,7 +179,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: change light device
       tags:
@@ -213,7 +213,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: delete a light group
       tags:
@@ -264,7 +264,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: list all light groups
       tags:
@@ -289,7 +289,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: add light group
       tags:
@@ -323,7 +323,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: delete a mapper
       tags:
@@ -374,7 +374,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: list all mappings
       tags:
@@ -400,7 +400,7 @@ paths:
           description: default
       security:
       - cookieAuth: []
-      - bearerAuth: []
+      
       summary: add a light - product mapping
       tags:
       - lights
@@ -426,7 +426,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: change a light - product mapping
       tags:
@@ -460,7 +460,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: delete a order
       tags:
@@ -511,7 +511,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: list all orders
       tags:
@@ -535,7 +535,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: add an order
       tags:
@@ -573,7 +573,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: update an order
       tags:
@@ -611,7 +611,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: order information
       tags:
@@ -727,7 +727,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: list orders
       tags:
@@ -761,7 +761,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: delete a product
       tags:
@@ -812,7 +812,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: list of products
       tags:
@@ -836,7 +836,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: add a product
       tags:
@@ -873,7 +873,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: update product
       tags:
@@ -911,7 +911,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: product information
       tags:
@@ -1014,7 +1014,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       tags:
       - products
@@ -1045,7 +1045,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: display settings
       tags:
@@ -1088,7 +1088,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: update settings
       tags:
@@ -1108,7 +1108,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: valid token
       tags:
@@ -1151,7 +1151,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: Delete user
       tags:
@@ -1193,7 +1193,7 @@ paths:
         default:
           description: default
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: Get user by user name
       tags:
@@ -1291,7 +1291,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
           description: Internal Server Error
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: Update user
       tags:
@@ -1341,7 +1341,7 @@ paths:
                 $ref: '#/components/schemas/Unathorized'
           description: Unauthorized
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: list users
       tags:
@@ -1410,7 +1410,7 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
           description: Internal Server Error
       security:
-      - bearerAuth: []
+      
       - cookieAuth: []
       summary: Logs out current logged in user session
       tags:
@@ -2278,11 +2278,6 @@ components:
       title: security_controller_login_200_response
       type: object
   securitySchemes:
-    bearerAuth:
-      bearerFormat: JWT
-      scheme: bearer
-      type: http
-      x-bearerInfoFunc: openapi_server.controllers.security_controller.info_from_bearerAuth
     cookieAuth:
       in: cookie
       name: access_token
