@@ -1,3 +1,23 @@
+#saveButton {
+	background-color: #4caf50;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+	justify-content: center;
+	align-items: center;
+}
+
+#saveButton:hover {
+	background-color: #45a049;
+}
+
+#saveButton:active {
+	background-color: #3e8e41;
+}
+
 .container {
 	background-color: #fff;
 	border-radius: 8px;
@@ -26,7 +46,6 @@
 	list-style-type: none;
 	padding: 0;
 }
-
 .customer-group-item {
 	background-color: #fff;
 	padding: 10px;
@@ -40,4 +59,9 @@
 }
 .customer-group-item a:hover {
 	color: #007bff;
+}
+
+.customer-group-list {
+	list-style-type: none;
+	padding: 0;
 }

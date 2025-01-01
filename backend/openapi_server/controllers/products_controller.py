@@ -31,10 +31,7 @@ def product_add(products=None):  # noqa: E501
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
 
-        if check_sql_inject_json(products):
-            return "Invalid input", 400
-
-        if check_sql_inject_json(products):
+        if check_sql_inject_json(**products.to_dict()):
             return "Invalid input", 400
 
         cursor.execute("SELECT * FROM products WHERE name = %s", (products.name,))
