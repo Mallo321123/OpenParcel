@@ -24,18 +24,19 @@ def check_sql_inject_value(value: str) -> bool:
     value = normalize_input(value)
 
     sql_injection_regex = re.compile(
-    r"""
-    [;'"--]
+        r"""
+    [;'"]
     |(\b(SELECT|DROP|INSERT|DELETE|UPDATE|UNION|OR|AND)\b)
     |(\b(SELECT\s.*FROM|DROP\s.*TABLE)\b)
     """,
-    re.IGNORECASE | re.VERBOSE,
-)
+        re.IGNORECASE | re.VERBOSE,
+    )
 
     response = bool(sql_injection_regex.search(value))
     if response:
         logging.critical(f"Möglicher SQL Inject versuch erkannt: {value}")
     return response
+
 
 def check_sql_inject_json(**kwargs: dict) -> bool:
     for key, value in kwargs.items():
@@ -45,21 +46,21 @@ def check_sql_inject_json(**kwargs: dict) -> bool:
     return False
 
 
-def check_auth(group = None):
-    token = request.cookies.get('access_token')
+def check_auth(group=None):
+    token = request.cookies.get("access_token")
     try:
         user = get_jwt_identity()
     except Exception:
         logging.error("No user found in JWT Token.")
         return False
-    
+
     if not valid_token(user, token):
         logging.error(f"Token invalid for user {user}.")
         return False
-    
+
     if group is not None:
         if not (check_permission(group, user) or check_permission("admin", user)):
             logging.error(f"User {user} has no permission for {group}.")
             return False
-        
+
     return True
