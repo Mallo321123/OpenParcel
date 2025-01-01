@@ -20,6 +20,9 @@ from openapi_server.security import (
 import json
 import datetime
 
+from openapi_server.config import get_logging
+
+logging = get_logging()
 
 @jwt_required()
 def orders_delete():  # noqa: E501
@@ -34,11 +37,14 @@ def orders_delete():  # noqa: E501
     cursor.execute("SELECT * FROM orders WHERE id = %s", (id,))
     result = cursor.fetchone()
     if result is None:
+        logging.warning(f"Order {id} not found")
         return "Order not found", 404
 
     cursor.execute("DELETE FROM orders WHERE id = %s", (id,))
     db.commit()
     close_db(db)
+    
+    logging.info(f"Order {id} deleted")
     return "Order deleted", 200
 
 
@@ -108,8 +114,10 @@ def orders_post(orders_add=None):  # noqa: E501
 
         db.commit()
         close_db(db)
+        logging.info("Order added")
         return "Order added", 201
 
+    logging.warning("Invalid request in orders_post")
     return "invalid request", 400
 
 
@@ -173,8 +181,10 @@ def orders_put(orders_change=None):  # noqa: E501
         cursor.execute(update_query, tuple(values))
         db.commit()
         close_db(db)
+        logging.info(f"Order {id} updated")
         return "ok", 200
 
+    logging.warning("Invalid request in orders_put")
     return "invalid request", 400
 
 
@@ -218,12 +228,15 @@ def orders_list_get(
     ALLOWED_STATES = {"open", "closed", "working", "hold"}
 
     if sort is not None and sort not in ALLOWED_SORT_COLUMNS:
+        logging.warning(f"Invalid sort parameter in order_list_get: {sort}")
         return "Invalid sort parameter", 400
 
     if order is not None and order.lower() not in ALLOWED_ORDER_DIRECTIONS:
+        logging.warning(f"Invalid sort parameter in order_list_get: {order}")
         return "Invalid order parameter", 400
 
     if state is not None and state.lower() not in ALLOWED_STATES:
+        logging.warning(f"Invalid state parameter in order_list_get: {state}")
         return "Invalid state parameter", 400
 
     # Build the WHERE clause dynamically
@@ -298,6 +311,7 @@ def orders_info_get():  # noqa: E501
     close_db(db)
 
     if order is None:
+        logging.warning(f"Order {id} not found")
         return "Order not found", 404
 
     products_str = order[4]

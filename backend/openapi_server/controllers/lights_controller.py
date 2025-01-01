@@ -13,7 +13,13 @@ from openapi_server.security import check_auth
 
 from flask_jwt_extended import jwt_required
 
+from flask import request
+
 import json
+
+from openapi_server.config import get_logging
+
+logging = get_logging()
 
 
 def light_add(lights):  # noqa: E501
@@ -75,12 +81,14 @@ def lights_devices_get(limit=None, page=None):  # noqa: E501
 
 
 @jwt_required()
-def lights_group_delete(id):  # noqa: E501
+def lights_group_delete():  # noqa: E501
     if not check_auth("lights"):
         return "unauthorized", 401
 
     db = get_db()
     cursor = db.cursor()
+    
+    id = request.args.get("id")
 
     cursor.execute("SELECT * FROM groups WHERE id = %s", (id,))
     if cursor.fetchone() is None:
@@ -89,6 +97,8 @@ def lights_group_delete(id):  # noqa: E501
     cursor.execute("DELETE FROM groups WHERE id = %s", (id,))
     db.commit()
     close_db(db)
+    
+    logging.info(f"Group {id} deleted")
     return "Group deleted", 200
 
 
@@ -117,11 +127,12 @@ def lights_group_get(limit=None, page=None):  # noqa: E501
 
     return groups, 200
 
+
 @jwt_required()
 def lights_group_post(groups):  # noqa: E501
     if not check_auth("lights"):
         return "unauthorized", 401
-    
+
     db = get_db()
     cursor = db.cursor()
 
@@ -139,6 +150,8 @@ def lights_group_post(groups):  # noqa: E501
         db.commit()
         close_db(db)
         return "Group added", 201
+    
+    logging.warning("Invalid request in lights_group_post")
     return "invalid request", 400
 
 

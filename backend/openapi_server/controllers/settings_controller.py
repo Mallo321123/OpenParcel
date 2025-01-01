@@ -8,6 +8,10 @@ from openapi_server.db import get_db, close_db
 
 from openapi_server.security import check_sql_inject_json, check_auth
 
+from openapi_server.config import get_logging
+
+logging = get_logging()
+
 @jwt_required()
 def settings_list():  # noqa: E501
     if not check_auth("admin"):
@@ -69,5 +73,9 @@ def settings_update():  # noqa: E501
         
         db.commit()
         close_db(db)
+        
+        logging.info("Settings updated")
         return "Ok", 200
+    
+    logging.warning("Invalid request in settings_update")
     return "invalid Request", 400

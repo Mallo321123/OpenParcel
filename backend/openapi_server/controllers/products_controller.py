@@ -20,8 +20,6 @@ from openapi_server.config import get_logging
 logging = get_logging()
 
 
-
-
 @jwt_required()
 def product_add(products=None):  # noqa: E501
     if not check_auth("products"):
@@ -41,6 +39,7 @@ def product_add(products=None):  # noqa: E501
 
         cursor.execute("SELECT * FROM products WHERE name = %s", (products.name,))
         if cursor.fetchone() is not None:
+            logging.warning(f"Product {products.name} already exists")
             return "Product already exists", 400
 
         customer_groups_json = json.dumps(products.customer_groups)
@@ -59,30 +58,35 @@ def product_add(products=None):  # noqa: E501
             )
 
         except Exception as e:
-            return str(e), 400
+            logging.error(f"Failed to create product: {e}")
+            return "Failed, check Server Log", 500
 
         db.commit()
         close_db(db)
-
+        logging.info(f"Product {products.name} created")
         return "Product created", 200
 
 
 @jwt_required()
-def products_delete(id):  # noqa: E501
+def products_delete():  # noqa: E501
     if not check_auth("products"):
         return "unauthorized", 401
 
     db = get_db()
     cursor = db.cursor()
+    
+    id = request.args.get("id")
 
     cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
     if cursor.fetchone() is None:
-        return "Product not found", 400
+        logging.warning(f"Product {id} not found")
+        return "Product not found", 404
 
     cursor.execute("DELETE FROM products WHERE id = %s", (id,))
     db.commit()
 
     close_db(db)
+    logging.info(f"Product {id} deleted")
     return "Product deleted", 200
 
 
@@ -99,6 +103,10 @@ def products_list(limit=None, page=None):  # noqa: E501
     cursor.execute(
         "SELECT * FROM products ORDER BY id ASC LIMIT %s OFFSET %s", (limit, offset)
     )
+    if cursor.fetchone() is None:
+        logging.warning("No products found in products_list")
+        return "No products found", 404
+    
     products = cursor.fetchall()
 
     close_db(db)
@@ -128,7 +136,7 @@ def update_product(products=None):  # noqa: E501
 
     db = get_db()
     cursor = db.cursor()
-    
+
     id = request.args.get("id")
 
     if connexion.request.is_json:
@@ -187,7 +195,7 @@ def update_product(products=None):  # noqa: E501
 
         logging.info(f"Product with id {id} updated")
         return "Product updated", 200
-    
+
     logging.warning("Invalid input in product_update")
     return "Invalid input", 400
 
@@ -199,10 +207,14 @@ def products_info_get():  # noqa: E501
 
     db = get_db()
     cursor = db.cursor()
-    
+
     id = request.args.get("id")
 
     cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
+    if cursor.fetchone() is None:
+        logging.warning(f"Product {id} not found")
+        return "Product not found", 404
+    
     product = cursor.fetchone()
 
     close_db(db)
@@ -260,18 +272,11 @@ def products_list_get(
     ):
         return "Invalid input", 400
 
-    if (
-        check_sql_inject_value(name)
-        or check_sql_inject_value(difficulty)
-        or check_sql_inject_value(sort)
-        or check_sql_inject_value(order)
-    ):
-        return "Invalid input", 400
-
     offset = limit * page
 
     if name is not None:
         cursor.execute("SELECT * FROM products")
+        
         products = cursor.fetchall()
 
         sorted_products = sort_by_similarity(products, name)
@@ -282,6 +287,7 @@ def products_list_get(
             "SELECT * FROM products WHERE difficulty = %s LIMIT %s OFFSET %s",
             (difficulty, limit, offset),
         )
+        
         products = cursor.fetchall()
 
     elif sort is not None and order is not None:
@@ -320,6 +326,10 @@ def products_list_get(
         return "Invalid input", 400
 
     close_db(db)
+    
+    if products is None:
+        logging.warning("No products found in products_list_get")
+        return "No products found", 404
 
     for i in range(len(products)):
         try:

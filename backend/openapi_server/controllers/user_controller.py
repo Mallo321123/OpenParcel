@@ -206,6 +206,7 @@ def delete_user(username):  # noqa: E501
     db.commit()
 
     delete_token(username)
+    
     logging.info(f"User {username} deleted")
     return "User deleted", 200
 
@@ -226,6 +227,7 @@ def get_user_by_name(username):  # noqa: E501
     close_db(db)
 
     if user is None:
+        logging.warning(f"User {username} not found")
         return "User not found", 404
 
     try:
