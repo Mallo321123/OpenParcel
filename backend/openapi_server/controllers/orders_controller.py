@@ -5,36 +5,26 @@ from openapi_server.models.orders_response import OrdersResponse
 from openapi_server.models.orders_change import OrdersChange
 
 from openapi_server.db import get_db, close_db
-from openapi_server.tokenManager import valid_token
-from openapi_server.permission_check import check_permission
 
 from flask import request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt
+from flask_jwt_extended import jwt_required
 
 from typing import Optional
 
-from openapi_server.security import check_sql_inject_value, check_sql_inject_json
+from openapi_server.security import (
+    check_sql_inject_value,
+    check_sql_inject_json,
+    check_auth,
+)
 
 import json
 import datetime
 
+
 @jwt_required()
 def orders_delete():  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")  # Extract username from token
-    auth_header = request.headers.get("Authorization")
-    if auth_header is None:
+    if not check_auth("orders"):
         return "unauthorized", 401
-    token = auth_header.split(" ")[1]  # Extract token
-
-    if not valid_token(user, token):
-        return "unauthorized", 401
-
-    if not (check_permission("orders", user) or not check_permission("admin", user)):
-        return (
-            "unauthorized",
-            401,
-        )  # Only admins and the user himself can update the user
 
     id = request.args.get("id")
 
@@ -54,14 +44,7 @@ def orders_delete():  # noqa: E501
 
 @jwt_required()
 def orders_get(limit=None, page=None):  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")  # Extract username from token
-    auth_header = request.headers.get("Authorization")
-    if auth_header is None:
-        return "unauthorized", 401
-    token = auth_header.split(" ")[1]  # Extract token
-
-    if not valid_token(user, token):
+    if not check_auth():
         return "unauthorized", 401
 
     db = get_db()
@@ -98,21 +81,8 @@ def orders_get(limit=None, page=None):  # noqa: E501
 
 @jwt_required()
 def orders_post(orders_add=None):  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")  # Extract username from token
-    auth_header = request.headers.get("Authorization")
-    if auth_header is None:
+    if not check_auth("orders"):
         return "unauthorized", 401
-    token = auth_header.split(" ")[1]  # Extract token
-
-    if not valid_token(user, token):
-        return "unauthorized", 401
-
-    if not (check_permission("orders", user) or check_permission("admin", user)):
-        return (
-            "unauthorized",
-            401,
-        )  # Only admins and users in the orders group can add orders
 
     db = get_db()
     cursor = db.cursor()
@@ -122,7 +92,7 @@ def orders_post(orders_add=None):  # noqa: E501
 
         if check_sql_inject_json(**orders_add.to_dict()):
             return "Invalid input", 400
-        
+
         cursor.execute(
             """INSERT INTO orders 
                    (customer, addDate, products, comment, state, shipmentType) VALUES (%s, %s, %s, %s, %s, %s)""",
@@ -145,21 +115,8 @@ def orders_post(orders_add=None):  # noqa: E501
 
 @jwt_required()
 def orders_put(orders_change=None):  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")  # Extract username from token
-    auth_header = request.headers.get("Authorization")
-    if auth_header is None:
-        return "unauthorized header", 401
-    token = auth_header.split(" ")[1]  # Extract token
-
-    if not valid_token(user, token):
-        return "unauthorized token", 401
-
-    if not (check_permission("orders", user) or check_permission("admin", user)):
-        return (
-            "unauthorized permission",
-            401,
-        )  # Only admins and the user himself can update the user
+    if not check_auth("orders"):
+        return "unauthorized", 401
 
     db = get_db()
     cursor = db.cursor()
@@ -231,14 +188,7 @@ def orders_list_get(
     sort: Optional[str] = None,
     order: Optional[str] = None,
 ):  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")  # Extract username from token
-    auth_header = request.headers.get("Authorization")
-    if auth_header is None:
-        return "unauthorized", 401
-    token = auth_header.split(" ")[1]  # Extract token
-
-    if not valid_token(user, token):
+    if not check_auth():
         return "unauthorized", 401
 
     db = get_db()
@@ -331,14 +281,7 @@ def orders_list_get(
 
 @jwt_required()
 def orders_info_get():  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")  # Extract username from token
-    auth_header = request.headers.get("Authorization")
-    if auth_header is None:
-        return "unauthorized", 401
-    token = auth_header.split(" ")[1]  # Extract token
-
-    if not valid_token(user, token):
+    if not check_auth():
         return "unauthorized", 401
 
     id = request.args.get("id")

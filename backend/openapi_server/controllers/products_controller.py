@@ -11,7 +11,11 @@ from flask import request
 
 from typing import Optional
 
-from openapi_server.security import check_sql_inject_value, check_sql_inject_json
+from openapi_server.security import (
+    check_sql_inject_value,
+    check_sql_inject_json,
+    check_auth,
+)
 
 import json
 from rapidfuzz import process, fuzz
@@ -19,15 +23,7 @@ from rapidfuzz import process, fuzz
 
 @jwt_required()
 def product_add(products=None):  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")
-
-    if not (check_permission("products", user) or check_permission("admin", user)):
-        return "unauthorized", 401
-
-    token = request.headers.get("Authorization").split(" ")[1]
-
-    if not valid_token(user, token):
+    if not check_auth("products"):
         return "unauthorized", 401
 
     db = get_db()
@@ -35,7 +31,7 @@ def product_add(products=None):  # noqa: E501
 
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
-        
+
         if check_sql_inject_json(products):
             return "Invalid input", 400
 
@@ -72,15 +68,7 @@ def product_add(products=None):  # noqa: E501
 
 @jwt_required()
 def products_delete(id):  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")
-
-    if not (check_permission("products", user) or check_permission("admin", user)):
-        return "unauthorized", 401
-
-    token = request.headers.get("Authorization").split(" ")[1]
-
-    if not valid_token(user, token):
+    if not check_auth("products"):
         return "unauthorized", 401
 
     db = get_db()
@@ -99,12 +87,7 @@ def products_delete(id):  # noqa: E501
 
 @jwt_required()
 def products_list(limit=None, page=None):  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")
-
-    token = request.headers.get("Authorization").split(" ")[1]
-
-    if not valid_token(user, token):
+    if not check_auth():
         return "unauthorized", 401
 
     db = get_db()
@@ -139,20 +122,12 @@ def products_list(limit=None, page=None):  # noqa: E501
 
 @jwt_required()
 def update_product(name, products=None):  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")
-
-    if not (check_permission("products", user) or check_permission("admin", user)):
-        return "unauthorized", 401
-
-    token = request.headers.get("Authorization").split(" ")[1]
-
-    if not valid_token(user, token):
+    if not check_auth("products"):
         return "unauthorized", 401
 
     db = get_db()
     cursor = db.cursor()
-    
+
     if check_sql_inject_value(name):
         return "Invalid input", 400
 
@@ -161,7 +136,7 @@ def update_product(name, products=None):  # noqa: E501
 
     if connexion.request.is_json:
         products = Products.from_dict(connexion.request.get_json())  # noqa: E501
-        
+
         if check_sql_inject_json(products):
             return "Invalid input", 400
 
@@ -220,14 +195,7 @@ def update_product(name, products=None):  # noqa: E501
 
 @jwt_required()
 def products_info_get():  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")
-
-    id = request.args.get("id")
-
-    token = request.headers.get("Authorization").split(" ")[1]
-
-    if not valid_token(user, token):
+    if not check_auth():
         return "unauthorized", 401
 
     db = get_db()
@@ -277,20 +245,18 @@ def products_list_get(
     sort: Optional[str] = None,
     order: Optional[str] = None,
 ):  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")  # Extract username from token
-    auth_header = request.headers.get("Authorization")
-    if auth_header is None:
-        return "unauthorized", 401
-    token = auth_header.split(" ")[1]  # Extract token
-
-    if not valid_token(user, token):
+    if not check_auth():
         return "unauthorized", 401
 
     db = get_db()
     cursor = db.cursor()
-    
-    if check_sql_inject_value(name) or check_sql_inject_value(difficulty) or check_sql_inject_value(sort) or check_sql_inject_value(order):
+
+    if (
+        check_sql_inject_value(name)
+        or check_sql_inject_value(difficulty)
+        or check_sql_inject_value(sort)
+        or check_sql_inject_value(order)
+    ):
         return "Invalid input", 400
 
     if (

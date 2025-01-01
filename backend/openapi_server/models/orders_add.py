@@ -156,6 +156,8 @@ class OrdersAdd(Model):
         """
         if comment is not None and len(comment) > 255:
             raise ValueError("Invalid value for `comment`, length must be less than or equal to `255`")  # noqa: E501
+        if comment is not None and not re.search(r'^.*$', comment):  # noqa: E501
+            raise ValueError(r"Invalid value for `comment`, must be a follow pattern or equal to `/^.*$/`")  # noqa: E501
 
         self._comment = comment
 

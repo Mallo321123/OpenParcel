@@ -1,17 +1,11 @@
 from openapi_server.db import get_db, close_db
-from openapi_server.tokenManager import valid_token
-
-from flask import request
-from flask_jwt_extended import jwt_required, get_jwt
+from flask_jwt_extended import jwt_required
+from openapi_server.security import check_auth
 
 
 @jwt_required()
 def dashboard_get():  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")  # Extract username from token
-    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
-    
-    if not valid_token(user, token):
+    if not check_auth():
         return "unauthorized", 401
     
     db = get_db()

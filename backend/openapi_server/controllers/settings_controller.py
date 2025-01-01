@@ -1,27 +1,17 @@
 import connexion
 
-from flask_jwt_extended import jwt_required, get_jwt
-from flask import request
+from flask_jwt_extended import jwt_required
 
 from openapi_server.models.settings import Settings  # noqa: E501
 
 from openapi_server.db import get_db, close_db
-from openapi_server.tokenManager import valid_token
-from openapi_server.permission_check import check_permission
 
-from openapi_server.security import check_sql_inject_json
+from openapi_server.security import check_sql_inject_json, check_auth
 
 @jwt_required()
 def settings_list():  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")  # Extract username from token
-    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
-
-    if not valid_token(user, token):
+    if not check_auth("admin"):
         return "unauthorized", 401
-    
-    if check_permission("admin", user) is False:
-        return "unauthorized", 401     # Only admins can change settings
 
     db = get_db()
     cursor = db.cursor()
@@ -50,15 +40,8 @@ def settings_list():  # noqa: E501
 
 @jwt_required()
 def settings_update():  # noqa: E501
-    jwt_data = get_jwt()
-    user = jwt_data.get("user")  # Extract username from token
-    token = request.headers.get("Authorization").split(" ")[1]  # Extract token
-
-    if not valid_token(user, token):
+    if not check_auth("admin"):
         return "unauthorized", 401
-    
-    if check_permission("admin", user) is False:
-        return "unauthorized", 401     # Only admins can change settings
     
     if connexion.request.is_json:
         settings = Settings.from_dict(connexion.request.get_json())  # noqa: E501
