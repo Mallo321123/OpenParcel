@@ -47,7 +47,8 @@ addEventListener("DOMContentLoaded", async function () {
 		throw new Error("Unbekannter Fehler beim Abrufen der Daten");
 	}
 
-	async function getOrders(limit, page) {
+	async function getOrders(page) {
+		limit = localStorage.getItem("item-limit") || 10;
 		const response = await fetch(
 			`${baseUrl}/api/orders?limit=${limit}&page=${page}`,
 			{
@@ -91,11 +92,13 @@ addEventListener("DOMContentLoaded", async function () {
 		});
 	}
 
-	async function updateOrderList(limit, page = 0) {
+	async function updateOrderList(page = 0) {
 		loading.style.display = "flex";
-		orderList.style.display = "none"; // Bestell-Liste ausblenden
+		orderList.style.display = "none";
 
-		const orders = await getOrders(limit, page);
+		const orders = await getOrders(page);
+
+		limit = localStorage.getItem("item-limit") || 10;
 
 		orderList.innerHTML = "";
 		const visibleOrders = orders.slice(0, limit);
@@ -155,13 +158,14 @@ addEventListener("DOMContentLoaded", async function () {
 
 	orderLimitSelector.addEventListener("change", function () {
 		currentLimit = parseInt(this.value, 10);
-		updateOrderList(currentLimit);
+		localStorage.setItem("item-limit", currentLimit);
+		updateOrderList();
 	});
 
 	data = await getDashboardData();
 	updateDashboard(data);
 
-	updateOrderList(parseInt(orderLimitSelector.value, 10));
+	updateOrderList();
 });
 
 function getCookie(name) {

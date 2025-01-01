@@ -6,9 +6,11 @@ addEventListener("DOMContentLoaded", async function () {
 	searchDifficulty.value = "";
 	searchName.value = "";
 
+	productLimitSelector.value = localStorage.getItem("item-limit") || 10;
+
 	productLimitSelector.addEventListener("change", async function () {
 		productLimit = productLimitSelector.value;
-		localStorage.setItem("itemLimit", productLimit);
+		localStorage.setItem("item-limit", productLimit);
 
 		searchName.value = "";
 		searchDifficulty.value = "";
@@ -23,7 +25,7 @@ addEventListener("DOMContentLoaded", async function () {
 
 	searchDifficulty.addEventListener("change", async function () {
 		const difficulty = searchDifficulty.value;
-		productLimit = localStorage.getItem("itemLimit") || 10;
+		productLimit = localStorage.getItem("item-limit") || 10;
 		products = await searchProducts(productLimit, 0, "", difficulty);
 
 		searchName.value = "";
@@ -33,14 +35,14 @@ addEventListener("DOMContentLoaded", async function () {
 
 	searchName.addEventListener("change", async function () {
 		const name = searchName.value;
-		productLimit = localStorage.getItem("itemLimit") || 10;
+		productLimit = localStorage.getItem("item-limit") || 10;
 		products = await searchProducts(productLimit, 0, name, "");
 
 		searchDifficulty.value = "";
 		updateData(products);
 	});
 
-	productLimit = localStorage.getItem("itemLimit") || 10;
+	productLimit = localStorage.getItem("item-limit") || 10;
 	productLimitSelector.value = productLimit;
 	products = await getProducts(productLimit, 0);
 	updateData(products);
@@ -175,7 +177,7 @@ async function handleSortClick(event) {
 	localStorage.setItem("productSortField", sortField);
 	localStorage.setItem("productSortOrder", sortOrder);
 
-	productLimit = localStorage.getItem("itemLimit") || 10;
+	productLimit = localStorage.getItem("item-limit") || 10;
 
 	if (sortField === null || sortOrder === null) {
 		products = await getProducts(productLimit, 0);

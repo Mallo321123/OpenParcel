@@ -14,7 +14,10 @@ addEventListener("DOMContentLoaded", async function () {
 		updateData();
 	}
 
+	orderLimitSelector.value = localStorage.getItem("item-limit") || 10;
+
 	orderLimitSelector.addEventListener("change", function () {
+		localStorage.setItem("item-limit", this.value);
 		updateData();
 	});
 
@@ -45,10 +48,8 @@ async function updateData() {
 	const searchCustomer = document.getElementById("search-customer").value;
 	const searchShipment = document.getElementById("search-shipmentType").value;
 	const statusSelect = document.getElementById("search-state").value;
-	const currentLimit = parseInt(
-		document.getElementById("order-limit").value,
-		10
-	);
+
+	const currentLimit = localStorage.getItem("item-limit") || 10;
 	const currentPage = 0;
 
 	const sortField = localStorage.getItem("sortField");
