@@ -14,10 +14,10 @@ addEventListener("DOMContentLoaded", async function () {
 	const deleteButton = document.getElementById("deleteOrderButton");
 
 	deleteButton.addEventListener("click", () => {
-        deleteOrder(id).then(() => {
+		deleteOrder(id).then(() => {
 			window.location.href = "orders.html";
 		});
-    });
+	});
 
 	textCustomer.addEventListener("change", function () {
 		textChange();
@@ -62,16 +62,13 @@ addEventListener("DOMContentLoaded", async function () {
 });
 
 async function getOrderData(id) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
 	const response = await fetch(`${baseUrl}/api/orders/info?id=${id}`, {
 		method: "GET",
 		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json"
 		},
 	});
 
@@ -99,16 +96,13 @@ function formatDateForInput(isoDate) {
 }
 
 async function getProductInfo(id) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
 	const response = await fetch(`${baseUrl}/api/products/info?id=${id}`, {
 		method: "GET",
 		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json"
 		},
 	});
 
@@ -125,16 +119,13 @@ async function getProductInfo(id) {
 }
 
 async function deleteOrder(id) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
 	const response = await fetch(`${baseUrl}/api/orders?id=${id}`, {
 		method: "DELETE",
 		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json"
 		},
 	});
 
@@ -153,33 +144,33 @@ async function deleteOrder(id) {
 function buildProductList(order) {
 	const productListElement = document.getElementById("productList");
 
-    // Leere die Produktliste
+	// Leere die Produktliste
 	productListElement.innerHTML = "";
 
-    // Iteriere über die Produkte
+	// Iteriere über die Produkte
 	order.products.forEach(async (product, index) => {
 		const listItem = document.createElement("li");
 		listItem.classList.add("product-item");
 
-        // Hole die Produktinformationen basierend auf der ID
+		// Hole die Produktinformationen basierend auf der ID
 		const productInfo = await getProductInfo(product.id);
 		const productName = productInfo.name;
 
-        // Erstelle den Link für das Produkt
+		// Erstelle den Link für das Produkt
 		const productLink = document.createElement("a");
 		productLink.href = `view-product.html?id=${encodeURIComponent(product.id)}`;
 		productLink.textContent = `${productName} (x${product.count})`;
 
-        // Erstelle den Löschen-Button
+		// Erstelle den Löschen-Button
 		const deleteButton = document.createElement("button");
 		deleteButton.textContent = "❌";
 		deleteButton.classList.add("delete-button");
 		deleteButton.onclick = () => {
-            // Entferne das Produkt aus der Liste
+			// Entferne das Produkt aus der Liste
 			order.products.splice(index, 1);
 			listItem.remove();
 
-            // Lösche nicht benötigte Eigenschaften, falls erforderlich
+			// Lösche nicht benötigte Eigenschaften, falls erforderlich
 			delete order.comment;
 			delete order.customer;
 			delete order.dateAdd;
@@ -187,11 +178,11 @@ function buildProductList(order) {
 			delete order.shipmentType;
 			delete order.state;
 
-            // Speichere die geänderte Bestellung
+			// Speichere die geänderte Bestellung
 			saveOrder(order);
 		};
 
-        // Füge die Elemente zur Liste hinzu
+		// Füge die Elemente zur Liste hinzu
 		listItem.appendChild(deleteButton);
 		listItem.appendChild(productLink);
 
@@ -199,11 +190,8 @@ function buildProductList(order) {
 	});
 }
 
-
 // From here
 async function getProducts(limit = 200, page = 0) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -212,8 +200,7 @@ async function getProducts(limit = 200, page = 0) {
 		{
 			method: "GET",
 			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json"
 			},
 		}
 	);
@@ -296,16 +283,13 @@ async function saveOrder(order) {
 
 	delete order.id;
 
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
 	const response = await fetch(`${baseUrl}/api/orders?id=${id}`, {
 		method: "PUT",
 		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json"
 		},
 		body: JSON.stringify(order),
 	});
@@ -335,7 +319,9 @@ async function addProductToList() {
 	if (productName && productCount > 0) {
 		const productId = findBestMatchId(await buildJsonBomb(), productName);
 
-		const existingProduct = order.products.find((product) => product.id === productId);
+		const existingProduct = order.products.find(
+			(product) => product.id === productId
+		);
 
 		if (existingProduct) {
 			existingProduct.count += productCount;
@@ -360,8 +346,6 @@ async function addProductToList() {
 		alert("Bitte geben Sie einen gültigen Produktnamen und eine Anzahl ein.");
 	}
 }
-
-
 
 async function textChange() {
 	const textCustomer = document.getElementById("customer").value;
@@ -388,4 +372,3 @@ async function handleInputChange(event) {
 	order.state = value;
 	saveOrder(order);
 }
-

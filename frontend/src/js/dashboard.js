@@ -1,6 +1,4 @@
 addEventListener("DOMContentLoaded", async function () {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -34,7 +32,6 @@ addEventListener("DOMContentLoaded", async function () {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
 			},
 		});
 
@@ -56,8 +53,7 @@ addEventListener("DOMContentLoaded", async function () {
 			{
 				method: "GET",
 				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json"
 				},
 			}
 		);
@@ -167,3 +163,12 @@ addEventListener("DOMContentLoaded", async function () {
 
 	updateOrderList(parseInt(orderLimitSelector.value, 10));
 });
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return parts.pop().split(";").shift();
+    }
+    return null;
+  }

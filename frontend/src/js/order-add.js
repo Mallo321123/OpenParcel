@@ -1,6 +1,6 @@
 addEventListener("DOMContentLoaded", async function () {
 	const saveButton = document.getElementById("saveButton");
-    
+
 	document.getElementById("comment").value = "";
 	document.getElementById("customer").value = "";
 	document.getElementById("shipment").value = "";
@@ -16,8 +16,6 @@ addEventListener("DOMContentLoaded", async function () {
 
 // From here
 async function getProducts(limit = 200, page = 0) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -27,7 +25,6 @@ async function getProducts(limit = 200, page = 0) {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
 			},
 		}
 	);
@@ -50,15 +47,12 @@ async function buildJsonBomb() {
 	while (true) {
 		const sections = await getProducts(200, currentPage);
 
-		// Anhängen der Abschnitte an das Ergebnis
 		mergedSections = mergedSections.concat(sections);
 
-		// Wenn weniger als 199 Abschnitte zurückkommen, abbrechen
 		if (sections.length < 199) {
 			break;
 		}
 
-		// Seite erhöhen und erneut anfragen
 		currentPage++;
 	}
 
@@ -105,8 +99,6 @@ function levenshteinDistance(a, b) {
 // To here, the code is a bit shit, and could be a bit more optimized using a special API endpoint, but I am a bit to tired to do this right now, so for now its a bit shitty
 
 async function getProductInfo(id) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -114,7 +106,6 @@ async function getProductInfo(id) {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
 		},
 	});
 
@@ -131,8 +122,6 @@ async function getProductInfo(id) {
 }
 
 async function createOrder() {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -140,7 +129,6 @@ async function createOrder() {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify(order),
 	});

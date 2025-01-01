@@ -1,6 +1,4 @@
 addEventListener("DOMContentLoaded", async function () {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -31,8 +29,7 @@ addEventListener("DOMContentLoaded", async function () {
 		const response = await fetch(`${baseUrl}/api/settings`, {
 			method: "PUT",
 			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json"
 			},
 			body: JSON.stringify(data),
 		});

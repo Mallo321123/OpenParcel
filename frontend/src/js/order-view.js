@@ -47,8 +47,6 @@ addEventListener("DOMContentLoaded", async function () {
 });
 
 async function getOrderData(id) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -56,7 +54,6 @@ async function getOrderData(id) {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
 		},
 	});
 
@@ -73,8 +70,6 @@ async function getOrderData(id) {
 }
 
 async function getProductInfo(id) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -82,7 +77,6 @@ async function getProductInfo(id) {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
 		},
 	});
 
@@ -101,24 +95,19 @@ async function getProductInfo(id) {
 async function displayProducts(order) {
 	const productListElement = document.getElementById("productList");
 
-    // Leere die Produktliste
 	productListElement.innerHTML = "";
 
-    // Iteriere durch die Produkte
 	order.products.forEach(async (product) => {
 		const listItem = document.createElement("li");
 		listItem.classList.add("product-item");
 
-        // Hole Produktinformationen basierend auf der ID
 		const productInfo = await getProductInfo(product.id);
 		const productName = productInfo.name;
 
-        // Erstelle den Link für das Produkt
 		const productLink = document.createElement("a");
 		productLink.href = `view-product.html?id=${encodeURIComponent(product.id)}`;
 		productLink.textContent = `${productName} (x${product.count})`;
 
-        // Füge die Elemente der Liste hinzu
 		listItem.appendChild(productLink);
 		productListElement.appendChild(listItem);
 	});

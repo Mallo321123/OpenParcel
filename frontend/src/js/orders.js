@@ -163,8 +163,6 @@ async function getOrdersSorted(
 	sortField = null,
 	sortOrder = null
 ) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -205,8 +203,7 @@ async function getOrdersSorted(
 	const response = await fetch(url, {
 		method: "GET",
 		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json"
 		},
 	});
 

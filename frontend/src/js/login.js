@@ -11,14 +11,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
   const apiUrl = `${baseUrl}/api/user/login`;
 
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
-  // check for existing token
+  const token = getCookie("access_token");
   if (token) {
     window.location.href = "/dashboard.html";
   }
 
-  // Login-Logic
   async function login(username, password) {
     if (!/^[0-9a-zA-Z]{1,15}$/.test(username)) {
       if (alertMessage) {
@@ -41,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }),
       });
 
-      // Error Handling
       if (!response.ok) {
         if (response.status === 401) {
           throw new Error("Ungültige Anmeldedaten");
@@ -60,8 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = await response.json();
 
       if (data.success) {
-        localStorage.setItem("token", data.token);
-        window.location.href = "/dashboard.html"; // Redirect to dashboard
+        window.location.href = "/dashboard.html";
       } else {
         throw new Error(data.message || "Unbekannter Fehler");
       }
@@ -92,5 +87,22 @@ document.addEventListener("DOMContentLoaded", function () {
       "click",
       togglePasswordVisibility
     );
+  }
+
+  // Funktionen für Cookies
+  function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    const expires = `expires=${date.toUTCString()}`;
+    document.cookie = `${name}=${value}; ${expires}; path=/; Secure; HttpOnly; SameSite=Strict`;
+  }
+
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return parts.pop().split(";").shift();
+    }
+    return null;
   }
 });

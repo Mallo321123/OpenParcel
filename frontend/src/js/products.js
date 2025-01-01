@@ -48,8 +48,6 @@ addEventListener("DOMContentLoaded", async function () {
 const loading = document.getElementById("loading");
 
 async function getProducts(limit, page) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -59,7 +57,6 @@ async function getProducts(limit, page) {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
 			},
 		}
 	);
@@ -73,8 +70,6 @@ async function getProducts(limit, page) {
 }
 
 async function getProductsSorted(limit, page, sortField, sortOrder) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -84,7 +79,6 @@ async function getProductsSorted(limit, page, sortField, sortOrder) {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
 			},
 		}
 	);
@@ -98,8 +92,6 @@ async function getProductsSorted(limit, page, sortField, sortOrder) {
 }
 
 async function searchProducts(limit, page, name, difficulty) {
-	const token =
-		localStorage.getItem("token") || sessionStorage.getItem("token");
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
@@ -119,7 +111,6 @@ async function searchProducts(limit, page, name, difficulty) {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
 		},
 	});
 
