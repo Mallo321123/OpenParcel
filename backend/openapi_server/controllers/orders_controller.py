@@ -337,7 +337,7 @@ def orders_info_get():  # noqa: E501
     else:
         dateClosed = order[3]
 
-    order = OrdersResponse(
+    order = OrdersResponseItem(
         id=order[0],
         customer=order[1],
         date_add=order[2],

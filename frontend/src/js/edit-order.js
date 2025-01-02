@@ -221,7 +221,8 @@ async function buildJsonBomb() {
 	let currentPage = 0;
 
 	while (true) {
-		const sections = await getProducts(200, currentPage);
+		var sections = await getProducts(200, currentPage);
+		sections = sections.items;
 
 		// Anhängen der Abschnitte an das Ergebnis
 		mergedSections = mergedSections.concat(sections);

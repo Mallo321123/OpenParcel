@@ -228,7 +228,7 @@ def products_info_get():  # noqa: E501
     except TypeError:
         customerGroups = []
 
-    product = ProductsResponse(
+    product = ProductsResponseItem(
         id=product[0],
         name=product[1],
         comment=product[2],
