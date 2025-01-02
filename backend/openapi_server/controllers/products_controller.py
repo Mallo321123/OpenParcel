@@ -100,15 +100,18 @@ def products_list(limit=None, page=None):  # noqa: E501
 
     cursor.execute("SELECT COUNT(*) AS total_products FROM products")
     total_items = cursor.fetchone()[0]
+    
+    logging.info(f"offset: {offset}, limit: {limit}, page: {page}")
 
     cursor.execute(
         "SELECT * FROM products ORDER BY id ASC LIMIT %s OFFSET %s", (limit, offset)
     )
-    if cursor.fetchone() is None:
-        logging.warning("No products found in products_list")
-        return "No products found", 404
 
     products = cursor.fetchall()
+    
+    if products is None:
+        logging.warning("No products found in products_list")
+        return "No products found", 404
 
     close_db(db)
 
@@ -127,7 +130,7 @@ def products_list(limit=None, page=None):  # noqa: E501
             build_time=products[i][5],
         )
 
-    response = {"items": products, "total": total_items}
+    response = {"items": products, "total": total_items-1}
 
     return response, 200
 
