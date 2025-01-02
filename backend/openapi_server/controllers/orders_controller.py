@@ -2,6 +2,7 @@ import connexion
 
 from openapi_server.models.orders_add import OrdersAdd  # noqa: E501
 from openapi_server.models.orders_response import OrdersResponse
+from openapi_server.models.orders_response_item import OrdersResponseItem
 from openapi_server.models.orders_change import OrdersChange
 
 from openapi_server.db import get_db, close_db
@@ -24,6 +25,7 @@ from openapi_server.config import get_logging
 
 logging = get_logging()
 
+
 @jwt_required()
 def orders_delete():  # noqa: E501
     if not check_auth("orders"):
@@ -43,7 +45,7 @@ def orders_delete():  # noqa: E501
     cursor.execute("DELETE FROM orders WHERE id = %s", (id,))
     db.commit()
     close_db(db)
-    
+
     logging.info(f"Order {id} deleted")
     return "Order deleted", 200
 
@@ -56,7 +58,10 @@ def orders_get(limit=None, page=None):  # noqa: E501
     db = get_db()
     cursor = db.cursor()
 
-    offset = limit * page
+    offset = limit * page if limit and page else 0
+
+    cursor.execute("SELECT COUNT(*) AS total_orders FROM orders")
+    total_items = cursor.fetchone()[0]
 
     cursor.execute(
         "SELECT * FROM orders ORDER BY id DESC LIMIT %s OFFSET %s", (limit, offset)
@@ -64,25 +69,27 @@ def orders_get(limit=None, page=None):  # noqa: E501
     orders = cursor.fetchall()
     close_db(db)
 
-    for i in range(len(orders)):
-        if orders[i][3] is None:
-            dateClosed = "-"
-        else:
-            dateClosed = orders[i][3]
+    items = []
+    for order in orders:
+        date_closed = order[3] if order[3] is not None else "-"
+        products = json.loads(order[4].replace("'", '"'))
 
-        products_str = orders[i][4]
+        item = {
+            "id": order[0],
+            "customer": order[1],
+            "dateAdd": order[2],
+            "dateClosed": date_closed,
+            "comment": order[5],
+            "products": products,
+            "state": order[6],
+            "shipmentType": order[7],
+        }
+        items.append(item)
 
-        orders[i] = OrdersResponse(
-            id=orders[i][0],
-            customer=orders[i][1],
-            date_add=orders[i][2],
-            date_closed=dateClosed,
-            comment=orders[i][5],
-            products=json.loads(products_str.replace("'", '"')),
-            state=orders[i][6],
-            shipment_type=orders[i][7],
-        )
-    return jsonify(orders), 200
+    # JSON-Response erstellen
+    response = {"items": items, "totalItems": total_items}
+
+    return jsonify(response), 200
 
 
 @jwt_required()
@@ -188,6 +195,11 @@ def orders_put(orders_change=None):  # noqa: E501
     return "invalid request", 400
 
 
+from flask import jsonify
+from flask_jwt_extended import jwt_required
+from typing import Optional
+import json
+
 @jwt_required()
 def orders_list_get(
     limit,
@@ -204,7 +216,7 @@ def orders_list_get(
     db = get_db()
     cursor = db.cursor()
 
-    offset = limit * page
+    offset = limit * page if limit and page else 0
 
     if (
         check_sql_inject_value(state)
@@ -253,8 +265,16 @@ def orders_list_get(
     set_clause = " AND ".join([f"{key} = %s" for key in query_fields.keys()])
     values = list(query_fields.values())
 
+    # Get total items count
+    count_query = "SELECT COUNT(*) AS total_orders FROM orders"
+    if set_clause:
+        count_query += f" WHERE {set_clause}"
+
+    cursor.execute(count_query, values)
+    total_items = cursor.fetchone()[0]
+
     # Build the final query
-    query = "SELECT * FROM orders"
+    query = "SELECT id, customer, addDate, closeDate, products, comment, state, shipmentType FROM orders"
     if set_clause:
         query += f" WHERE {set_clause}"
 
@@ -270,26 +290,31 @@ def orders_list_get(
     close_db(db)
 
     # Process the results
-    for i in range(len(orders)):
-        if orders[i][3] is None:
-            dateClosed = "-"
-        else:
-            dateClosed = orders[i][3]
+    items = []
+    for order in orders:
+        date_closed = order[3] if order[3] is not None else "-"
+        products = json.loads(order[4].replace("'", '"'))
 
-        products_str = orders[i][4]
+        item = {
+            "id": order[0],
+            "customer": order[1],
+            "dateAdd": order[2],
+            "dateClosed": date_closed,
+            "comment": order[5],
+            "products": products,
+            "state": order[6],
+            "shipmentType": order[7],
+        }
+        items.append(item)
 
-        orders[i] = OrdersResponse(
-            id=orders[i][0],
-            customer=orders[i][1],
-            date_add=orders[i][2],
-            date_closed=dateClosed,
-            comment=orders[i][5],
-            products=json.loads(products_str.replace("'", '"')),
-            state=orders[i][6],
-            shipment_type=orders[i][7],
-        )
+    # JSON-Response erstellen
+    response = {
+        "items": items,
+        "totalItems": total_items
+    }
 
-    return orders, 200
+    return jsonify(response), 200
+
 
 
 @jwt_required()

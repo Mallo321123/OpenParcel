@@ -14,8 +14,10 @@ from openapi_server.models.order_products import OrderProducts
 from openapi_server.models.orders_add import OrdersAdd
 from openapi_server.models.orders_change import OrdersChange
 from openapi_server.models.orders_response import OrdersResponse
+from openapi_server.models.orders_response_item import OrdersResponseItem
 from openapi_server.models.products import Products
 from openapi_server.models.products_response import ProductsResponse
+from openapi_server.models.products_update import ProductsUpdate
 from openapi_server.models.security_controller_login200_response import SecurityControllerLogin200Response
 from openapi_server.models.security_controller_login_request import SecurityControllerLoginRequest
 from openapi_server.models.settings import Settings
