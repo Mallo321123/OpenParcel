@@ -19,7 +19,6 @@ services:
       - SECRET_KEY=cPpkbCFceAnqhJkt
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - LOGIN_REQUIRED=true
       - DEV_SERVER=true
     depends_on:
       - mysql
