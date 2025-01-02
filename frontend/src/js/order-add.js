@@ -127,10 +127,13 @@ async function createOrder() {
 	const currentUrl = window.location.href;
 	const baseUrl = currentUrl.split("/").slice(0, 3).join("/");
 
+	const csrf_token = getCookie("csrf_token")
+
 	const response = await fetch(`${baseUrl}/api/orders`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
+			"X-CSRF-Token": csrf_token,
 		},
 		body: JSON.stringify(order),
 	});
@@ -250,4 +253,13 @@ async function addProductToList() {
 	} else {
 		alert("Bitte geben Sie einen gültigen Produktnamen und eine Anzahl ein.");
 	}
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+        return parts.pop().split(";").shift();
+    }
+    return null;
 }
