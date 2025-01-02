@@ -637,7 +637,6 @@ paths:
           - hold
           - closed
           maxLength: 20
-          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       - description: customer
@@ -656,7 +655,6 @@ paths:
         required: false
         schema:
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       - description: Sort by
@@ -673,7 +671,6 @@ paths:
           - addDate
           - closeDate
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       - description: Sort order
@@ -686,7 +683,6 @@ paths:
           - asc
           - desc
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       responses:
@@ -924,7 +920,6 @@ paths:
         required: false
         schema:
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       - description: difficulty of the product
@@ -952,7 +947,6 @@ paths:
           - name
           - difficulty
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       - description: Sort order
@@ -965,7 +959,6 @@ paths:
           - asc
           - desc
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       responses:
@@ -1095,7 +1088,6 @@ paths:
         required: true
         schema:
           maxLength: 20
-          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       responses:
@@ -1136,7 +1128,6 @@ paths:
         required: true
         schema:
           maxLength: 20
-          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       responses:
@@ -1215,7 +1206,6 @@ paths:
         required: true
         schema:
           maxLength: 20
-          pattern: "^[0-9a-zA-Z]+$"
           type: string
         style: form
       requestBody:
@@ -1390,7 +1380,6 @@ components:
         message:
           example: Updated
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           title: message
           type: string
       title: Updated
@@ -1403,7 +1392,6 @@ components:
         message:
           example: Not Found
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           title: message
           type: string
       title: NotFound
@@ -1416,7 +1404,6 @@ components:
         message:
           example: Too Many Requests
           maxLength: 255
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
           title: message
           type: string
       title: TooManyRequests
@@ -1429,7 +1416,6 @@ components:
         message:
           example: Created
           maxLength: 255
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
           title: message
           type: string
       title: Created
@@ -1442,7 +1428,6 @@ components:
         message:
           example: Successful operation
           maxLength: 255
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
           title: message
           type: string
       title: SuccessfulResponse
@@ -1455,7 +1440,6 @@ components:
         message:
           example: Invalid Request
           maxLength: 255
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
           title: message
           type: string
       title: InvalidRequest
@@ -1468,7 +1452,6 @@ components:
         message:
           example: Internal Server Error
           maxLength: 255
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
           title: message
           type: string
       title: InternalServerError
@@ -1481,7 +1464,6 @@ components:
         message:
           example: Unathorized
           maxLength: 255
-          pattern: "^example-[0-9a-z]+$^example-[0-9a-z]+$^example-[0-9a-z]+$"
           title: message
           type: string
       title: Unathorized
@@ -1618,7 +1600,6 @@ components:
           type: string
         comment:
           maxLength: 255
-          pattern: ^.*$
           title: comment
           type: string
         shipmentType:
@@ -1763,12 +1744,10 @@ components:
           type: string
         comment:
           maxLength: 255
-          pattern: ^.*$
           title: comment
           type: string
         shipmentType:
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           title: shipmentType
           type: string
       title: Orders_response_item
@@ -1820,12 +1799,10 @@ components:
           type: string
         comment:
           maxLength: 255
-          pattern: ^.*$
           title: comment
           type: string
         shipmentType:
           maxLength: 255
-          pattern: "^[0-9a-zA-Z]+$"
           title: shipmentType
           type: string
       title: Orders_change
@@ -1846,31 +1823,26 @@ components:
         username:
           example: theUser
           maxLength: 15
-          pattern: "^[0-9a-zA-Z]+$"
           title: username
           type: string
         firstName:
           example: John
           maxLength: 20
-          pattern: "^[a-zA-Z]+$"
           title: firstName
           type: string
         lastName:
           example: James
           maxLength: 20
-          pattern: "^[a-zA-Z]+$"
           title: lastName
           type: string
         email:
           example: john@email.com
           maxLength: 100
-          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
           title: email
           type: string
         password:
           example: "12345"
           maxLength: 255
-          pattern: ^.*$
           title: password
           type: string
         userStatus:
@@ -1912,25 +1884,20 @@ components:
         firstName:
           example: John
           maxLength: 20
-          pattern: "^[a-zA-Z]+$"
           title: firstName
           type: string
         lastName:
           example: James
           maxLength: 20
-          pattern: "^[a-zA-Z]+$"
           title: lastName
           type: string
         email:
           example: john@email.com
           maxLength: 100
-          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
           title: email
           type: string
         password:
           example: "12345"
-          maxLength: 255
-          pattern: ^.*$
           title: password
           type: string
         userStatus:
@@ -1980,25 +1947,21 @@ components:
         username:
           example: theUser
           maxLength: 15
-          pattern: "^[0-9a-zA-Z]+$"
           title: username
           type: string
         firstName:
           example: John
           maxLength: 20
-          pattern: "^[a-zA-Z]+$"
           title: firstName
           type: string
         lastName:
           example: James
           maxLength: 20
-          pattern: "^[a-zA-Z]+$"
           title: lastName
           type: string
         email:
           example: john@email.com
           maxLength: 100
-          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
           title: email
           type: string
         userStatus:
@@ -2235,7 +2198,6 @@ components:
         name:
           example: regal rechts
           maxLength: 255
-          pattern: "^example-[0-9a-z]"
           title: name
           type: string
       title: Groups
@@ -2256,7 +2218,6 @@ components:
         name:
           example: regal rechts
           maxLength: 255
-          pattern: "^example-[0-9a-z]"
           title: name
           type: string
       title: Groups_response
@@ -2281,14 +2242,11 @@ components:
         adress:
           example: wled1.local
           maxLength: 255
-          pattern: "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^([a-zA-Z0-9-]+\\\
-            .)+[a-zA-Z]{2,}$"
           title: adress
           type: string
         comment:
           example: example comment
           maxLength: 65535
-          pattern: "^[0-9a-z]+$"
           title: comment
           type: string
       title: Lights
@@ -2322,14 +2280,11 @@ components:
         adress:
           example: wled1.local
           maxLength: 255
-          pattern: "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^([a-zA-Z0-9-]+\\\
-            .)+[a-zA-Z]{2,}$"
           title: adress
           type: string
         comment:
           example: example comment
           maxLength: 65535
-          pattern: "^[0-9a-z]+$"
           title: comment
           type: string
         online:
@@ -2363,7 +2318,6 @@ components:
         name:
           example: blinky
           maxLength: 255
-          pattern: "^example-[0-9a-z]"
           title: name
           type: string
         productId:
@@ -2394,13 +2348,11 @@ components:
         username:
           example: theUser
           maxLength: 15
-          pattern: "^[0-9a-z]"
           title: username
           type: string
         password:
           example: "12345"
           maxLength: 255
-          pattern: ^.*$
           title: password
           type: string
       required:
@@ -2423,7 +2375,6 @@ components:
           type: boolean
         token:
           maxLength: 255
-          pattern: "^[\\w-]*\\.[\\w-]*\\.[\\w-]*$"
           title: token
           type: string
       title: security_controller_login_200_response
