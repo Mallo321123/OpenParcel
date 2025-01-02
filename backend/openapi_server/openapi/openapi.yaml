@@ -1771,7 +1771,7 @@ components:
           pattern: "^[0-9a-zA-Z]+$"
           title: shipmentType
           type: string
-      title: Orders_response
+      title: Orders_response_item
       type: object
     Orders_change:
       additionalProperties: false
@@ -2071,6 +2071,67 @@ components:
     Products_response:
       additionalProperties: false
       example:
+        totalItems: 100
+        items:
+        - difficulty: 3
+          customerGroups:
+          - adults
+          - nerds
+          buildTime: 20-30 min
+          name: openDTU
+          comment: example comment
+          id: 1
+        - difficulty: 3
+          customerGroups:
+          - adults
+          - nerds
+          buildTime: 20-30 min
+          name: openDTU
+          comment: example comment
+          id: 1
+        - difficulty: 3
+          customerGroups:
+          - adults
+          - nerds
+          buildTime: 20-30 min
+          name: openDTU
+          comment: example comment
+          id: 1
+        - difficulty: 3
+          customerGroups:
+          - adults
+          - nerds
+          buildTime: 20-30 min
+          name: openDTU
+          comment: example comment
+          id: 1
+        - difficulty: 3
+          customerGroups:
+          - adults
+          - nerds
+          buildTime: 20-30 min
+          name: openDTU
+          comment: example comment
+          id: 1
+      properties:
+        totalItems:
+          example: 100
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          title: totalItems
+          type: integer
+        items:
+          items:
+            $ref: '#/components/schemas/Products_response_item'
+          maxItems: 200
+          title: items
+          type: array
+      title: Products_response
+      type: object
+    Products_response_item:
+      additionalProperties: false
+      example:
         difficulty: 3
         customerGroups:
         - adults
@@ -2119,7 +2180,7 @@ components:
           maxItems: 100
           title: customerGroups
           type: array
-      title: Products_response
+      title: Products_response_item
       type: object
     Products_update:
       additionalProperties: false

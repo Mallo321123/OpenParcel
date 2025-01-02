@@ -1,6 +1,7 @@
 import connexion
 from openapi_server.models.products import Products  # noqa: E501
 from openapi_server.models.products_response import ProductsResponse  # noqa: E501
+from openapi_server.models.products_response_item import ProductsResponseItem
 
 from openapi_server.db import get_db, close_db
 from flask_jwt_extended import jwt_required
@@ -71,7 +72,7 @@ def products_delete():  # noqa: E501
 
     db = get_db()
     cursor = db.cursor()
-    
+
     id = request.args.get("id")
 
     cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
@@ -97,13 +98,16 @@ def products_list(limit=None, page=None):  # noqa: E501
 
     offset = limit * page
 
+    cursor.execute("SELECT COUNT(*) AS total_products FROM products")
+    total_items = cursor.fetchone()[0]
+
     cursor.execute(
         "SELECT * FROM products ORDER BY id ASC LIMIT %s OFFSET %s", (limit, offset)
     )
     if cursor.fetchone() is None:
         logging.warning("No products found in products_list")
         return "No products found", 404
-    
+
     products = cursor.fetchall()
 
     close_db(db)
@@ -114,7 +118,7 @@ def products_list(limit=None, page=None):  # noqa: E501
         except TypeError:
             customerGroups = []
 
-        products[i] = ProductsResponse(
+        products[i] = ProductsResponseItem(
             id=products[i][0],
             name=products[i][1],
             comment=products[i][2],
@@ -123,7 +127,9 @@ def products_list(limit=None, page=None):  # noqa: E501
             build_time=products[i][5],
         )
 
-    return products, 200
+    response = {"items": products, "total": total_items}
+
+    return response, 200
 
 
 @jwt_required()
@@ -208,7 +214,7 @@ def products_info_get():  # noqa: E501
     id = request.args.get("id")
 
     cursor.execute("SELECT * FROM products WHERE id = %s", (id,))
-    
+
     product = cursor.fetchone()
 
     close_db(db)
@@ -270,19 +276,25 @@ def products_list_get(
     offset = limit * page
 
     if name is not None:
-        cursor.execute("SELECT * FROM products")
+        cursor.execute("SELECT COUNT(*) AS total_products FROM products")
+        total_items = cursor.fetchone()[0]
         
+        cursor.execute("SELECT * FROM products")
+
         products = cursor.fetchall()
 
         sorted_products = sort_by_similarity(products, name)
         products = sorted_products[offset : offset + limit]
 
     elif difficulty is not None:
+        cursor.execute("SELECT COUNT(*) AS total_products FROM products WHERE difficulty = %s", (difficulty,))
+        total_items = cursor.fetchone()[0]
+        
         cursor.execute(
             "SELECT * FROM products WHERE difficulty = %s LIMIT %s OFFSET %s",
             (difficulty, limit, offset),
         )
-        
+
         products = cursor.fetchall()
 
     elif sort is not None and order is not None:
@@ -294,6 +306,9 @@ def products_list_get(
             or order.lower() not in ALLOWED_ORDER_DIRECTIONS
         ):
             return "Invalid sort or order parameter", 400
+        
+        cursor.execute("SELECT COUNT(*) AS total_products FROM products")
+        total_items = cursor.fetchone()[0]
 
         query = (
             f"SELECT * FROM products ORDER BY {sort} {order.upper()} LIMIT %s OFFSET %s"
@@ -310,6 +325,9 @@ def products_list_get(
             or order.lower() not in ALLOWED_ORDER_DIRECTIONS
         ):
             return "Invalid sort or order parameter", 400
+        
+        cursor.execute("SELECT COUNT(*) AS total_products FROM products WHERE difficulty = %s", (difficulty,))
+        total_items = cursor.fetchone()[0]
 
         query = (
             f"SELECT * FROM products WHERE difficulty = %s ORDER BY {sort} {order.upper()} "
@@ -321,7 +339,7 @@ def products_list_get(
         return "Invalid input", 400
 
     close_db(db)
-    
+
     if products is None:
         logging.warning("No products found in products_list_get")
         return "No products found", 404
@@ -331,7 +349,7 @@ def products_list_get(
             customerGroups = json.loads(products[i][3])
         except TypeError:
             customerGroups = []
-        products[i] = ProductsResponse(
+        products[i] = ProductsResponseItem(
             id=products[i][0],
             name=products[i][1],
             comment=products[i][2],
@@ -339,5 +357,7 @@ def products_list_get(
             difficulty=products[i][4],
             build_time=products[i][5],
         )
+        
+    response = {"items": products, "total": total_items}
 
-    return products, 200
+    return response, 200

@@ -195,11 +195,6 @@ def orders_put(orders_change=None):  # noqa: E501
     return "invalid request", 400
 
 
-from flask import jsonify
-from flask_jwt_extended import jwt_required
-from typing import Optional
-import json
-
 @jwt_required()
 def orders_list_get(
     limit,
@@ -308,13 +303,9 @@ def orders_list_get(
         items.append(item)
 
     # JSON-Response erstellen
-    response = {
-        "items": items,
-        "totalItems": total_items
-    }
+    response = {"items": items, "totalItems": total_items}
 
     return jsonify(response), 200
-
 
 
 @jwt_required()
