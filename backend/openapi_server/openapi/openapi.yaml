@@ -76,7 +76,6 @@ paths:
         default:
           description: Too Many Requests
       security:
-      
       - cookieAuth: []
       summary: delete a light
       tags:
@@ -127,7 +126,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: list lights
       tags:
@@ -152,7 +150,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: add light device
       tags:
@@ -179,7 +176,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: change light device
       tags:
@@ -213,7 +209,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: delete a light group
       tags:
@@ -264,7 +259,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: list all light groups
       tags:
@@ -289,7 +283,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: add light group
       tags:
@@ -323,7 +316,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: delete a mapper
       tags:
@@ -374,7 +366,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: list all mappings
       tags:
@@ -400,7 +391,6 @@ paths:
           description: default
       security:
       - cookieAuth: []
-      
       summary: add a light - product mapping
       tags:
       - lights
@@ -426,7 +416,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: change a light - product mapping
       tags:
@@ -460,7 +449,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: delete a order
       tags:
@@ -497,10 +485,7 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/Orders_response'
-                maxItems: 200
-                type: array
+                $ref: '#/components/schemas/Orders_response'
           description: successful operation
         "401":
           description: Unathorized
@@ -511,7 +496,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: list all orders
       tags:
@@ -535,7 +519,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: add an order
       tags:
@@ -573,7 +556,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: update an order
       tags:
@@ -600,7 +582,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Orders_response'
+                $ref: '#/components/schemas/Orders_response_item'
           description: successful operation
         "401":
           description: Unathorized
@@ -611,7 +593,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: order information
       tags:
@@ -713,10 +694,7 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/Orders_response'
-                maxItems: 200
-                type: array
+                $ref: '#/components/schemas/Orders_response'
           description: successful operation
         "401":
           description: Unathorized
@@ -727,7 +705,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: list orders
       tags:
@@ -761,7 +738,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: delete a product
       tags:
@@ -812,7 +788,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: list of products
       tags:
@@ -836,7 +811,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: add a product
       tags:
@@ -911,7 +885,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: product information
       tags:
@@ -1014,7 +987,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       tags:
       - products
@@ -1045,7 +1017,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: display settings
       tags:
@@ -1088,7 +1059,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: update settings
       tags:
@@ -1108,7 +1078,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: valid token
       tags:
@@ -1151,7 +1120,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: Delete user
       tags:
@@ -1193,7 +1161,6 @@ paths:
         default:
           description: default
       security:
-      
       - cookieAuth: []
       summary: Get user by user name
       tags:
@@ -1291,7 +1258,6 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
           description: Internal Server Error
       security:
-      
       - cookieAuth: []
       summary: Update user
       tags:
@@ -1341,7 +1307,6 @@ paths:
                 $ref: '#/components/schemas/Unathorized'
           description: Unauthorized
       security:
-      
       - cookieAuth: []
       summary: list users
       tags:
@@ -1410,7 +1375,6 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
           description: Internal Server Error
       security:
-      
       - cookieAuth: []
       summary: Logs out current logged in user session
       tags:
@@ -1664,6 +1628,87 @@ components:
       title: Orders_add
       type: object
     Orders_response:
+      additionalProperties: false
+      example:
+        totalItems: 100
+        items:
+        - dateAdd: 2024-12-26 23:58:48.260781
+          id: 5610
+          state: open
+          dateClosed: 2024-12-26 23:58:48.260781
+          customer: Max Mustermann
+          products:
+          - id: 101
+            count: 1
+          - id: 42
+            count: 1
+          comment: Example comment
+          shipmentType: DHL
+        - dateAdd: 2024-12-26 23:58:48.260781
+          id: 5610
+          state: open
+          dateClosed: 2024-12-26 23:58:48.260781
+          customer: Max Mustermann
+          products:
+          - id: 101
+            count: 1
+          - id: 42
+            count: 1
+          comment: Example comment
+          shipmentType: DHL
+        - dateAdd: 2024-12-26 23:58:48.260781
+          id: 5610
+          state: open
+          dateClosed: 2024-12-26 23:58:48.260781
+          customer: Max Mustermann
+          products:
+          - id: 101
+            count: 1
+          - id: 42
+            count: 1
+          comment: Example comment
+          shipmentType: DHL
+        - dateAdd: 2024-12-26 23:58:48.260781
+          id: 5610
+          state: open
+          dateClosed: 2024-12-26 23:58:48.260781
+          customer: Max Mustermann
+          products:
+          - id: 101
+            count: 1
+          - id: 42
+            count: 1
+          comment: Example comment
+          shipmentType: DHL
+        - dateAdd: 2024-12-26 23:58:48.260781
+          id: 5610
+          state: open
+          dateClosed: 2024-12-26 23:58:48.260781
+          customer: Max Mustermann
+          products:
+          - id: 101
+            count: 1
+          - id: 42
+            count: 1
+          comment: Example comment
+          shipmentType: DHL
+      properties:
+        totalItems:
+          example: 100
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          title: totalItems
+          type: integer
+        items:
+          items:
+            $ref: '#/components/schemas/Orders_response_item'
+          maxItems: 200
+          title: items
+          type: array
+      title: Orders_response
+      type: object
+    Orders_response_item:
       additionalProperties: false
       example:
         dateAdd: 2024-12-26 23:58:48.260781

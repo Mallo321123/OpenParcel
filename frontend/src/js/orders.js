@@ -39,10 +39,14 @@ addEventListener("DOMContentLoaded", async function () {
 		this.localStorage.setItem("search-state", null);
 	}
 
-	updateData();
+	await updateData();
+	renderPagination();
 });
 
 const loading = document.getElementById("loading");
+let totalOrders = 1;
+let currentPage = 0;
+let currentLimit = 10;
 
 async function updateData() {
 	const searchCustomer = document.getElementById("search-customer").value;
@@ -50,7 +54,6 @@ async function updateData() {
 	const statusSelect = document.getElementById("search-state").value;
 
 	const currentLimit = localStorage.getItem("item-limit") || 10;
-	const currentPage = 0;
 
 	const sortField = localStorage.getItem("sortField");
 	const sortOrder = localStorage.getItem("sortOrder");
@@ -75,19 +78,20 @@ async function updateData() {
 		sortOrder
 	);
 
-	updateOrderList(orders, currentLimit);
+	totalOrders = await orders.totalItems;
+
+	updateOrderList(await orders);
 }
 
-async function updateOrderList(orders, limit) {
+async function updateOrderList(orders) {
 	const orderList = document.querySelector(".order-list");
 
 	loading.style.display = "flex";
 	orderList.style.display = "none";
 
 	orderList.innerHTML = "";
-	const visibleOrders = orders.slice(0, limit);
 
-	visibleOrders.forEach((order) => {
+	orders.items.forEach((order) => {
 		const orderItem = document.createElement("div");
 
 		let stateClass = "";
@@ -223,3 +227,46 @@ async function getOrdersSorted(
 function handleInputChange() {
 	updateData();
 }
+
+function renderPagination() {
+	const pagination = document.getElementById("pagination");
+	pagination.innerHTML = "";
+
+	var totalPages =  Math.ceil(totalOrders / currentLimit);
+
+	console.log("totalPages: ", totalPages, "totalOrders: ", totalOrders, "currentLimit: ", currentLimit);
+  
+	const prevButton = document.createElement("button");
+	prevButton.textContent = "«";
+	prevButton.disabled = currentPage === 0;
+	prevButton.addEventListener("click", () => {
+	  currentPage--;
+	  updateData();
+	  renderPagination();
+	});
+	pagination.appendChild(prevButton);
+  
+	// Seitenzahlen
+	for (let i = 1; i <= totalPages; i++) {
+	  const pageButton = document.createElement("button");
+	  pageButton.textContent = i;
+	  pageButton.classList.toggle("active", i-1 === currentPage);
+	  pageButton.addEventListener("click", () => {
+		currentPage = i-1;
+		updateData();
+		renderPagination();
+	  });
+	  pagination.appendChild(pageButton);
+	}
+  
+	// Nächste Seite
+	const nextButton = document.createElement("button");
+	nextButton.textContent = "»";
+	nextButton.disabled = currentPage === totalPages;
+	nextButton.addEventListener("click", () => {
+	  currentPage++;
+	  updateData();
+	  renderPagination();
+	});
+	pagination.appendChild(nextButton);
+  }

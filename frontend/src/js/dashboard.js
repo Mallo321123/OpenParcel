@@ -101,9 +101,8 @@ addEventListener("DOMContentLoaded", async function () {
 		limit = localStorage.getItem("item-limit") || 10;
 
 		orderList.innerHTML = "";
-		const visibleOrders = orders.slice(0, limit);
 
-		visibleOrders.forEach((order) => {
+		orders.items.forEach((order) => {
 			const orderItem = document.createElement("div");
 
 			let stateClass = "";
