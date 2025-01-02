@@ -1,22 +1,24 @@
 addEventListener("DOMContentLoaded", async function () {
-	const productLimitSelector = document.getElementById("product-limit");
+	const currentLimitSelector = document.getElementById("product-limit");
 	const searchName = document.getElementById("search-name");
 	const searchDifficulty = document.getElementById("search-difficulty");
 
 	searchDifficulty.value = "";
 	searchName.value = "";
 
-	productLimitSelector.value = localStorage.getItem("item-limit") || 10;
+	currentLimitSelector.value = localStorage.getItem("item-limit") || 10;
 
-	productLimitSelector.addEventListener("change", async function () {
-		productLimit = productLimitSelector.value;
-		localStorage.setItem("item-limit", productLimit);
+	currentLimitSelector.addEventListener("change", async function () {
+		currentLimit = currentLimitSelector.value;
+		localStorage.setItem("item-limit", currentLimit);
 
 		searchName.value = "";
 		searchDifficulty.value = "";
 
-		products = await getProducts(productLimit, 0);
+		products = await getProducts(currentLimit, currentPage);
+		totalProducts = products.total;
 		updateData(products);
+		renderPagination();
 	});
 
 	document.querySelectorAll(".sort-controls").forEach((button) => {
@@ -24,30 +26,44 @@ addEventListener("DOMContentLoaded", async function () {
 	});
 
 	searchDifficulty.addEventListener("change", async function () {
-		const difficulty = searchDifficulty.value;
-		productLimit = localStorage.getItem("item-limit") || 10;
-		products = await searchProducts(productLimit, 0, "", difficulty);
+		difficulty = searchDifficulty.value;
+		searchName = "";
+		currentLimit = localStorage.getItem("item-limit") || 10;
+		products = await searchProducts(currentLimit, currentPage, "", difficulty);
 
 		searchName.value = "";
+		totalProducts = products.total;
 
 		updateData(products);
+		renderPagination();
 	});
 
 	searchName.addEventListener("change", async function () {
-		const name = searchName.value;
-		productLimit = localStorage.getItem("item-limit") || 10;
-		products = await searchProducts(productLimit, 0, name, "");
+		searchName = searchName.value;
+		difficulty = "";
+		currentLimit = localStorage.getItem("item-limit") || 10;
+		products = await searchProducts(currentLimit, currentPage, searchName, "");
 
 		searchDifficulty.value = "";
+		totalProducts = products.total;
 		updateData(products);
+		renderPagination();
 	});
 
-	productLimit = localStorage.getItem("item-limit") || 10;
-	productLimitSelector.value = productLimit;
-	products = await getProducts(productLimit, 0);
+	currentLimit = localStorage.getItem("item-limit") || 10;
+	currentLimitSelector.value = currentLimit;
+	products = await getProducts(currentLimit, 0);
+	totalProducts = products.total;
+
 	updateData(products);
+	renderPagination();
 });
 const loading = document.getElementById("loading");
+let totalProducts = 1;
+let currentPage = 0;
+let currentLimit = 10;
+let difficulty = "";
+let searchName = "";
 
 async function getProducts(limit, page) {
 	const currentUrl = window.location.href;
@@ -132,7 +148,7 @@ async function updateData(products) {
 
 	productList.innerHTML = "";
 
-	products.forEach((product) => {
+	products.items.forEach((product) => {
 		const productItem = document.createElement("div");
 		productItem.classList.add("product-item");
 
@@ -177,14 +193,74 @@ async function handleSortClick(event) {
 	localStorage.setItem("productSortField", sortField);
 	localStorage.setItem("productSortOrder", sortOrder);
 
-	productLimit = localStorage.getItem("item-limit") || 10;
+	currentLimit = localStorage.getItem("item-limit") || 10;
 
 	if (sortField === null || sortOrder === null) {
-		products = await getProducts(productLimit, 0);
+		products = await getProducts(currentLimit, 0);
 		updateData(products);
 		return;
 	}
 
-	products = await getProductsSorted(productLimit, 0, sortField, sortOrder);
+	products = await getProductsSorted(currentLimit, 0, sortField, sortOrder);
 	updateData(products);
+}
+
+async function renderPagination() {
+	const pagination = document.getElementById("pagination");
+	pagination.innerHTML = "";
+
+	var totalPages = Math.ceil(totalProducts / currentLimit);
+
+	const prevButton = document.createElement("button");
+	prevButton.textContent = "«";
+	prevButton.disabled = currentPage === 0;
+	prevButton.addEventListener("click", async () => {
+		currentPage--;
+		products = await searchProducts(
+			currentLimit,
+			currentPage,
+			searchName,
+			difficulty
+		);
+		updateData(products);
+		totalProducts = products.total;
+		renderPagination();
+	});
+	pagination.appendChild(prevButton);
+
+	for (let i = 1; i <= totalPages; i++) {
+		const pageButton = document.createElement("button");
+		pageButton.textContent = i;
+		pageButton.classList.toggle("active", i - 1 === currentPage);
+		pageButton.addEventListener("click", async () => {
+			currentPage = i - 1;
+			products = await searchProducts(
+				currentLimit,
+				currentPage,
+				searchName,
+				difficulty
+			);
+			updateData(products);
+			totalProducts = products.total;
+			renderPagination();
+		});
+		pagination.appendChild(pageButton);
+	}
+
+	const nextButton = document.createElement("button");
+	nextButton.textContent = "»";
+	nextButton.disabled = currentPage === totalPages;
+	nextButton.addEventListener("click", async () => {
+		currentPage++;
+		products = await searchProducts(
+			currentLimit,
+			currentPage,
+			searchName,
+			difficulty
+		);
+		updateData(products);
+		totalProducts = products.total;
+		renderPagination();
+	});
+	pagination.appendChild(nextButton);
 }
