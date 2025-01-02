@@ -8,9 +8,9 @@
 }
 
 .add-order-button {
-  margin-right: auto;
-  display: flex;
-  align-items: center;
+	margin-right: auto;
+	display: flex;
+	align-items: center;
 }
 
 .order-head {
@@ -23,18 +23,18 @@
 }
 
 .order-head button {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  background-color: #3cff00;
-  color: #000000;
-  cursor: pointer;
-  align-content: left;
-  transition: background-color 0.3s;
+	padding: 5px 10px;
+	border: none;
+	border-radius: 4px;
+	background-color: #3cff00;
+	color: #000000;
+	cursor: pointer;
+	align-content: left;
+	transition: background-color 0.3s;
 }
 
 .order-head button:hover {
-  background-color: #00ff00;
+	background-color: #00ff00;
 }
 
 .order-head select {
@@ -272,7 +272,7 @@
 }
 
 .search-container input {
-  caret-color: auto;
+	caret-color: auto;
 }
 
 #search-field-container {

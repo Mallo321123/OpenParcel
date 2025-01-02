@@ -49,32 +49,31 @@
 }
 
 .order-row {
-  display: flex;
-  align-items: center;
-  position: relative;
-  padding: 15px;
-  border-bottom: 1px solid #ccc;
-  cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
+	display: flex;
+	align-items: center;
+	position: relative;
+	padding: 15px;
+	border-bottom: 1px solid #ccc;
+	cursor: pointer;
+	transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .order-row span {
-  flex-shrink: 0;
-  margin-right: auto;
+	flex-shrink: 0;
+	margin-right: auto;
 }
 
 .order-row text {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	text-align: center;
 }
 
 .order-row a {
-  flex-shrink: 0;
-  margin-left: auto;
+	flex-shrink: 0;
+	margin-left: auto;
 }
-
 
 .order-row:hover {
 	background-color: #00000011;

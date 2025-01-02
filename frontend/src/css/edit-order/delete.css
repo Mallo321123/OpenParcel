@@ -1,26 +1,26 @@
 #deleteOrderButton {
-    display: block;
-    width: 100%;
-    max-width: 400px;
-    margin: 20px auto;
-    padding: 10px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    background-color: #ff6b6b;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+	display: block;
+	width: 100%;
+	max-width: 400px;
+	margin: 20px auto;
+	padding: 10px 15px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	background-color: #ff6b6b;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease-in-out;
 }
 
 #deleteOrderButton:hover {
-    background-color: #e63946;
-    transform: scale(1.05);
+	background-color: #e63946;
+	transform: scale(1.05);
 }
 
 #deleteOrderButton:active {
-    background-color: #d62828;
-    transform: scale(1);
+	background-color: #d62828;
+	transform: scale(1);
 }
