@@ -128,4 +128,4 @@ when you want to recieve Server Logs, insert this into your volumes options:
 ```
 - ./logs:/var/log/OpenParcel
 ```
-replace ``` ./logs````with your logging directory
+replace ``` ./logs```with your logging directory
