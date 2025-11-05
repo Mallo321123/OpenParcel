@@ -3,6 +3,7 @@ from mysql.connector import pooling, Error
 import os
 import time
 import redis
+import threading
 
 from openapi_server.config import get_logging
 
@@ -90,6 +91,7 @@ def close_redis(redis_connection):
 # Settings cache to avoid repeated queries
 _settings_cache = {}
 _settings_cache_time = 0
+_settings_cache_lock = threading.Lock()
 SETTINGS_CACHE_TTL = 300  # 5 minutes
 
 def get_setting(setting_name):
@@ -97,14 +99,15 @@ def get_setting(setting_name):
     global _settings_cache, _settings_cache_time
     
     current_time = time.time()
-    # Check if cache is valid
-    if current_time - _settings_cache_time > SETTINGS_CACHE_TTL:
-        _settings_cache = {}
-        _settings_cache_time = current_time
-    
-    # Return from cache if available
-    if setting_name in _settings_cache:
-        return _settings_cache[setting_name]
+    # Check if cache is valid (thread-safe)
+    with _settings_cache_lock:
+        if current_time - _settings_cache_time > SETTINGS_CACHE_TTL:
+            _settings_cache = {}
+            _settings_cache_time = current_time
+        
+        # Return from cache if available
+        if setting_name in _settings_cache:
+            return _settings_cache[setting_name]
     
     # Fetch from database
     db = get_db()
@@ -115,7 +118,8 @@ def get_setting(setting_name):
     
     if result:
         value = result[0]
-        _settings_cache[setting_name] = value
+        with _settings_cache_lock:
+            _settings_cache[setting_name] = value
         return value
     return None
 
@@ -202,17 +206,14 @@ def prepare_database():
         )""")
     
     # Create indexes for frequently queried columns
-    try:
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_settings_name ON settings(name)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_orders_state ON orders(state)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_orders_customer ON orders(customer)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_orders_shipmentType ON orders(shipmentType)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_products_name ON products(name)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_products_difficulty ON products(difficulty)")
-        logging.info("Database indexes created successfully")
-    except Error:
-        logging.warning("Index creation warning - indexes may already exist")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_settings_name ON settings(name)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_orders_state ON orders(state)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_orders_customer ON orders(customer)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_orders_shipmentType ON orders(shipmentType)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_products_name ON products(name)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_products_difficulty ON products(difficulty)")
+    logging.info("Database indexes created successfully")
     
     db.commit()
     close_db(db)

@@ -12,6 +12,7 @@ _permissions_cache_time = {}
 PERMISSIONS_CACHE_TTL = 300  # 5 minutes
 
 def check_permission(permission: str, username: str) -> bool:
+    db = None
     try:
         current_time = time.time()
         cache_key = f"{username}:permissions"
@@ -48,7 +49,9 @@ def check_permission(permission: str, username: str) -> bool:
         
         return permission in groups
 
-    except Exception as e:
+    except Exception:
+        if db is not None:
+            close_db(db)
         logging.error("Error during permission check")
         return False
     

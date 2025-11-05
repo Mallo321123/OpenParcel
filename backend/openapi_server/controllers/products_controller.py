@@ -282,7 +282,11 @@ def products_list_get(
     offset = limit * page
 
     if name is not None:
-        # Use LIKE query for better performance instead of loading all products
+        # NOTE: LIKE with leading wildcard (%name%) cannot use indexes efficiently.
+        # For better performance with large datasets, consider:
+        # - Full-text search index (FULLTEXT INDEX on name)
+        # - Prefix matching only (name%) if substring matching isn't required
+        # Current implementation prioritizes functionality (substring match) over index usage
         search_pattern = f"%{name}%"
         cursor.execute("SELECT COUNT(*) AS total_products FROM products WHERE name LIKE %s", (search_pattern,))
         total_items = cursor.fetchone()[0]
