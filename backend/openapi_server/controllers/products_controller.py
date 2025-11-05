@@ -279,15 +279,29 @@ def products_list_get(
     offset = limit * page
 
     if name is not None:
-        cursor.execute("SELECT COUNT(*) AS total_products FROM products")
+        # Use LIKE query for better performance instead of loading all products
+        search_pattern = f"%{name}%"
+        cursor.execute("SELECT COUNT(*) AS total_products FROM products WHERE name LIKE %s", (search_pattern,))
         total_items = cursor.fetchone()[0]
         
-        cursor.execute("SELECT * FROM products")
-
+        # Use database LIKE for initial filtering, then use fuzzy matching only on results
+        cursor.execute("SELECT * FROM products WHERE name LIKE %s", (search_pattern,))
         products = cursor.fetchall()
+        
+        # If we have results, sort by similarity
+        if products:
+            sorted_products = sort_by_similarity(products, name)
+            products = sorted_products[offset : offset + limit]
+        else:
+            # Fallback: if no LIKE matches, do fuzzy search on limited dataset
+            cursor.execute("SELECT * FROM products LIMIT %s", (min(1000, offset + limit * 2),))
+            all_products = cursor.fetchall()
+            if all_products:
+                sorted_products = sort_by_similarity(all_products, name)
+                products = sorted_products[offset : offset + limit]
+            else:
+                products = []
 
-        sorted_products = sort_by_similarity(products, name)
-        products = sorted_products[offset : offset + limit]
 
     elif difficulty is not None:
         cursor.execute("SELECT COUNT(*) AS total_products FROM products WHERE difficulty = %s", (difficulty,))

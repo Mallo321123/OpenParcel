@@ -1,55 +1,124 @@
 import mysql.connector
+from mysql.connector import pooling, Error
 import os
 import time
 import redis
-
-from mysql.connector import Error
 
 from openapi_server.config import get_logging
 
 logging = get_logging()
 
-# Create Database connection
-def get_db():
-    retries = 5
-    while retries > 0:
-        try:
-            db = mysql.connector.connect(
-                host=os.getenv('MYSQL_HOST', 'mysql'),
-                port=int(os.getenv('MYSQL_PORT', '3306')),
-                user=os.getenv('MYSQL_USER', 'root'),
-                password=os.getenv('MYSQL_PASSWORD', 'example'),
-                database=os.getenv('MYSQL_DATABASE', 'OpenParcel')
-            )
-            break
-        except Error as e:
-            logging.warning(f"Datenbank Verbindung fehlgeschlagen: {e}, neuer Versuch in 5 Sekunden...")
-            retries -= 1
-            time.sleep(5)
-    if not db:
-        logging.error("MySQL-Datenbank konnte nach mehreren Versuchen nicht erreicht werden.")
-        raise ConnectionError("MySQL-Datenbank konnte nach mehreren Versuchen nicht erreicht werden.")
-    return db
+# Connection pool for MySQL
+_db_pool = None
+_redis_pool = None
 
-# Close Database connection
+def _init_db_pool():
+    """Initialize the database connection pool"""
+    global _db_pool
+    if _db_pool is None:
+        retries = 5
+        while retries > 0:
+            try:
+                _db_pool = pooling.MySQLConnectionPool(
+                    pool_name="openparcel_pool",
+                    pool_size=10,
+                    pool_reset_session=True,
+                    host=os.getenv('MYSQL_HOST', 'mysql'),
+                    port=int(os.getenv('MYSQL_PORT', '3306')),
+                    user=os.getenv('MYSQL_USER', 'root'),
+                    password=os.getenv('MYSQL_PASSWORD', 'example'),
+                    database=os.getenv('MYSQL_DATABASE', 'OpenParcel')
+                )
+                logging.info("Database connection pool initialized successfully")
+                break
+            except Error as e:
+                logging.warning(f"Datenbank Pool Initialisierung fehlgeschlagen: {e}, neuer Versuch in 5 Sekunden...")
+                retries -= 1
+                time.sleep(5)
+        if _db_pool is None:
+            logging.error("MySQL-Datenbank Pool konnte nach mehreren Versuchen nicht initialisiert werden.")
+            raise ConnectionError("MySQL-Datenbank Pool konnte nach mehreren Versuchen nicht initialisiert werden.")
+    return _db_pool
+
+# Create Database connection from pool
+def get_db():
+    pool = _init_db_pool()
+    try:
+        return pool.get_connection()
+    except Error as e:
+        logging.error(f"Fehler beim Abrufen der Verbindung aus dem Pool: {e}")
+        raise
+
+# Close Database connection (returns to pool)
 def close_db(db):
     if db is not None:
         db.close()
     return True
 
-def get_redis():
-    try:
-        redis_connection = redis.StrictRedis(host=os.getenv('REDIS_HOST', 'redis'), port=os.getenv('REDIS_PORT', '6379'), decode_responses=True)
+def _init_redis_pool():
+    """Initialize Redis connection pool"""
+    global _redis_pool
+    if _redis_pool is None:
+        try:
+            _redis_pool = redis.ConnectionPool(
+                host=os.getenv('REDIS_HOST', 'redis'),
+                port=int(os.getenv('REDIS_PORT', '6379')),
+                decode_responses=True,
+                max_connections=10
+            )
+            logging.info("Redis connection pool initialized successfully")
+        except redis.ConnectionError as e:
+            logging.error(f"Redis connection pool initialization error: {e}")
+            return None
+    return _redis_pool
 
+def get_redis():
+    pool = _init_redis_pool()
+    if pool is None:
+        return None
+    try:
+        return redis.StrictRedis(connection_pool=pool)
     except redis.ConnectionError:
         logging.error("Redis connection error.")
         return None
-    return redis_connection
 
 def close_redis(redis_connection):
     if redis_connection is not None:
         redis_connection.close()
     return True
+
+# Settings cache to avoid repeated queries
+_settings_cache = {}
+_settings_cache_time = 0
+SETTINGS_CACHE_TTL = 300  # 5 minutes
+
+def get_setting(setting_name):
+    """Get a setting value with caching"""
+    global _settings_cache, _settings_cache_time
+    import time
+    
+    current_time = time.time()
+    # Check if cache is valid
+    if current_time - _settings_cache_time > SETTINGS_CACHE_TTL:
+        _settings_cache = {}
+        _settings_cache_time = current_time
+    
+    # Return from cache if available
+    if setting_name in _settings_cache:
+        return _settings_cache[setting_name]
+    
+    # Fetch from database
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT value FROM settings WHERE name = %s", (setting_name,))
+    result = cursor.fetchone()
+    close_db(db)
+    
+    if result:
+        value = result[0]
+        _settings_cache[setting_name] = value
+        return value
+    return None
 
 def settings_default():
     db = get_db()
@@ -132,6 +201,20 @@ def prepare_database():
         lights VARCHAR(255) DEFAULT NULL,
         products VARCHAR(255) DEFAULT NULL
         )""")
+    
+    # Create indexes for frequently queried columns
+    try:
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_settings_name ON settings(name)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_orders_state ON orders(state)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_orders_customer ON orders(customer)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_orders_shipmentType ON orders(shipmentType)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_products_name ON products(name)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_products_difficulty ON products(difficulty)")
+        logging.info("Database indexes created successfully")
+    except Error as e:
+        logging.warning(f"Index creation warning (may already exist): {e}")
+    
     db.commit()
     close_db(db)
     logging.info("Preparings Database ... done")

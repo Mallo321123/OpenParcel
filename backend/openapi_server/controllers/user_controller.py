@@ -6,7 +6,7 @@ from openapi_server.models.security_controller_login_request import (
 from openapi_server.models.user import User  # noqa: E501
 from openapi_server.models.user_response import UserResponse
 
-from openapi_server.db import get_db, close_db, get_redis
+from openapi_server.db import get_db, close_db, get_redis, get_setting
 from openapi_server.tokenManager import delete_token
 from openapi_server.permission_check import check_permission
 
@@ -40,10 +40,7 @@ def create_user(user=None):  # noqa: E501
     if connexion.request.is_json:
         user = User.from_dict(connexion.request.get_json())  # noqa: E501
 
-        cursor.execute(
-            "SELECT value FROM settings WHERE name = %s", ("min_password_length",)
-        )
-        min_password_length = int(cursor.fetchone()[0])
+        min_password_length = int(get_setting("min_password_length") or 5)
 
         if len(user.password) < min_password_length:
             return (
@@ -96,14 +93,10 @@ def security_controller_login():  # noqa: E501
     client_ip = connexion.request.remote_addr
     redis_key = f"login_attempts:{client_ip}"
 
-    cursor.execute("SELECT value FROM settings WHERE name = %s", ("maxLoginAttempts",))
-    max_attempts = int(cursor.fetchone()[0])
-
-    cursor.execute("SELECT value FROM settings WHERE name = %s", ("blockTime",))
-    block_time = int(cursor.fetchone()[0])  # Time in Seconds
-
-    cursor.execute("SELECT value FROM settings WHERE name = %s", ("tokenExpire",))
-    token_expiration = int(cursor.fetchone()[0])  # Time in Hours
+    # Use cached settings instead of multiple queries
+    max_attempts = int(get_setting("maxLoginAttempts") or 5)
+    block_time = int(get_setting("blockTime") or 600)  # Time in Seconds
+    token_expiration = int(get_setting("tokenExpire") or 24)  # Time in Hours
 
     attempts = redis_connection.get(redis_key)
     if attempts and int(attempts) >= max_attempts:
@@ -300,10 +293,7 @@ def update_user(username, user=None):  # noqa: E501
             update_fields["lastname"] = user["last_name"]
 
         if user.get("password") is not None:
-            cursor.execute(
-                "SELECT value FROM settings WHERE name = %s", ("min_password_length",)
-            )
-            min_password_length = cursor.fetchone()[0]
+            min_password_length = int(get_setting("min_password_length") or 5)
 
             if len(user["password"]) < min_password_length:
                 return (
