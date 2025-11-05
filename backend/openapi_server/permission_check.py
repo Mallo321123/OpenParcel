@@ -30,14 +30,14 @@ def check_permission(permission: str, username: str) -> bool:
             
         if not result or not result[0]:
             close_db(db)
-            logging.warning(f"User {username} not found or has no groups.")
+            logging.warning("User not found or has no groups")
             return False
         
         try:
             groups = json.loads(result[0])
         except json.JSONDecodeError:
             close_db(db)
-            logging.error(f"Error decoding groups for user {username}.")
+            logging.error("Error decoding user groups")
             return False
 
         close_db(db)

@@ -211,8 +211,8 @@ def prepare_database():
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_products_name ON products(name)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_products_difficulty ON products(difficulty)")
         logging.info("Database indexes created successfully")
-    except Error as e:
-        logging.warning(f"Index creation warning (may already exist): {e}")
+    except Error:
+        logging.warning("Index creation warning - indexes may already exist")
     
     db.commit()
     close_db(db)
