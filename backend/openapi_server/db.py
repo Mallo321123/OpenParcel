@@ -37,8 +37,8 @@ def _init_db_pool():
                 retries -= 1
                 time.sleep(5)
         if _db_pool is None:
-            logging.error("MySQL database pool could not be initialized after multiple attempts.")
-            raise ConnectionError("MySQL database pool could not be initialized after multiple attempts.")
+            logging.error("Database pool could not be initialized after multiple attempts")
+            raise ConnectionError("Database pool could not be initialized after multiple attempts")
     return _db_pool
 
 # Create Database connection from pool

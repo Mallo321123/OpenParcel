@@ -301,7 +301,8 @@ def products_list_get(
             products = sorted_products[offset : offset + limit]
         else:
             # Fallback: if no LIKE matches, do fuzzy search on limited dataset
-            cursor.execute("SELECT id, name, comment, customerGroups, difficulty, buildTime FROM products LIMIT %s", (min(MAX_FALLBACK_PRODUCTS, offset + limit * 2),))
+            # Load up to MAX_FALLBACK_PRODUCTS for fuzzy matching
+            cursor.execute("SELECT id, name, comment, customerGroups, difficulty, buildTime FROM products LIMIT %s", (MAX_FALLBACK_PRODUCTS,))
             all_products = cursor.fetchall()
             if all_products:
                 sorted_products = sort_by_similarity(all_products, name)
