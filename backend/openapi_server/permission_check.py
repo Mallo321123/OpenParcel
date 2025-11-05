@@ -27,18 +27,21 @@ def check_permission(permission: str, username: str) -> bool:
         cursor = db.cursor()
         cursor.execute("SELECT `groups` FROM users WHERE username = %s", (username,))
         result = cursor.fetchone()
-        close_db(db)
             
         if not result or not result[0]:
+            close_db(db)
             logging.warning(f"User {username} not found or has no groups.")
             return False
         
         try:
             groups = json.loads(result[0])
         except json.JSONDecodeError:
+            close_db(db)
             logging.error(f"Error decoding groups for user {username}.")
             return False
 
+        close_db(db)
+        
         # Update cache
         _permissions_cache[cache_key] = groups
         _permissions_cache_time[cache_key] = current_time

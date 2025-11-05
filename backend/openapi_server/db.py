@@ -95,7 +95,6 @@ SETTINGS_CACHE_TTL = 300  # 5 minutes
 def get_setting(setting_name):
     """Get a setting value with caching"""
     global _settings_cache, _settings_cache_time
-    import time
     
     current_time = time.time()
     # Check if cache is valid

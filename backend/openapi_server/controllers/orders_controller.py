@@ -38,7 +38,7 @@ def parse_products_json(products_str):
         try:
             return json.loads(products_str.replace("'", '"'))
         except (json.JSONDecodeError, ValueError):
-            logging.error(f"Failed to parse products: {products_str[:100]}")
+            logging.error("Failed to parse products JSON - invalid format")
             return []
 
 

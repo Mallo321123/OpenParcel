@@ -285,7 +285,7 @@ def products_list_get(
         total_items = cursor.fetchone()[0]
         
         # Use database LIKE for initial filtering, then use fuzzy matching only on results
-        cursor.execute("SELECT * FROM products WHERE name LIKE %s", (search_pattern,))
+        cursor.execute("SELECT id, name, comment, customerGroups, difficulty, buildTime FROM products WHERE name LIKE %s", (search_pattern,))
         products = cursor.fetchall()
         
         # If we have results, sort by similarity
@@ -294,7 +294,7 @@ def products_list_get(
             products = sorted_products[offset : offset + limit]
         else:
             # Fallback: if no LIKE matches, do fuzzy search on limited dataset
-            cursor.execute("SELECT * FROM products LIMIT %s", (min(1000, offset + limit * 2),))
+            cursor.execute("SELECT id, name, comment, customerGroups, difficulty, buildTime FROM products LIMIT %s", (min(1000, offset + limit * 2),))
             all_products = cursor.fetchall()
             if all_products:
                 sorted_products = sort_by_similarity(all_products, name)
