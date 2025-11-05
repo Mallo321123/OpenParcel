@@ -26,6 +26,22 @@ from openapi_server.config import get_logging
 logging = get_logging()
 
 
+def parse_products_json(products_str):
+    """
+    Parse products JSON with backward compatibility for Python string representation.
+    Try proper JSON first, fallback to string replacement for legacy data.
+    """
+    try:
+        return json.loads(products_str)
+    except (json.JSONDecodeError, ValueError):
+        # Fallback for legacy data stored as Python string representation
+        try:
+            return json.loads(products_str.replace("'", '"'))
+        except (json.JSONDecodeError, ValueError):
+            logging.error(f"Failed to parse products: {products_str[:100]}")
+            return []
+
+
 @jwt_required()
 def orders_delete():  # noqa: E501
     if not check_auth("orders"):
@@ -72,7 +88,7 @@ def orders_get(limit=None, page=None):  # noqa: E501
     items = []
     for order in orders:
         date_closed = order[3] if order[3] is not None else "-"
-        products = json.loads(order[4].replace("'", '"'))
+        products = parse_products_json(order[4])
 
         item = {
             "id": order[0],
@@ -112,7 +128,7 @@ def orders_post(orders_add=None):  # noqa: E501
             (
                 orders_add.customer,
                 datetime.datetime.now(),
-                str(orders_add.products),
+                json.dumps(orders_add.products),
                 orders_add.comment,
                 orders_add.state,
                 orders_add.shipment_type,
@@ -167,7 +183,7 @@ def orders_put(orders_change=None):  # noqa: E501
             update_fields["comment"] = orders_change["comment"]
 
         if orders_change.get("products") is not None:
-            update_fields["products"] = str(orders_change["products"])
+            update_fields["products"] = json.dumps(orders_change["products"])
 
         if orders_change.get("customer") is not None:
             update_fields["customer"] = orders_change["customer"]
@@ -288,7 +304,7 @@ def orders_list_get(
     items = []
     for order in orders:
         date_closed = order[3] if order[3] is not None else "-"
-        products = json.loads(order[4].replace("'", '"'))
+        products = parse_products_json(order[4])
 
         item = {
             "id": order[0],
@@ -343,7 +359,7 @@ def orders_info_get():  # noqa: E501
         date_add=order[2],
         date_closed=dateClosed,
         comment=order[5],
-        products=json.loads(products_str.replace("'", '"')),
+        products=parse_products_json(products_str),
         state=order[6],
         shipment_type=order[7],
     )
