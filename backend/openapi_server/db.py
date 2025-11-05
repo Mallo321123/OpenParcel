@@ -32,12 +32,12 @@ def _init_db_pool():
                 logging.info("Database connection pool initialized successfully")
                 break
             except Error as e:
-                logging.warning(f"Datenbank Pool Initialisierung fehlgeschlagen: {e}, neuer Versuch in 5 Sekunden...")
+                logging.warning("Database pool initialization failed, retrying in 5 seconds...")
                 retries -= 1
                 time.sleep(5)
         if _db_pool is None:
-            logging.error("MySQL-Datenbank Pool konnte nach mehreren Versuchen nicht initialisiert werden.")
-            raise ConnectionError("MySQL-Datenbank Pool konnte nach mehreren Versuchen nicht initialisiert werden.")
+            logging.error("MySQL database pool could not be initialized after multiple attempts.")
+            raise ConnectionError("MySQL database pool could not be initialized after multiple attempts.")
     return _db_pool
 
 # Create Database connection from pool
@@ -46,7 +46,7 @@ def get_db():
     try:
         return pool.get_connection()
     except Error as e:
-        logging.error(f"Fehler beim Abrufen der Verbindung aus dem Pool: {e}")
+        logging.error("Failed to get database connection from pool")
         raise
 
 # Close Database connection (returns to pool)
@@ -67,8 +67,8 @@ def _init_redis_pool():
                 max_connections=10
             )
             logging.info("Redis connection pool initialized successfully")
-        except redis.ConnectionError as e:
-            logging.error(f"Redis connection pool initialization error: {e}")
+        except redis.ConnectionError:
+            logging.error("Redis connection pool initialization error")
             return None
     return _redis_pool
 

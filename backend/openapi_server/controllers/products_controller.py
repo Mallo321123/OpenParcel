@@ -20,6 +20,9 @@ from openapi_server.config import get_logging
 
 logging = get_logging()
 
+# Maximum number of products to load for fuzzy search fallback
+MAX_FALLBACK_PRODUCTS = 1000
+
 
 @jwt_required()
 def product_add(products=None):  # noqa: E501
@@ -294,7 +297,7 @@ def products_list_get(
             products = sorted_products[offset : offset + limit]
         else:
             # Fallback: if no LIKE matches, do fuzzy search on limited dataset
-            cursor.execute("SELECT id, name, comment, customerGroups, difficulty, buildTime FROM products LIMIT %s", (min(1000, offset + limit * 2),))
+            cursor.execute("SELECT id, name, comment, customerGroups, difficulty, buildTime FROM products LIMIT %s", (min(MAX_FALLBACK_PRODUCTS, offset + limit * 2),))
             all_products = cursor.fetchall()
             if all_products:
                 sorted_products = sort_by_similarity(all_products, name)

@@ -49,6 +49,6 @@ def check_permission(permission: str, username: str) -> bool:
         return permission in groups
 
     except Exception as e:
-        logging.error(f"Fehler bei der Berechtigungsprüfung von {username}: {e}")
+        logging.error("Error during permission check")
         return False
     
